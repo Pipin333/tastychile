@@ -1,9 +1,12 @@
 ﻿"use client";
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
+import { addB2BContact } from '@/app/actions';
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [contactStatus, setContactStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [contactMessage, setContactMessage] = useState('');
 
   const varieties = [
     {
@@ -41,6 +44,19 @@ export default function Home() {
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev === 0 ? varieties.length - 1 : prev - 1));
+  };
+
+  const handleB2BSubmit = async (formData: FormData) => {
+    setContactStatus('loading');
+    const result = await addB2BContact(formData);
+    
+    if (result.success) {
+      setContactStatus('success');
+      setContactMessage(result.message || 'Mensaje enviado exitosamente');
+    } else {
+      setContactStatus('error');
+      setContactMessage(result.error || 'Ocurrió un error');
+    }
   };
 
   return (
@@ -147,16 +163,46 @@ export default function Home() {
 
       {/* Contacto */}
       <section id='contacto' className='py-20 bg-amber-900'>
-        <div className='max-w-xl mx-auto px-4'>
-          <div className='text-center text-white'>
+        <div className='max-w-3xl mx-auto px-4'>
+          <div className='text-center text-white mb-10'>
             <h3 className='text-3xl font-bold mb-4'>Construyamos una Alianza</h3>
-            <p className='mb-8 text-amber-100'>
+            <p className='text-amber-100'>
               Quedamos disponibles para coordinar el envío de muestras, fichas técnicas y antecedentes comerciales.
             </p>
-            <button className='w-full bg-white text-amber-900 font-bold py-4 px-8 rounded-full shadow hover:bg-gray-100 transition transform hover:scale-105 duration-200'>
-              Contactar a Selva Alta Roasters
-            </button>
           </div>
+          
+          <form action={handleB2BSubmit} className='bg-white p-8 rounded-2xl shadow-xl flex flex-col gap-4 text-gray-900'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <div>
+                <label className='block text-sm font-bold text-gray-700 mb-1'>Nombre Completo *</label>
+                <input required type="text" name="name" className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
+              </div>
+              <div>
+                <label className='block text-sm font-bold text-gray-700 mb-1'>Nombre de la Empresa *</label>
+                <input required type="text" name="company" className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
+              </div>
+            </div>
+            
+            <div>
+              <label className='block text-sm font-bold text-gray-700 mb-1'>Correo Electrónico Corporativo *</label>
+              <input required type="email" name="email" className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
+            </div>
+
+            <div>
+              <label className='block text-sm font-bold text-gray-700 mb-1'>Mensaje</label>
+              <textarea name="message" rows={4} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' placeholder='¿Qué tipo de volumen buscan? ¿Desean agendar una cata?' disabled={contactStatus === 'loading' || contactStatus === 'success'}></textarea>
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={contactStatus === 'loading' || contactStatus === 'success'}
+              className='mt-4 w-full bg-amber-900 text-white font-bold py-4 px-8 rounded-xl shadow hover:bg-amber-800 transition transform hover:scale-105 duration-200 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed'>
+              {contactStatus === 'loading' ? 'Enviando Datos...' : 'Contactar a Selva Alta Roasters'}
+            </button>
+            
+            {contactStatus === 'success' && <p className="text-green-600 font-bold text-center mt-2">{contactMessage}</p>}
+            {contactStatus === 'error' && <p className="text-red-500 font-bold text-center mt-2">{contactMessage}</p>}
+          </form>
         </div>
       </section>
 
