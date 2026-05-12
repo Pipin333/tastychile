@@ -1,6 +1,6 @@
 "use server"
 
-import { sql } from '@vercel/postgres';
+import { neon } from '@neondatabase/serverless';
 
 export async function addContactToWaitlist(formData: FormData) {
   const email = formData.get('email')?.toString();
@@ -10,8 +10,14 @@ export async function addContactToWaitlist(formData: FormData) {
   }
 
   try {
+    // Neon requiere la variable de entorno DATABASE_URL que te darán al crear la BD
+    if (!process.env.DATABASE_URL) {
+      throw new Error("Falta la variable DATABASE_URL");
+    }
+
+    const sql = neon(process.env.DATABASE_URL);
+
     // Inserta el correo en la tabla "waitlist".
-    // "ON CONFLICT" evita que de error si alguien registra el mismo correo 2 veces.
     await sql`
       INSERT INTO waitlist (email) 
       VALUES (${email}) 
