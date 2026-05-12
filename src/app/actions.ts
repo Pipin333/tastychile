@@ -11,9 +11,11 @@ export async function addContactToWaitlist(formData: FormData) {
 
   try {
     // Vercel y Neon inyectan ahora la variable DATABASE_URL o POSTGRES_URL 
-    // y suelen anteponer el prefijo de tu proyecto.
-    // Usaremos process.env.DATABASE_URL si existe o process.env.POSTGRES_URL
-    const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    // y suelen anteponer el prefijo de tu proyecto. En tu caso, Vercel agregó "TASTY_".
+    const dbUrl = process.env.DATABASE_URL 
+      || process.env.POSTGRES_URL 
+      || process.env.TASTY_DATABASE_URL 
+      || process.env.TASTY_POSTGRES_URL;
 
     if (!dbUrl) {
       throw new Error("Faltan las variables de conexión a la base de datos");
