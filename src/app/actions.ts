@@ -10,12 +10,16 @@ export async function addContactToWaitlist(formData: FormData) {
   }
 
   try {
-    // Neon requiere la variable de entorno DATABASE_URL que te darán al crear la BD
-    if (!process.env.DATABASE_URL) {
-      throw new Error("Falta la variable DATABASE_URL");
+    // Vercel y Neon inyectan ahora la variable DATABASE_URL o POSTGRES_URL 
+    // y suelen anteponer el prefijo de tu proyecto.
+    // Usaremos process.env.DATABASE_URL si existe o process.env.POSTGRES_URL
+    const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
+    if (!dbUrl) {
+      throw new Error("Faltan las variables de conexión a la base de datos");
     }
 
-    const sql = neon(process.env.DATABASE_URL);
+    const sql = neon(dbUrl);
 
     // Inserta el correo en la tabla "waitlist".
     await sql`
