@@ -9,8 +9,11 @@ export default function Navbar() {
     <nav className="bg-white shadow-md fixed w-full z-50 top-0 left-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="text-2xl font-extrabold text-amber-900">
+          <div className="flex items-center space-x-2">
+            <Link href="/" className="text-sm font-bold text-amber-900 hover:text-amber-700 transition hidden sm:inline-block mr-2">
+              ← Volver
+            </Link>
+            <Link href="/b2b" className="text-xl md:text-2xl font-extrabold text-amber-900">
               Selva Alta Roasters
             </Link>
           </div>
