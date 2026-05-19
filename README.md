@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Selva Alta Roasters - TastyChile ☕🏔️
 
-## Getting Started
+Plataforma moderna para la adquisición de café de especialidad de la Amazonía Peruana. Cuenta con gestión del catálogo de cafés, sistema de lista de espera corporativa (B2B) y membresías para consumidores (Club).
 
-First, run the development server:
+## 🚀 Características Principales
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Landing Page Optimizada**: Interfaz orientada a la conversión y presentación de cafés premium.
+- **Portal B2B**: Formulario dedicado para contacto con empresas, cafeterías, HORECA y retail de forma fluida.
+- **Club Memberships (B2C)**: Programa de subscripción y venta directa para amantes del café de especialidad (Waitlist).
+- **Backend Moderno y Responsivo**: Uso de **React Server Actions** para peticiones fluidas del cliente al servidor sin endpoints intermedios.
+- **Integración con Base de Datos**: Vercel Postgres + Neon DB para una gestión de datos rápida y *serverless*.
+- **Diseño Ultra-rápido**: Utilizando Tailwind CSS v4 para un diseño minimalista, moderno y adaptado a dispositivos móviles.
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16.2.6 (App Router)
+- **Frontend**: React 19, TypeScript
+- **Styling**: Tailwind CSS 4
+- **Database**: Vercel Postgres + Neon Database (`@neondatabase/serverless`)
+- **Linting**: ESLint + Prettier
+
+## 📋 Requisitos Previos
+
+- Node.js 18+ o superior.
+- npm, yarn o pnpm.
+- Una base de datos en [Neon](https://neon.tech/) o [Vercel Postgres](https://vercel.com/postgres).
+
+## ⚙️ Configuración del Entorno (Variables de Entorno)
+
+Crea un archivo `.env.local` en la raíz del proyecto y agrega tus credenciales de la base de datos:
+
+```env
+# Variables para conexión a Neon o Vercel Postgres
+DATABASE_URL="postgresql://usuario:contraseña@servidor.neon.tech/neondb?sslmode=require"
+# En caso de desplegar con prefijo en Vercel:
+TASTY_DATABASE_URL="postgresql://... "
+TASTY_POSTGRES_URL="postgresql://... "
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+> **Nota:** El archivo `actions.ts` detectará automáticamente estas variables. Asegúrate de ejecutar también las migraciones/tablas (e.g. tablas `waitlist` y `b2b_contacts`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🏁 Inicio Rápido
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Instalar dependencias:**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+2. **Ejecutar servidor de desarrollo:**
+   ```bash
+   npm run dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+3. Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver la interfaz.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Estructura Principal del Proyecto
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```text
+src/
+├── app/
+│   ├── actions.ts          # Server Actions para manejo de Formularios y DB
+│   ├── layout.tsx          # Layout principal global (Root Layout)
+│   ├── page.tsx            # Landing Page (Inicio)
+│   ├── b2b/               
+│   │   └── page.tsx        # Sección catálogo "Nuestras Variedades" y B2B
+│   └── club/               
+│       └── page.tsx        # Sección "El Club" y B2C
+└── components/
+    └── Navbar.tsx          # Navegación principal reusable
+```
 
-## Deploy on Vercel
+## 🌿 Flujo de Trabajo (Git)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **`main`**: Rama de producción (código estable, directamente ligada a Vercel/Producción).
+- **`dev`**: Rama de desarrollo (todas las nuevas funcionalidades se inician y testean aquí).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Para comenzar a agregar algo nuevo:
+```bash
+git checkout dev
+git checkout -b feature/nueva-funcionalidad
+```
+
+## 🚀 Despliegue
+
+Este proyecto está optimizado para desplegar fácilmente en [Vercel](https://vercel.com).
+La plataforma de Vercel detectará automáticamente que es un proyecto de Next.js y aplicará las configuraciones de construcción por defecto (`next build`). 
+
+## 📄 Licencia
+
+Proyecto privado - TastyChile (Selva Alta Roasters)
