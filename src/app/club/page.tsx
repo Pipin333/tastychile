@@ -26,19 +26,18 @@ export default function Club() {
       {/* Navbar simplificado para el club */}
       <nav className="bg-white shadow-sm w-full top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between min-h-16 items-center gap-2 py-2">
+          <div className="relative flex min-h-16 items-center justify-center py-2">
             <Link
               href="/"
-              className="inline-flex h-11 min-w-11 items-center justify-center rounded-md px-2 text-base sm:text-lg font-bold text-amber-900 hover:text-amber-700 hover:bg-amber-50 transition"
+              className="absolute left-0 inline-flex h-11 min-w-11 items-center justify-center rounded-md px-2 text-base sm:text-lg font-bold text-amber-900 hover:text-amber-700 hover:bg-amber-50 transition"
               aria-label="Volver al inicio"
             >
               <span aria-hidden="true">←</span>
               <span className="sr-only sm:not-sr-only sm:ml-1">Volver</span>
             </Link>
-            <div className="text-base sm:text-xl md:text-2xl font-extrabold text-amber-900 tracking-tight text-center truncate flex-1 px-1">
+            <div className="text-base sm:text-xl md:text-2xl font-extrabold text-amber-900 tracking-tight text-center truncate max-w-[calc(100%-5.5rem)] px-1">
               Selva Alta Club
             </div>
-            <div className="h-11 w-11"></div>
           </div>
         </div>
       </nav>
