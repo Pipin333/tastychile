@@ -38,7 +38,7 @@ export default function Club() {
             <div className="text-base sm:text-xl md:text-2xl font-extrabold text-amber-900 tracking-tight text-center truncate flex-1 px-1">
               Selva Alta Club
             </div>
-            <div className="h-11 w-11" aria-hidden="true"></div>
+            <div className="h-11 w-11"></div>
           </div>
         </div>
       </nav>
