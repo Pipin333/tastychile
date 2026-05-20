@@ -97,7 +97,7 @@ export default function Home() {
             </button>
 
             {/* Contenido del Slide Activo */}
-            <div className='flex flex-col md:flex-row gap-8 md:gap-12 items-center' aria-live="polite" aria-label="Contenido del carrusel">
+            <div className='flex flex-col md:flex-row gap-8 md:gap-12 items-center' aria-live="polite" role="region" aria-label="Contenido del carrusel">
               <div className='md:w-1/2'>
                 <h3 className='text-2xl sm:text-3xl font-extrabold text-amber-900 mb-2'>{varieties[currentSlide].name}</h3>
                 <span className='inline-block bg-amber-200 text-amber-900 font-bold px-3 py-1 rounded-full text-sm mb-6'>
@@ -145,6 +145,7 @@ export default function Home() {
                   onClick={() => setCurrentSlide(index)}
                   className='h-11 w-11 inline-flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600'
                   aria-label={`Ir al slide ${index + 1}`}
+                  aria-current={currentSlide === index ? 'true' : undefined}
                 >
                   <span className={`h-3 rounded-full transition-all ${currentSlide === index ? 'bg-amber-900 w-8' : 'bg-amber-300 w-3'}`} />
                 </button>

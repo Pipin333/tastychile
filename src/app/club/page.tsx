@@ -35,7 +35,7 @@ export default function Club() {
               <span aria-hidden="true">←</span>
               <span className="sr-only sm:not-sr-only sm:ml-1">Volver</span>
             </Link>
-            <div className="text-base sm:text-xl md:text-2xl font-extrabold text-amber-900 tracking-tight text-center truncate max-w-[calc(100%-5.5rem)] px-1">
+            <div className="text-base sm:text-xl md:text-2xl font-extrabold text-amber-900 tracking-tight text-center leading-tight px-14 sm:px-20">
               Selva Alta Club
             </div>
           </div>
