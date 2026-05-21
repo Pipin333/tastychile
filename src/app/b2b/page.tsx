@@ -19,13 +19,22 @@ export default function Home() {
       tastingNotes: ["🍫 Chocolate", "🍬 Caramelo", "🍒 Frutas Dulces"]
     },
     {
-      name: "Catimore",
+      name: "Pronto: Catimore",
       points: "84 Puntos SCA",
       description: "Un perfil dulce y balanceado con un cuerpo cremoso. Este lote lavado a 1.600 msnm resalta por sus notas ricas que recuerdan a postres clásicos. Una opción sumamente versátil y perfecta tanto para espresso como para filtrados suaves diarios.",
       origin: "Huánuco, Perú",
       altitude: "1.600 msnm",
       process: "Lavado",
       tastingNotes: ["🍯 Miel", "🌰 Avellanas", "🍫 Cacao puro"]
+    },
+    {
+      name: "Caturra",
+      points: "85 Puntos SCA",
+      description: "Un clásico sudamericano conocido por su acidez brillante y cuerpo medio. Este perfil lavado ofrece notas vibrantes y un dulzor prolongado.",
+      origin: "Alta Amazonía",
+      altitude: "1.650 msnm",
+      process: "Lavado",
+      tastingNotes: ["🍋 Cítrico", "🍯 Miel", "🍫 Cacao"]
     },
     {
       name: "Pronto: Pink Bourbon",
