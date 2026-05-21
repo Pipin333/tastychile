@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Selva Alta Roasters | TastyChile",
+    default: "Selva Alta Roasters",
     template: "%s | Selva Alta Roasters",
   },
   description:
@@ -29,7 +29,13 @@ export const metadata: Metadata = {
     "club de café",
     "café para empresas",
     "B2B café",
+    "Selva Alta",
+    "Club",
+    "Chile",
+    "Perú",
+    "café de origen"
   ],
+  
   openGraph: {
     title: "Selva Alta Roasters | TastyChile",
     description:
