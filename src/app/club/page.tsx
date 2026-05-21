@@ -7,7 +7,7 @@ import { addContactToWaitlist } from '@/app/actions';
 const coffees = [
   { id: 'marsellesa', name: 'Marsellesa', notes: 'Chocolate, Caramelo, Frutas Dulces', process: 'Lavado / Orgánico', points: '87 Puntos SCA', price: 12900, emoji: '🍫', alt: '1.820 msnm' },
   { id: 'catimore', name: 'Catimore (Pronto)', notes: 'Avellanas, Miel, Cacao puro', process: 'Lavado', points: '84 Puntos SCA', price: 11900, emoji: '🍯', alt: '1.600 msnm' },
-  { id: 'caturra', name: 'Caturra', notes: 'Cítrico, Miel, Cacao', process: 'Lavado', points: '85 Puntos SCA', price: 12500, emoji: '🍋', alt: '1.650 msnm' },
+  { id: 'caturra', name: 'Caturra (Pronto)', notes: 'Cítrico, Miel, Cacao', process: 'Lavado', points: '85 Puntos SCA', price: 12500, emoji: '🍋', alt: '1.650 msnm' },
   { id: 'pink-bourbon', name: 'Pink Bourbon (Pronto)', notes: 'Floral, Frutos Rojos, Miel', process: 'Lavado', points: 'SCA por evaluar', price: 14900, emoji: '🌸', alt: '1.700 - 1.900 msnm' },
   { id: 'tupi', name: 'Tupi (Pronto)', notes: 'Nuez, Cacao, Especias', process: 'Natural', points: 'SCA por evaluar', price: 13500, emoji: '🌰', alt: '1.500 - 1.700 msnm' },
   { id: 'geisha', name: 'Geisha (Pronto)', notes: 'Jazmín, Bergamota, Fruta Tropical', process: 'Lavado', points: 'SCA por evaluar', price: 19900, emoji: '🌺', alt: '1.850+ msnm' },
