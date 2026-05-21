@@ -1,5 +1,5 @@
 ﻿"use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import { addB2BContact } from '@/app/actions';
 
@@ -64,6 +64,14 @@ export default function Home() {
     setCurrentSlide((prev) => (prev === 0 ? varieties.length - 1 : prev - 1));
   };
 
+  // Autoscroll del carrusel cada 5 segundos
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev === varieties.length - 1 ? 0 : prev + 1));
+    }, 35000);
+    return () => clearInterval(timer);
+  }, [varieties.length]);
+
   const handleB2BSubmit = async (formData: FormData) => {
     setContactStatus('loading');
     const result = await addB2BContact(formData);
@@ -85,7 +93,7 @@ export default function Home() {
       <section id='inicio' className='bg-amber-900 text-white py-24 text-center px-4'>
         <h1 className='text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6'>Café de Especialidad de la Alta Amazonía</h1>
         <p className='text-xl max-w-2xl mx-auto text-amber-100 mb-8'>
-          Selva Alta Roasters presenta "Tasty": Café premium de origen Tingo María, Huánuco - Perú. Seleccionado especialmente para el mercado specialty y empresarial.
+          Selva Alta Roasters presenta &quot;Tasty&quot;: Café premium de origen Tingo María, Huánuco - Perú. Seleccionado especialmente para el mercado specialty y empresarial.
         </p>
         <a href="#contacto" className="inline-block bg-white text-amber-900 font-bold py-3 px-8 rounded-full shadow hover:bg-gray-100 transition transform hover:scale-105 duration-200">
           Solicitar Muestra
@@ -173,7 +181,7 @@ export default function Home() {
             </div>
             <div className='p-8 bg-white shadow-sm rounded-xl border border-gray-100'>
               <h2 className='text-2xl font-bold mb-3'>📦 Distribuidores y Tiendas</h2>
-              <p className='text-gray-600'>Comercializamos nuestro café tostado bajo la marca "Tasty" en formato de 250 gramos, con completa trazabilidad y garantía de frescura.</p>
+              <p className='text-gray-600'>Comercializamos nuestro café tostado bajo la marca &quot;Tasty&quot; en formato de 250 gramos, con completa trazabilidad y garantía de frescura.</p>
             </div>
           </div>
         </div>
@@ -226,7 +234,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className='bg-gray-900 text-center py-8 text-gray-400 text-sm'>
-        <p>© 2026 Selva Alta Roasters SpA. Producto "Tasty". Todos los derechos reservados.</p>
+        <p>© 2026 Selva Alta Roasters SpA. Producto &quot;Tasty&quot;. Todos los derechos reservados.</p>
       </footer>
     </div>
   );
