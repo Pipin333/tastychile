@@ -1,5 +1,5 @@
 ﻿"use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import { addB2BContact } from '@/app/actions';
 
@@ -54,6 +54,14 @@ export default function Home() {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev === 0 ? varieties.length - 1 : prev - 1));
   };
+
+  // Autoscroll del carrusel cada 35 segundos
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev === varieties.length - 1 ? 0 : prev + 1));
+    }, 35000);
+    return () => clearInterval(timer);
+  }, [varieties.length]);
 
   const handleB2BSubmit = async (formData: FormData) => {
     setContactStatus('loading');
