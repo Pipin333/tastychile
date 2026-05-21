@@ -19,6 +19,15 @@ export default function Home() {
       tastingNotes: ["🍫 Chocolate", "🍬 Caramelo", "🍒 Frutas Dulces"]
     },
     {
+      name: "Catimore",
+      points: "84 Puntos SCA",
+      description: "Un perfil dulce y balanceado con un cuerpo cremoso. Este lote lavado a 1.600 msnm resalta por sus notas ricas que recuerdan a postres clásicos. Una opción sumamente versátil y perfecta tanto para espresso como para filtrados suaves diarios.",
+      origin: "Huánuco, Perú",
+      altitude: "1.600 msnm",
+      process: "Lavado",
+      tastingNotes: ["🍯 Miel", "🌰 Avellanas", "🍫 Cacao puro"]
+    },
+    {
       name: "Pronto: Pink Bourbon",
       points: "SCA por evaluar",
       description: "Próximamente incorporaremos esta exótica variedad a nuestro catálogo. Conocida por su perfil distintivo y su resistencia, Pink Bourbon es una rareza altamente codiciada en el mundo del specialty coffee.",
@@ -64,10 +73,10 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <section id='inicio' className='scroll-mt-24 bg-amber-900 text-white py-16 sm:py-24 text-center px-4'>
-        <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6'>Café de Especialidad de la Alta Amazonía</h1>
-        <p className='text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-amber-100 mb-8'>
-          Selva Alta Roasters presenta &quot;Tasty&quot;: Café premium de origen Tingo María, Huánuco - Perú. Seleccionado especialmente para el mercado specialty y empresarial.
+      <section id='inicio' className='bg-amber-900 text-white py-24 text-center px-4'>
+        <h1 className='text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6'>Café de Especialidad de la Alta Amazonía</h1>
+        <p className='text-xl max-w-2xl mx-auto text-amber-100 mb-8'>
+          Selva Alta Roasters presenta "Tasty": Café premium de origen Tingo María, Huánuco - Perú. Seleccionado especialmente para el mercado specialty y empresarial.
         </p>
         <a href="#contacto" className="inline-block bg-white text-amber-900 font-bold py-3 px-8 rounded-full shadow hover:bg-gray-100 transition transform hover:scale-105 duration-200">
           Solicitar Muestra
@@ -75,35 +84,27 @@ export default function Home() {
       </section>
 
       {/* Catálogo de Variedades (Carrusel) */}
-      <section id='quienes-somos' className='scroll-mt-24 py-16 bg-white'>
+      <section id='quienes-somos' className='py-16 bg-white'>
         <div className='max-w-6xl mx-auto px-4'>
-          <h2 className='text-2xl sm:text-3xl font-bold mb-10 text-amber-900 text-center'>Nuestras Variedades</h2>
+          <h2 className='text-3xl font-bold mb-10 text-amber-900 text-center'>Nuestras Variedades</h2>
           
-          <div className='relative bg-amber-50 rounded-2xl px-4 py-6 sm:p-8 md:p-12 shadow-md border border-amber-100'>
+          <div className='relative bg-amber-50 rounded-2xl p-8 md:p-12 shadow-md border border-amber-100'>
             {/* Controles del Carrusel */}
-            <button
-              onClick={prevSlide}
-              className='absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full h-11 w-11 inline-flex items-center justify-center shadow hover:bg-gray-100 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600'
-              aria-label='Ver variedad anterior'
-            >
+            <button onClick={prevSlide} className='absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow hover:bg-gray-100 z-10'>
               <svg className="w-6 h-6 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            <button
-              onClick={nextSlide}
-              className='absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full h-11 w-11 inline-flex items-center justify-center shadow hover:bg-gray-100 z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600'
-              aria-label='Ver siguiente variedad'
-            >
+            <button onClick={nextSlide} className='absolute right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow hover:bg-gray-100 z-10'>
               <svg className="w-6 h-6 text-amber-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
             </button>
 
             {/* Contenido del Slide Activo */}
-            <div className='flex flex-col md:flex-row gap-8 md:gap-12 items-center' aria-live="polite" role="region" aria-label="Contenido del carrusel">
+            <div className='flex flex-col md:flex-row gap-12 items-center'>
               <div className='md:w-1/2'>
-                <h3 className='text-2xl sm:text-3xl font-extrabold text-amber-900 mb-2'>{varieties[currentSlide].name}</h3>
+                <h3 className='text-3xl font-extrabold text-amber-900 mb-2'>{varieties[currentSlide].name}</h3>
                 <span className='inline-block bg-amber-200 text-amber-900 font-bold px-3 py-1 rounded-full text-sm mb-6'>
                   {varieties[currentSlide].points}
                 </span>
-                <p className='text-base sm:text-lg text-gray-700 leading-relaxed mb-6'>
+                <p className='text-lg text-gray-700 leading-relaxed mb-6'>
                   {varieties[currentSlide].description}
                 </p>
                 
@@ -117,20 +118,20 @@ export default function Home() {
                 </div>
               </div>
               
-              <div className='md:w-1/2 grid grid-cols-2 gap-3 sm:gap-4 w-full'>
-                <div className='bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100'>
+              <div className='md:w-1/2 grid grid-cols-2 gap-4 w-full'>
+                <div className='bg-white p-6 rounded-xl shadow-sm border border-gray-100'>
                   <h4 className='font-bold text-amber-900'>Origen</h4>
                   <p className='text-gray-700'>{varieties[currentSlide].origin}</p>
                 </div>
-                <div className='bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100'>
+                <div className='bg-white p-6 rounded-xl shadow-sm border border-gray-100'>
                   <h4 className='font-bold text-amber-900'>Altitud</h4>
                   <p className='text-gray-700'>{varieties[currentSlide].altitude}</p>
                 </div>
-                <div className='bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100'>
+                <div className='bg-white p-6 rounded-xl shadow-sm border border-gray-100'>
                   <h4 className='font-bold text-amber-900'>Proceso</h4>
                   <p className='text-gray-700'>{varieties[currentSlide].process}</p>
                 </div>
-                <div className='bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100'>
+                <div className='bg-white p-6 rounded-xl shadow-sm border border-gray-100'>
                   <h4 className='font-bold text-amber-900'>Variedad</h4>
                   <p className='text-gray-700'>{varieties[currentSlide].name.replace("Pronto: ", "")}</p>
                 </div>
@@ -143,12 +144,9 @@ export default function Home() {
                 <button 
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className='h-11 w-11 inline-flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600'
+                  className={`h-3 rounded-full transition-all ${currentSlide === index ? 'bg-amber-900 w-8' : 'bg-amber-300 w-3'}`}
                   aria-label={`Ir al slide ${index + 1}`}
-                  aria-current={currentSlide === index ? 'true' : undefined}
-                >
-                  <span className={`h-3 rounded-full transition-all ${currentSlide === index ? 'bg-amber-900 w-8' : 'bg-amber-300 w-3'}`} />
-                </button>
+                />
               ))}
             </div>
           </div>
@@ -156,9 +154,9 @@ export default function Home() {
       </section>
 
       {/* Formatos y Servicios */}
-      <section id='servicios' className='scroll-mt-24 py-16 sm:py-20 bg-gray-50 border-t border-gray-200'>
+      <section id='servicios' className='py-20 bg-gray-50 border-t border-gray-200'>
         <div className='max-w-5xl mx-auto px-4'>
-          <h2 className='text-2xl sm:text-3xl font-bold mb-12 text-center text-amber-900'>Nuestra Oferta Comercial</h2>
+          <h2 className='text-3xl font-bold mb-12 text-center text-amber-900'>Nuestra Oferta Comercial</h2>
           <div className='grid md:grid-cols-2 gap-8 text-left'>
             <div className='p-8 bg-white shadow-sm rounded-xl border border-gray-100'>
               <h2 className='text-2xl font-bold mb-3'>☕ Cafeterías y Specialty</h2>
@@ -166,17 +164,17 @@ export default function Home() {
             </div>
             <div className='p-8 bg-white shadow-sm rounded-xl border border-gray-100'>
               <h2 className='text-2xl font-bold mb-3'>📦 Distribuidores y Tiendas</h2>
-              <p className='text-gray-600'>Comercializamos nuestro café tostado bajo la marca &quot;Tasty&quot; en formato de 250 gramos, con completa trazabilidad y garantía de frescura.</p>
+              <p className='text-gray-600'>Comercializamos nuestro café tostado bajo la marca "Tasty" en formato de 250 gramos, con completa trazabilidad y garantía de frescura.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contacto */}
-      <section id='contacto' className='scroll-mt-24 py-16 sm:py-20 bg-amber-900'>
+      <section id='contacto' className='py-20 bg-amber-900'>
         <div className='max-w-3xl mx-auto px-4'>
           <div className='text-center text-white mb-10'>
-            <h3 className='text-2xl sm:text-3xl font-bold mb-4'>Construyamos una Alianza</h3>
+            <h3 className='text-3xl font-bold mb-4'>Construyamos una Alianza</h3>
             <p className='text-amber-100'>
               Quedamos disponibles para coordinar el envío de muestras, fichas técnicas y antecedentes comerciales.
             </p>
@@ -186,22 +184,22 @@ export default function Home() {
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               <div>
                 <label className='block text-sm font-bold text-gray-700 mb-1'>Nombre Completo *</label>
-                <input required type="text" name="name" className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
+                <input required type="text" name="name" className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
               </div>
               <div>
                 <label className='block text-sm font-bold text-gray-700 mb-1'>Nombre de la Empresa *</label>
-                <input required type="text" name="company" className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
+                <input required type="text" name="company" className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
               </div>
             </div>
             
             <div>
               <label className='block text-sm font-bold text-gray-700 mb-1'>Correo Electrónico Corporativo *</label>
-              <input required type="email" name="email" className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
+              <input required type="email" name="email" className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' disabled={contactStatus === 'loading' || contactStatus === 'success'} />
             </div>
 
             <div>
               <label className='block text-sm font-bold text-gray-700 mb-1'>Mensaje</label>
-              <textarea name="message" rows={4} className='w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' placeholder='¿Qué tipo de volumen buscan? ¿Desean agendar una cata?' disabled={contactStatus === 'loading' || contactStatus === 'success'}></textarea>
+              <textarea name="message" rows={4} className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none' placeholder='¿Qué tipo de volumen buscan? ¿Desean agendar una cata?' disabled={contactStatus === 'loading' || contactStatus === 'success'}></textarea>
             </div>
 
             <button 
@@ -211,17 +209,15 @@ export default function Home() {
               {contactStatus === 'loading' ? 'Enviando Datos...' : 'Contactar a Selva Alta Roasters'}
             </button>
             
-            <div className='min-h-6 text-center mt-2' aria-live="polite">
-              {contactStatus === 'success' && <p className="text-green-600 font-bold">{contactMessage}</p>}
-              {contactStatus === 'error' && <p className="text-red-500 font-bold">{contactMessage}</p>}
-            </div>
+            {contactStatus === 'success' && <p className="text-green-600 font-bold text-center mt-2">{contactMessage}</p>}
+            {contactStatus === 'error' && <p className="text-red-500 font-bold text-center mt-2">{contactMessage}</p>}
           </form>
         </div>
       </section>
 
       {/* Footer */}
       <footer className='bg-gray-900 text-center py-8 text-gray-400 text-sm'>
-        <p>© 2026 Selva Alta Roasters SpA. Producto &quot;Tasty&quot;. Todos los derechos reservados.</p>
+        <p>© 2026 Selva Alta Roasters SpA. Producto "Tasty". Todos los derechos reservados.</p>
       </footer>
     </div>
   );
