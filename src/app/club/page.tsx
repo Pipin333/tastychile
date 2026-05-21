@@ -9,6 +9,7 @@ const coffees = [
   { id: 'catimore', name: 'Catimore', notes: 'Avellanas, Miel, Cacao puro', process: 'Lavado', points: '84 Puntos SCA', price: 11900, emoji: '🍯', alt: '1.600 msnm' },
   { id: 'pink-bourbon', name: 'Pink Bourbon (Pronto)', notes: 'Floral, Frutos Rojos, Miel', process: 'Lavado', points: 'SCA por evaluar', price: 14900, emoji: '🌸', alt: '1.700 - 1.900 msnm' },
   { id: 'tupi', name: 'Tupi (Pronto)', notes: 'Nuez, Cacao, Especias', process: 'Natural', points: 'SCA por evaluar', price: 13500, emoji: '🌰', alt: '1.500 - 1.700 msnm' },
+  { id: 'geisha', name: 'Geisha (Pronto)', notes: 'Jazmín, Bergamota, Fruta Tropical', process: 'Lavado', points: 'SCA por evaluar', price: 19900, emoji: '🌺', alt: '1.850+ msnm' },
 ];
 
 export default function Club() {

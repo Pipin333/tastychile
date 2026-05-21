@@ -44,6 +44,15 @@ export default function Home() {
       altitude: "1.500 - 1.700 msnm",
       process: "Natural",
       tastingNotes: ["🌰 Nuez", "🍫 Cacao", "🪵 Especias"]
+    },
+    {
+      name: "Pronto: Geisha",
+      points: "SCA por evaluar",
+      description: "Nuestra joya en desarrollo. El famoso perfil Geisha cultivado en altura extrema para desarrollar una taza elegante y compleja con notas de jazmín y frutas tropicales.",
+      origin: "Alta Amazonía",
+      altitude: "1.850+ msnm",
+      process: "Lavado",
+      tastingNotes: ["🌺 Jazmín", "🍊 Bergamota", "🍍 Fruta Tropical"]
     }
   ];
 
