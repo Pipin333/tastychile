@@ -130,7 +130,7 @@ export default function SuscripcionesPage() {
           <div className="space-y-6">
             <div className="bg-gray-50 p-6 rounded-2xl">
               <h4 className="text-lg font-bold text-gray-900 mb-2">¿Puedo cambiar mi variedad mes a mes?</h4>
-                <p className="text-gray-600">¡Por supuesto! Desde tu panel podrás cambiar la bolsa principal de 250g antes del día 5 de cada mes para probar toda nuestra rotación (Marsellesa, Caturra, Catimore, Pink Bourbon, etc).</p>
+                <p className="text-gray-600">¡Por supuesto! Desde tu panel podrás cambiar la bolsa principal de 250g antes del día 5 de cada mes para probar toda nuestra rotación (Marsellesa, Caturra, Catimore, Geisha, Pink Bourbon, etc).</p>
             </div>
             <div className="bg-gray-50 p-6 rounded-2xl">
               <h4 className="text-lg font-bold text-gray-900 mb-2">¿Cómo funcionan los envíos?</h4>
