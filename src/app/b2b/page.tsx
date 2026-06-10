@@ -1,7 +1,9 @@
-﻿"use client";
+"use client";
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import { addB2BContact } from '@/app/actions';
+import Footer from '@/components/Footer';
+import CartDrawer from '@/components/CartDrawer';
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -241,10 +243,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className='bg-gray-900 text-center py-8 text-gray-400 text-sm'>
-        <p>© 2026 Selva Alta Roasters SpA. Producto &quot;Tasty&quot;. Todos los derechos reservados.</p>
-      </footer>
+      <Footer />
+      <CartDrawer />
     </div>
   );
 }

@@ -1,8 +1,12 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { addContactToWaitlist } from '@/app/actions';
+import { useCartStore } from '@/lib/cart-store';
+import CartIcon from '@/components/CartIcon';
+import CartDrawer from '@/components/CartDrawer';
+import Footer from '@/components/Footer';
 
 const coffees = [
   { id: 'marsellesa', name: 'Marsellesa', notes: 'Chocolate, Caramelo, Frutas Dulces', process: 'Lavado / Orgánico', points: '87 Puntos SCA', price: 12900, emoji: '🍫', alt: '1.820 msnm' },
@@ -16,6 +20,7 @@ const coffees = [
 export default function Club() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const addItem = useCartStore((s) => s.addItem);
 
   const handleSubmit = async (formData: FormData) => {
     setStatus('loading');
@@ -31,7 +36,7 @@ export default function Club() {
   };
 
   return (
-    <div className='min-h-screen bg-gray-50 text-gray-900 font-sans'>
+    <div className='min-h-screen bg-gray-50 text-gray-900 font-sans flex flex-col justify-between'>
       {/* Navbar simplificado para el club */}
       <nav className="bg-white shadow-sm w-full sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,10 +47,13 @@ export default function Club() {
             <div className="text-xl md:text-2xl font-extrabold text-amber-900 tracking-tight">
               Selva Alta Club
             </div>
-            <div className="hidden md:flex gap-4 text-sm font-medium text-amber-900">
-              <a href="#suscripcion" className="hover:text-amber-700 transition">Suscripción</a>
-              <a href="#tienda" className="hover:text-amber-700 transition">Tienda</a>
-              <a href="#nosotros" className="hover:text-amber-700 transition">Nosotros</a>
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex gap-4 text-sm font-medium text-amber-900">
+                <a href="#suscripcion" className="hover:text-amber-700 transition">Suscripción</a>
+                <a href="#tienda" className="hover:text-amber-700 transition">Tienda</a>
+                <a href="#nosotros" className="hover:text-amber-700 transition">Nosotros</a>
+              </div>
+              <CartIcon />
             </div>
           </div>
         </div>
@@ -117,7 +125,18 @@ export default function Club() {
                 </div>
                 <div className="mt-auto pt-4 flex flex-col sm:flex-row justify-between items-center border-t border-gray-100 gap-4">
                   <span className="text-2xl font-extrabold text-amber-900">${coffee.price.toLocaleString('es-CL')}</span>
-                  <button className="w-full sm:w-auto bg-amber-100 text-amber-900 font-bold py-2 px-6 rounded-xl hover:bg-amber-200 transition">
+                  <button 
+                    type="button"
+                    onClick={() => addItem({
+                      id: coffee.id,
+                      name: `Café ${coffee.name} (250g)`,
+                      price: coffee.price,
+                      emoji: coffee.emoji,
+                      detail: `${coffee.process} • ${coffee.alt}`,
+                      type: 'product'
+                    })}
+                    className="w-full sm:w-auto bg-amber-100 text-amber-900 font-bold py-2 px-6 rounded-xl hover:bg-amber-200 transition"
+                  >
                     Agregar al Carrito
                   </button>
                 </div>
@@ -140,7 +159,7 @@ export default function Club() {
       </section>
 
       {/* Newsletter CTA / Waitlist */}
-      <section className='bg-white py-16 border-t border-gray-100 px-4'>
+      <section className='bg-white py-16 border-t border-gray-100 px-4 mb-8'>
         <div className='max-w-md mx-auto text-center'>
           <h3 className='text-2xl font-bold text-amber-900 mb-2'>¡Estamos encendiendo los tostadores!</h3>
           <p className='text-gray-600 mb-6'>Déjanos tu correo para avisarte apenas habilitemos el carrito de compras. ¡Las primeras suscripciones llevarán un regalo exclusivo!</p>
@@ -164,6 +183,9 @@ export default function Club() {
           </form>
         </div>
       </section>
+
+      <Footer />
+      <CartDrawer />
     </div>
   );
 }

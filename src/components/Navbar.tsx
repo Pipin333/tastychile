@@ -1,6 +1,8 @@
-﻿"use client";
+"use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import CartIcon from "@/components/CartIcon";
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,13 +28,15 @@ export default function Navbar() {
               Selva Alta Roasters
             </Link>
           </div>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="#inicio" className="text-gray-700 hover:text-amber-900 font-medium transition">Inicio</Link>
-            <Link href="#quienes-somos" className="text-gray-700 hover:text-amber-900 font-medium transition">Quiénes Somos</Link>
-            <Link href="#servicios" className="text-gray-700 hover:text-amber-900 font-medium transition">Servicios</Link>
-            <Link href="#contacto" className="text-gray-700 hover:text-amber-900 font-medium transition">Contacto</Link>
-          </div>
-          <div className="flex items-center md:hidden">
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="#inicio" className="text-gray-700 hover:text-amber-900 font-medium transition">Inicio</Link>
+              <Link href="#quienes-somos" className="text-gray-700 hover:text-amber-900 font-medium transition">Quiénes Somos</Link>
+              <Link href="#servicios" className="text-gray-700 hover:text-amber-900 font-medium transition">Servicios</Link>
+              <Link href="#contacto" className="text-gray-700 hover:text-amber-900 font-medium transition">Contacto</Link>
+            </div>
+            <CartIcon />
+            <div className="flex items-center md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="h-11 w-11 inline-flex items-center justify-center text-gray-700 hover:text-amber-900 hover:bg-amber-50 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600"
@@ -48,6 +52,7 @@ export default function Navbar() {
                 )}
               </svg>
             </button>
+          </div>
           </div>
         </div>
       </div>

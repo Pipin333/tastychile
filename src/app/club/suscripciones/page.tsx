@@ -3,10 +3,15 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { addContactToWaitlist } from '@/app/actions';
+import { useCartStore } from '@/lib/cart-store';
+import CartIcon from '@/components/CartIcon';
+import CartDrawer from '@/components/CartDrawer';
+import Footer from '@/components/Footer';
 
 export default function SuscripcionesPage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const addItem = useCartStore((s) => s.addItem);
 
   const handleSubmit = async (formData: FormData) => {
     setStatus('loading');
@@ -22,7 +27,7 @@ export default function SuscripcionesPage() {
   };
 
   return (
-    <div className='min-h-screen bg-gray-50 text-gray-900 font-sans'>
+    <div className='min-h-screen bg-gray-50 text-gray-900 font-sans flex flex-col justify-between'>
       {/* Navbar simplificado */}
       <nav className="bg-white shadow-sm w-full sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,7 +38,9 @@ export default function SuscripcionesPage() {
             <div className="text-xl md:text-2xl font-extrabold text-amber-900 tracking-tight">
               Selva Alta Club
             </div>
-            <div className="w-16"></div> {/* Espaciador */}
+            <div className="flex items-center gap-4">
+              <CartIcon />
+            </div>
           </div>
         </div>
       </nav>
@@ -65,9 +72,19 @@ export default function SuscripcionesPage() {
                 <span className="text-gray-700">1 Muestra sorpresa de 60g</span>
               </li>
             </ul>
-            <a href="#unirme" className="block text-center w-full bg-amber-100 text-amber-900 font-bold py-3 rounded-xl hover:bg-amber-200 transition">
+            <button
+              onClick={() => addItem({
+                id: 'sub-explorador',
+                name: 'Suscripción Explorador',
+                price: 14900,
+                emoji: '🌱',
+                detail: '1 Bolsa de 250g mensual + 1 muestra sorpresa',
+                type: 'subscription'
+              })}
+              className="block text-center w-full bg-amber-100 text-amber-900 font-bold py-3 rounded-xl hover:bg-amber-200 transition"
+            >
               Elegir Plan
-            </a>
+            </button>
           </div>
 
           {/* Plan Aventurero (Destacado) */}
@@ -93,9 +110,19 @@ export default function SuscripcionesPage() {
                 <span>Carta del productor con tips</span>
               </li>
             </ul>
-            <a href="#unirme" className="block text-center w-full bg-white text-amber-900 font-bold py-3 rounded-xl hover:bg-gray-100 transition">
+            <button
+              onClick={() => addItem({
+                id: 'sub-aventurero',
+                name: 'Suscripción Aventurera',
+                price: 18900,
+                emoji: '🤠',
+                detail: '1 Bolsa de 250g mensual + 2 muestras + carta',
+                type: 'subscription'
+              })}
+              className="block text-center w-full bg-white text-amber-900 font-bold py-3 rounded-xl hover:bg-gray-100 transition"
+            >
               Elegir Plan
-            </a>
+            </button>
           </div>
 
           {/* Plan Experto */}
@@ -114,9 +141,19 @@ export default function SuscripcionesPage() {
                 <span className="text-gray-700">Acceso anticipado a microlotes</span>
               </li>
             </ul>
-            <a href="#unirme" className="block text-center w-full bg-amber-100 text-amber-900 font-bold py-3 rounded-xl hover:bg-amber-200 transition">
+            <button
+              onClick={() => addItem({
+                id: 'sub-experto',
+                name: 'Suscripción Experta',
+                price: 28900,
+                emoji: '👑',
+                detail: '2 Bolsas de 250g mensual + acceso preferente',
+                type: 'subscription'
+              })}
+              className="block text-center w-full bg-amber-100 text-amber-900 font-bold py-3 rounded-xl hover:bg-amber-200 transition"
+            >
               Elegir Plan
-            </a>
+            </button>
           </div>
 
         </div>
@@ -145,7 +182,7 @@ export default function SuscripcionesPage() {
       </section>
 
       {/* Waitlist (Bottom) */}
-      <section id="unirme" className='bg-amber-50 py-16 border-t border-amber-100 px-4'>
+      <section id="unirme" className='bg-amber-50 py-16 border-t border-amber-100 px-4 mb-8'>
         <div className='max-w-md mx-auto text-center'>
           <h3 className='text-2xl font-bold text-amber-900 mb-2'>Inscríbete a la Lista de Acceso</h3>
           <p className='text-gray-600 mb-6'>Pronto abriremos los cupos oficiales. Los primeros en la lista asegurarán su primera cajita con un regalo especial.</p>
@@ -169,6 +206,9 @@ export default function SuscripcionesPage() {
           </form>
         </div>
       </section>
+
+      <Footer />
+      <CartDrawer />
     </div>
   );
 }

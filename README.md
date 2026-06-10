@@ -27,17 +27,55 @@ Plataforma moderna para la adquisición de café de especialidad de la Amazonía
 
 ## ⚙️ Configuración del Entorno (Variables de Entorno)
 
-Crea un archivo `.env.local` en la raíz del proyecto y agrega tus credenciales de la base de datos:
+Crea un archivo `.env.local` en la raíz del proyecto (y configura las variables en Vercel para producción):
 
 ```env
-# Variables para conexión a Neon o Vercel Postgres
-DATABASE_URL="postgresql://usuario:contraseña@servidor.neon.tech/neondb?sslmode=require"
-# En caso de desplegar con prefijo en Vercel:
-TASTY_DATABASE_URL="postgresql://... "
-TASTY_POSTGRES_URL="postgresql://... "
+# 1. Base de Datos (Neon / Vercel Postgres)
+DATABASE_URL="postgresql://neondb_owner:npg_...sa-east-1.aws.neon.tech/neondb?sslmode=require"
+
+# 2. Resend (Envío de Correos Corporativos)
+RESEND_API_KEY="re_xxxxxxxxxxxx"
+# Remitente verificado en Resend. Si no se especifica, usa 'Selva Alta <onboarding@resend.dev>' (sandbox de prueba).
+RESEND_FROM_EMAIL="Selva Alta Roasters <no-reply@selvaalta.cl>"
+# Email del negocio donde te llegarán las alertas de pedidos y B2B leads
+CONTACT_EMAIL="comercial@selvaalta.cl"
+
+# 3. Mercado Pago (Pasarela de Pagos)
+# Token de acceso de producción o sandbox obtenido en mercadopago.cl -> Credenciales.
+# Si no se define, el sistema funcionará automáticamente en modo "Wizard of Oz" (transferencia bancaria).
+MP_ACCESS_TOKEN="APP_USR-xxxxxxxxxxxx-xxxxxxxxxxxx"
+
+# 4. Envío Masivo / Campañas
+# Token secreto para proteger el endpoint de envío de newsletters /api/newsletter/send
+NEWSLETTER_API_SECRET="tu-clave-secreta-de-campanas"
 ```
 
-> **Nota:** El archivo `actions.ts` detectará automáticamente estas variables. Asegúrate de ejecutar también las migraciones/tablas (e.g. tablas `waitlist` y `b2b_contacts`).
+## 🛠️ Pasos de Configuración para Producción
+
+### 1. Inicialización de la Base de Datos
+Una vez configurado `DATABASE_URL`, inicia el servidor localmente o despliega en Vercel, y visita el siguiente endpoint una sola vez para crear y actualizar las tablas (`orders`, `waitlist`, `b2b_contacts`):
+```text
+http://localhost:3000/api/setup-db
+(o tu-dominio.vercel.app/api/setup-db en producción)
+```
+
+### 2. Configurar Resend con tu Dominio (Nic Chile)
+Para enviar correos masivos a tus clientes desde `comercial@selvaalta.cl` (o `no-reply@selvaalta.cl`), debes verificar tu dominio en Resend:
+1. Crea una cuenta en [resend.com](https://resend.com).
+2. Ve a **Domains** > **Add Domain** e ingresa `selvaalta.cl`.
+3. Resend te entregará 3 registros de tipo `TXT` y `MX` (DKIM/SPF).
+4. Inicia sesión en tu panel de **Nic Chile** y agrega estos registros DNS en la administración del dominio `selvaalta.cl`.
+5. Vuelve a Resend y haz clic en **Verify**. Una vez activo, actualiza la variable `RESEND_FROM_EMAIL` con tu dirección real de dominio.
+
+### 3. Configurar Mercado Pago (Webhook de Confirmaciones)
+Para recibir notificaciones automáticas cuando un cliente pague:
+1. Inicia sesión en tu panel de desarrollador de [Mercado Pago](https://www.mercadopago.cl).
+2. Obtén tu **Access Token** en la sección de credenciales y agrégalo a tu entorno.
+3. Configura tu URL de Webhook para capturar las ventas aprobadas. Ve a **Notificaciones Webhook** e ingresa tu URL de producción apuntando a:
+   `https://tu-dominio.cl/api/mercadopago/webhook`
+4. Selecciona el evento **payment** (pagos) para suscribirte a las alertas de pago.
+
+---
 
 ## 🏁 Inicio Rápido
 
