@@ -130,10 +130,10 @@ export default function TerminosPage() {
                 <strong className="text-[#2A1B12]">
                   Precios de Bolsas de 250g y Packs:
                 </strong>{" "}
-                Los valores publicados en pesos chilenos (1 bolsa de 250g por
-                $12.900, pack de 4 bolsas / 1 kg por $44.900 y pack de 12 bolsas
-                / 3 kg por $119.900) incluyen IVA. Los packs de 1 kg y 3 kg
-                incluyen envío gratis en comunas urbanas de Santiago.
+                Los valores promocionales publicados en pesos chilenos (1 bolsa
+                de 250g por $11.500, pack de 4 bolsas / 1 kg por $39.990 y caja
+                de 12 bolsas / 3 kg por $104.990) incluyen IVA. Los packs de 1
+                kg y 3 kg incluyen envío gratis en comunas urbanas de Santiago.
               </li>
               <li>
                 <strong className="text-[#2A1B12]">

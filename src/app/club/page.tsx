@@ -11,7 +11,9 @@ interface VolumeTier {
   id: string;
   name: string;
   subtitle: string;
+  oldPrice: number;
   price: number;
+  discountBadge: string;
   unitPriceLabel: string;
   bagsCount: string;
 }
@@ -21,24 +23,30 @@ const VOLUME_TIERS: VolumeTier[] = [
     id: "marsellesa-250g",
     name: "1 Bolsa (250g)",
     subtitle: "1 bolsa de 250g recién tostada",
-    price: 12900,
-    unitPriceLabel: "$12.900 por bolsa",
+    oldPrice: 13990,
+    price: 11500,
+    discountBadge: "-18%",
+    unitPriceLabel: "$11.500 por bolsa (Normal $13.990)",
     bagsCount: "250 gramos",
   },
   {
     id: "marsellesa-1kg",
     name: "Pack 1 Kilo",
     subtitle: "4 bolsas de 250g · Envío gratis en Santiago",
-    price: 44900,
-    unitPriceLabel: "$11.225 por bolsa (Ahorras 13%)",
+    oldPrice: 55960,
+    price: 39990,
+    discountBadge: "-28%",
+    unitPriceLabel: "$9.998 por bolsa (Ahorras $15.970)",
     bagsCount: "4 × 250g (1 kg)",
   },
   {
     id: "marsellesa-3kg",
     name: "Caja 3 Kilos",
     subtitle: "12 bolsas de 250g · Ideal para grupos, barras y oficinas",
-    price: 119900,
-    unitPriceLabel: "$9.990 por bolsa (Ahorras 22%)",
+    oldPrice: 167880,
+    price: 104990,
+    discountBadge: "-37%",
+    unitPriceLabel: "$8.749 por bolsa (Ahorras $62.890)",
     bagsCount: "12 × 250g (3 kg)",
   },
 ];
@@ -205,7 +213,9 @@ export default function ClubPage() {
 
   const activeTier =
     VOLUME_TIERS.find((t) => t.id === selectedTierId) || VOLUME_TIERS[0];
+  const normalSubtotal = activeTier.oldPrice * quantity;
   const subtotal = activeTier.price * quantity;
+  const totalSavings = normalSubtotal - subtotal;
   const shipping = subtotal >= 30000 ? 0 : 3900;
   const total = subtotal + shipping;
 
@@ -378,15 +388,25 @@ export default function ClubPage() {
                               : "bg-[#FFFDF9]/90 border-[#DFD3C3] hover:bg-[#F3ECE1]"
                           }`}
                         >
-                          <span className="block font-mono text-[11px] uppercase text-[#9E2A2B] font-semibold mb-1">
-                            {tier.bagsCount}
-                          </span>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-mono text-[11px] uppercase text-[#9E2A2B] font-semibold">
+                              {tier.bagsCount}
+                            </span>
+                            <span className="font-mono text-[10px] font-bold bg-[#9E2A2B] text-white px-1.5 py-0.5 rounded">
+                              {tier.discountBadge}
+                            </span>
+                          </div>
                           <span className="block text-base font-bold text-[#143326] mb-1">
                             {tier.name}
                           </span>
-                          <span className="block font-mono text-xl font-bold text-[#2A1B12]">
-                            ${tier.price.toLocaleString("es-CL")}
-                          </span>
+                          <div className="flex items-baseline gap-2">
+                            <span className="font-mono text-xl font-bold text-[#2A1B12]">
+                              ${tier.price.toLocaleString("es-CL")}
+                            </span>
+                            <span className="font-mono text-xs text-[#6E5D4F] line-through">
+                              ${tier.oldPrice.toLocaleString("es-CL")}
+                            </span>
+                          </div>
                           <span className="block text-[11px] text-[#4A3F35] mt-1">
                             {tier.unitPriceLabel}
                           </span>
@@ -485,8 +505,17 @@ export default function ClubPage() {
                     <span>
                       {quantity} × Marsellesa ({activeTier.name})
                     </span>
+                    <div className="flex items-baseline gap-1.5 font-mono">
+                      <span className="text-[11px] text-[#6E5D4F] line-through font-normal">
+                        ${normalSubtotal.toLocaleString("es-CL")}
+                      </span>
+                      <span>${subtotal.toLocaleString("es-CL")}</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-[#9E2A2B] font-semibold">
+                    <span>Descuento directo aplicado</span>
                     <span className="font-mono">
-                      ${subtotal.toLocaleString("es-CL")}
+                      -${totalSavings.toLocaleString("es-CL")}
                     </span>
                   </div>
                   <div className="flex justify-between text-[#4A3F35]">

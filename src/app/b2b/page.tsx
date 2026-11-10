@@ -18,22 +18,28 @@ export default function B2BPage() {
     {
       tier: "Bolsa Individual (250g)",
       bags: "1 bolsa × 250g",
-      price: "$12.900",
-      unitCost: "$12.900 por bolsa",
+      oldPrice: "$13.990",
+      price: "$11.500",
+      badge: "18% DCTO",
+      unitCost: "$11.500 por bolsa (Normal $13.990)",
       useCase: "Para probar el café en tu máquina o cafetera antes de pedir por volumen",
     },
     {
       tier: "Pack 1 kg (4 × 250g)",
       bags: "4 bolsas × 250g",
-      price: "$44.900",
-      unitCost: "$11.225 por bolsa (Ahorras 13%)",
+      oldPrice: "$55.960",
+      price: "$39.990",
+      badge: "28% DCTO",
+      unitCost: "$9.998 por bolsa (Ahorras $15.970)",
       useCase: "Ideal para oficinas de 8 a 15 personas con envío gratis en Santiago",
     },
     {
       tier: "Caja 3 kg (12 × 250g)",
       bags: "12 bolsas × 250g",
-      price: "$119.900",
-      unitCost: "$9.990 por bolsa (Ahorras 22%)",
+      oldPrice: "$167.880",
+      price: "$104.990",
+      badge: "37% DCTO",
+      unitCost: "$8.749 por bolsa (Ahorras $62.890)",
       useCase: "Pensado para cafeterías, restaurantes, estudios y oficinas medianas",
     },
   ];
@@ -201,15 +207,25 @@ export default function B2BPage() {
                     }`}
                   >
                     <div>
-                      <p className="font-mono text-xs text-[#9E2A2B] font-semibold uppercase tracking-wider mb-1">
-                        {row.bags}
-                      </p>
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="font-mono text-xs text-[#9E2A2B] font-semibold uppercase tracking-wider">
+                          {row.bags}
+                        </p>
+                        <span className="font-mono text-[10px] font-bold bg-[#9E2A2B] text-white px-2 py-0.5 rounded">
+                          {row.badge}
+                        </span>
+                      </div>
                       <h3 className="text-lg font-bold text-[#143326] mb-2">
                         {row.tier}
                       </h3>
-                      <p className="font-mono text-3xl font-bold text-[#2A1B12] mb-1">
-                        {row.price}
-                      </p>
+                      <div className="flex items-baseline gap-2.5 mb-1">
+                        <p className="font-mono text-3xl font-bold text-[#2A1B12]">
+                          {row.price}
+                        </p>
+                        <span className="font-mono text-sm text-[#6E5D4F] line-through">
+                          {row.oldPrice}
+                        </span>
+                      </div>
                       <p className="font-mono text-xs text-[#1E4D38] font-medium mb-4">
                         {row.unitCost}
                       </p>

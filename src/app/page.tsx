@@ -9,20 +9,26 @@ export default function Home() {
   const volumeTiers = [
     {
       label: "1 Bolsa (250g)",
-      price: "$12.900",
+      oldPrice: "$13.990",
+      price: "$11.500",
+      badge: "18% DCTO",
       detail: "Para probar en casa · Molido a tu cafetera",
       href: "/club?tier=marsellesa-250g",
     },
     {
       label: "Pack 1 Kilo (4 × 250g)",
-      price: "$44.900",
-      detail: "Ahorras 13% · Envío gratis en Santiago",
+      oldPrice: "$55.960",
+      price: "$39.990",
+      badge: "28% DCTO",
+      detail: "$9.998 por bolsa · Envío gratis en Santiago",
       href: "/club?tier=marsellesa-1kg",
     },
     {
       label: "Caja 3 Kilos (12 × 250g)",
-      price: "$119.900",
-      detail: "Ahorras 22% · Ideal para oficinas y barras",
+      oldPrice: "$167.880",
+      price: "$104.990",
+      badge: "37% DCTO",
+      detail: "$8.749 por bolsa · Ideal para oficinas y barras",
       href: "/club?tier=marsellesa-3kg",
     },
   ];
@@ -232,12 +238,22 @@ export default function Home() {
                     href={tier.href}
                     className="group block bg-[#FAF6F0] hover:bg-[#EFE4D2] border border-[#DFD3C3] hover:border-[#9E2A2B] rounded-xl p-5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B]"
                   >
-                    <span className="block text-xs font-semibold text-[#1E4D38] mb-1">
-                      {tier.label}
-                    </span>
-                    <span className="block font-mono text-2xl font-bold text-[#2A1B12] mb-1">
-                      {tier.price}
-                    </span>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-semibold text-[#1E4D38]">
+                        {tier.label}
+                      </span>
+                      <span className="font-mono text-[10px] font-bold bg-[#9E2A2B] text-white px-2 py-0.5 rounded">
+                        {tier.badge}
+                      </span>
+                    </div>
+                    <div className="flex items-baseline gap-2 mb-1">
+                      <span className="font-mono text-2xl font-bold text-[#2A1B12]">
+                        {tier.price}
+                      </span>
+                      <span className="font-mono text-xs text-[#6E5D4F] line-through">
+                        {tier.oldPrice}
+                      </span>
+                    </div>
                     <span className="block text-xs text-[#4A3F35] mb-3">
                       {tier.detail}
                     </span>

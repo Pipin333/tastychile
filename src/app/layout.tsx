@@ -152,8 +152,8 @@ const jsonLd = {
       offers: {
         "@type": "AggregateOffer",
         priceCurrency: "CLP",
-        lowPrice: "9990",
-        highPrice: "12900",
+        lowPrice: "8749",
+        highPrice: "11500",
         offerCount: "3",
         availability: "https://schema.org/InStock",
         url: `${siteUrl}/club`,

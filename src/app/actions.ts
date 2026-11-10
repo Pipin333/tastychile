@@ -17,18 +17,18 @@ const MARSELLESA_CATALOG: Record<
 > = {
   "marsellesa-250g": {
     name: "Marsellesa Orgánico · 250g (1 bolsa)",
-    price: 12900,
-    detail: "1 bolsa de 250g con válvula desgasificadora",
+    price: 11500,
+    detail: "1 bolsa de 250g con válvula desgasificadora (Precio normal $13.990)",
   },
   "marsellesa-1kg": {
-    name: "Marsellesa Orgánico · Volumen 1 kg (4 × 250g)",
-    price: 44900,
-    detail: "4 bolsas de 250g (Ahorro por volumen 13%)",
+    name: "Marsellesa Orgánico · Pack 1 kg (4 × 250g)",
+    price: 39990,
+    detail: "4 bolsas de 250g ($9.998 c/u · Precio normal $55.960)",
   },
   "marsellesa-3kg": {
-    name: "Marsellesa Orgánico · Volumen 3 kg (12 × 250g)",
-    price: 119900,
-    detail: "12 bolsas de 250g para barras y oficinas (Ahorro 22%)",
+    name: "Marsellesa Orgánico · Caja 3 kg (12 × 250g)",
+    price: 104990,
+    detail: "12 bolsas de 250g ($8.749 c/u · Precio normal $167.880)",
   },
 };
 
