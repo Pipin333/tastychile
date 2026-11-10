@@ -1,45 +1,62 @@
 # Selva Alta Roasters - TastyChile ☕🏔️
 
-Plataforma moderna para la adquisición de café de especialidad de la Amazonía Peruana. Cuenta con gestión del catálogo de cafés, sistema de lista de espera corporativa (B2B) y membresías para consumidores (Club).
+Plataforma moderna para la adquisición de café de especialidad de la Amazonía Peruana (Huánuco y Tingo María a 1.820 msnm). Cuenta con catálogo de cafés con certificación SCA, suscripciones mensuales para hogares (**El Club**), portal comercial mayorista para cafeterías y empresas (**B2B**), y un **Backend Mago de Oz** para captura y gestión ágil de pedidos.
+
+---
 
 ## 🚀 Características Principales
 
-- **Landing Page Optimizada**: Interfaz orientada a la conversión y presentación de cafés premium.
-- **Portal B2B**: Formulario dedicado para contacto con empresas, cafeterías, HORECA y retail de forma fluida.
-- **Club Memberships (B2C)**: Programa de subscripción y venta directa para amantes del café de especialidad (Waitlist).
-- **Backend Moderno y Responsivo**: Uso de **React Server Actions** para peticiones fluidas del cliente al servidor sin endpoints intermedios.
-- **Integración con Base de Datos**: Vercel Postgres + Neon DB para una gestión de datos rápida y *serverless*.
-- **Diseño Ultra-rápido**: Utilizando Tailwind CSS v4 para un diseño minimalista, moderno y adaptado a dispositivos móviles.
+- **Landing Page Rediseñada**: Presentación de alta gama de la marca, notas de cata y origen directo de Huánuco.
+- **El Club (B2C) con Selector de Molienda**: Compra de café en bolsas de 250g o suscripciones mensuales (Explorador, Aventurero, Maestro Barista) con selector de molienda (Grano Entero, Espresso, Filtro V60, Prensa Francesa).
+- **Backend Mago de Oz**: Flujo de compra fluido donde el cliente recibe confirmación en pantalla ("*Un representante se contactará a la brevedad*") mientras el pedido se envía automáticamente al correo del equipo de Selva Alta y se almacena en base de datos.
+- **Portal B2B**: Fichas técnicas sensoriales interactivas, solicitud de muestras comerciales sin costo y cotizaciones por volumen.
+- **Notificaciones Transaccionales**: Envío de correos de confirmación tanto al comprador como al equipo comercial vía **Resend** (con simulación automática en consola si no hay credenciales configuradas).
+- **Containerización 100% Portable**: Docker multi-stage listo para correr con `docker compose up --build`.
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 16.2.6 (App Router)
+- **Framework**: Next.js 16.2.6 (App Router con Turbopack)
 - **Frontend**: React 19, TypeScript
-- **Styling**: Tailwind CSS 4
-- **Database**: Vercel Postgres + Neon Database (`@neondatabase/serverless`)
-- **Linting**: ESLint + Prettier
+- **Styling**: Tailwind CSS v4
+- **Database**: PostgreSQL (Neon Database / Vercel Postgres)
+- **Email**: Resend API (`resend`)
+- **Container**: Docker Multi-stage + Docker Compose
 
-## 📋 Requisitos Previos
+---
 
-- Node.js 18+ o superior.
-- npm, yarn o pnpm.
-- Una base de datos en [Neon](https://neon.tech/) o [Vercel Postgres](https://vercel.com/postgres).
+## ⚙️ Configuración del Entorno (`.env`)
 
-## ⚙️ Configuración del Entorno (Variables de Entorno)
+Copia el archivo de ejemplo y agrega tus credenciales si deseas activar base de datos o envíos reales de email:
 
-Crea un archivo `.env.local` en la raíz del proyecto y agrega tus credenciales de la base de datos:
-
-```env
-# Variables para conexión a Neon o Vercel Postgres
-DATABASE_URL="postgresql://usuario:contraseña@servidor.neon.tech/neondb?sslmode=require"
-# En caso de desplegar con prefijo en Vercel:
-TASTY_DATABASE_URL="postgresql://... "
-TASTY_POSTGRES_URL="postgresql://... "
+```bash
+cp .env.example .env.local
 ```
 
-> **Nota:** El archivo `actions.ts` detectará automáticamente estas variables. Asegúrate de ejecutar también las migraciones/tablas (e.g. tablas `waitlist` y `b2b_contacts`).
+### Variables disponibles:
 
-## 🏁 Inicio Rápido
+```env
+# Base de datos PostgreSQL (Neon / Vercel Postgres)
+DATABASE_URL="postgresql://usuario:contraseña@servidor.neon.tech/neondb?sslmode=require"
+
+# Correo al que llegan los pedidos y leads de Selva Alta
+CONTACT_EMAIL="comercial@selvaalta.cl"
+SALES_EMAIL="comercial@selvaalta.cl"
+
+# Servicio de Correo Resend (Opcional - modo simulado por defecto)
+RESEND_API_KEY=""
+RESEND_FROM_EMAIL="Selva Alta <onboarding@resend.dev>"
+
+# URL de la aplicación
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+```
+
+> **Nota:** Si `RESEND_API_KEY` o `DATABASE_URL` no están configuradas, el proyecto funciona normalmente en modo Mago de Oz local sin romperse.
+
+---
+
+## 🏁 Inicio Rápido Local
 
 1. **Instalar dependencias:**
    ```bash
@@ -51,40 +68,50 @@ TASTY_POSTGRES_URL="postgresql://... "
    npm run dev
    ```
 
-3. Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver la interfaz.
+3. Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-## 📁 Estructura Principal del Proyecto
+---
+
+## 🐳 Ejecución con Docker
+
+Cualquier persona puede clonar y ejecutar el proyecto sin necesidad de instalar Node.js ni dependencias en su máquina anfitriona:
+
+```bash
+git clone https://github.com/usuario/tastychile.git
+cd tastychile
+cp .env.example .env
+docker compose up --build
+```
+
+La aplicación estará disponible inmediatamente en [http://localhost:3000](http://localhost:3000).
+
+---
+
+## 📁 Estructura del Proyecto
 
 ```text
 src/
 ├── app/
-│   ├── actions.ts          # Server Actions para manejo de Formularios y DB
-│   ├── layout.tsx          # Layout principal global (Root Layout)
-│   ├── page.tsx            # Landing Page (Inicio)
-│   ├── b2b/               
-│   │   └── page.tsx        # Sección catálogo "Nuestras Variedades" y B2B
-│   └── club/               
-│       └── page.tsx        # Sección "El Club" y B2C
-└── components/
-    └── Navbar.tsx          # Navegación principal reusable
+│   ├── actions.ts             # Server Actions (Mago de Oz, Pedidos, B2B y Waitlist)
+│   ├── layout.tsx             # Root layout con metadata y fuentes
+│   ├── page.tsx               # Landing principal rediseñada
+│   ├── b2b/
+│   │   ├── layout.tsx         # Layout sección B2B
+│   │   └── page.tsx           # Catálogo técnico y formulario comercial
+│   └── club/
+│       ├── layout.tsx         # Layout sección Club
+│       └── page.tsx           # Catálogo B2C, molienda, carrito y checkout Mago de Oz
+├── components/
+│   ├── Navbar.tsx             # Navegación responsive fija con backdrop blur
+│   └── Footer.tsx             # Pie de página institucional y enlaces
+└── lib/
+    ├── db.ts                  # Cliente Neon SQL con fallback seguro
+    ├── email.ts               # Envío de correos y alertas (Resend / Mago de Oz)
+    └── email-templates.ts     # Plantillas HTML responsivas para pedidos y leads
 ```
 
-## 🌿 Flujo de Trabajo (Git)
-
-- **`main`**: Rama de producción (código estable, directamente ligada a Vercel/Producción).
-- **`dev`**: Rama de desarrollo (todas las nuevas funcionalidades se inician y testean aquí).
-
-Para comenzar a agregar algo nuevo:
-```bash
-git checkout dev
-git checkout -b feature/nueva-funcionalidad
-```
-
-## 🚀 Despliegue
-
-Este proyecto está optimizado para desplegar fácilmente en [Vercel](https://vercel.com).
-La plataforma de Vercel detectará automáticamente que es un proyecto de Next.js y aplicará las configuraciones de construcción por defecto (`next build`). 
+---
 
 ## 📄 Licencia
 
-Proyecto privado - TastyChile (Selva Alta Roasters)
+Proyecto privado - TastyChile SpA (Selva Alta Roasters).
