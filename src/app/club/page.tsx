@@ -196,17 +196,17 @@ function MethodIcon({ methodId }: { methodId: string }) {
 }
 
 export default function ClubPage() {
-  const [currentStep, setCurrentStep] = useState<1 | 2>(1);
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
   const stepContainerRef = useRef<HTMLDivElement>(null);
 
-  // Active configurator state
+  // Active coffee configuration
   const [selectedTierId, setSelectedTierId] = useState<string>("marsellesa-1kg");
   const [selectedGrind, setSelectedGrind] = useState<string>(GRIND_METHODS[0].id);
   const [quantity, setQuantity] = useState<number>(1);
 
-  // Cart state: allows multiple items with different grinds and sizes
+  // Cart state: supports multiple items with different grinds and formats
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [lastAddedFeedback, setLastAddedFeedback] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Delivery form state
   const [formData, setFormData] = useState({
@@ -233,7 +233,7 @@ export default function ClubPage() {
   const activeTier =
     VOLUME_TIERS.find((t) => t.id === selectedTierId) || VOLUME_TIERS[0];
 
-  // Cart financial calculations
+  // Cart totals
   const normalSubtotal = cart.reduce(
     (sum, item) => sum + item.oldUnitPrice * item.quantity,
     0
@@ -247,10 +247,10 @@ export default function ClubPage() {
   const total = subtotal + shipping;
   const totalCartUnits = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  const goToStep = (step: 1 | 2) => {
+  const goToStep = (step: 1 | 2 | 3) => {
     setCurrentStep(step);
     if (stepContainerRef.current) {
-      const yOffset = -90;
+      const yOffset = -80;
       const y =
         stepContainerRef.current.getBoundingClientRect().top +
         window.pageYOffset +
@@ -259,7 +259,7 @@ export default function ClubPage() {
     }
   };
 
-  const addToCart = (tierId: string, grind: string, qty: number) => {
+  const addItemToCart = (tierId: string, grind: string, qty: number) => {
     const tier = VOLUME_TIERS.find((t) => t.id === tierId) || VOLUME_TIERS[0];
     const key = `${tierId}__${grind}`;
 
@@ -288,12 +288,8 @@ export default function ClubPage() {
       ];
     });
 
-    setLastAddedFeedback(
-      `✓ Agregado: ${qty} × ${tier.name} · ${grind.split("(")[0].trim()}`
-    );
-    setTimeout(() => {
-      setLastAddedFeedback(null);
-    }, 4500);
+    setToastMessage(`✓ ¡Agregado: ${qty} × ${tier.name} (${grind.split("(")[0].trim()})!`);
+    setTimeout(() => setToastMessage(null), 4000);
   };
 
   const updateCartQty = (itemId: string, newQty: number) => {
@@ -312,12 +308,11 @@ export default function ClubPage() {
     setCart((prev) => prev.filter((item) => item.id !== itemId));
   };
 
-  const handleQuickBuy = () => {
-    // If cart is empty, add the currently configured coffee and advance
-    if (cart.length === 0) {
-      addToCart(selectedTierId, selectedGrind, quantity);
-    }
-    goToStep(2);
+  // Add current configuration and proceed to checkout
+  const handleProceedToDelivery = () => {
+    // If the cart doesn't have items, or if the current active selection isn't in cart, add it
+    addItemToCart(selectedTierId, selectedGrind, quantity);
+    goToStep(3);
   };
 
   const handleOrderSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -325,13 +320,22 @@ export default function ClubPage() {
     setSubmitting(true);
     setOrderError(null);
 
-    if (cart.length === 0) {
-      setOrderError(
-        "Tu carrito está vacío. Por favor agrega al menos un café a tu pedido."
-      );
-      setSubmitting(false);
-      return;
-    }
+    // If cart is somehow empty, add the active configured tier
+    const finalCart =
+      cart.length > 0
+        ? cart
+        : [
+            {
+              id: `${selectedTierId}__${selectedGrind}`,
+              tierId: activeTier.id,
+              name: activeTier.name,
+              bagsCount: activeTier.bagsCount,
+              unitPrice: activeTier.price,
+              oldUnitPrice: activeTier.oldPrice,
+              grind: selectedGrind,
+              quantity,
+            },
+          ];
 
     const fd = new FormData(e.currentTarget);
     const name = fd.get("name")?.toString() || formData.name;
@@ -350,7 +354,7 @@ export default function ClubPage() {
       city,
       region,
       notes,
-      items: cart.map((item) => ({
+      items: finalCart.map((item) => ({
         id: item.tierId,
         quantity: item.quantity,
         grind: item.grind,
@@ -377,35 +381,34 @@ export default function ClubPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6F0] text-[#2A1B12] flex flex-col font-sans selection:bg-[#9E2A2B] selection:text-white">
+    <div className="min-h-screen bg-[#FAF6F0] text-[#2A1B12] flex flex-col font-sans selection:bg-[#9E2A2B] selection:text-white pb-20 sm:pb-12">
       <BellaDurmienteBackground variant="club" />
       <Navbar />
 
-      <main className="relative z-10 flex-grow pt-36 pb-24">
+      <main className="relative z-10 flex-grow pt-24 sm:pt-36 pb-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header with Product Photo */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pb-8">
-            <div className="lg:col-span-7 bg-[#FAF6F0]/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-[#DFD3C3]/80 shadow-sm">
-              <p className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold mb-2">
+          {/* Header Banner - Compact on mobile */}
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 items-center pb-6 sm:pb-8">
+            <div className="lg:col-span-7 bg-[#FAF6F0]/85 backdrop-blur-md rounded-2xl p-4 sm:p-7 border border-[#DFD3C3]/80 shadow-sm">
+              <p className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold mb-1 sm:mb-2">
                 Marsellesa de Altura · Tingo María (87.0 SCA)
               </p>
-              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#143326] leading-[1.12] mb-4">
+              <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-[#143326] leading-tight mb-2 sm:mb-3">
                 Pide tu café en grano o con molienda a medida.
               </h1>
-              <p className="text-base sm:text-lg text-[#4A3F35] leading-relaxed">
-                Arma tu pedido combinando diferentes formatos y tipos de molienda
-                en un solo carrito. Despachamos en bicimensajería a todo el Gran
-                Santiago.
+              <p className="text-xs sm:text-base text-[#4A3F35] leading-relaxed">
+                Arma tu pedido eligiendo tamaño y molienda. Puedes sumar
+                múltiples variedades en un solo carrito.
               </p>
             </div>
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-5 hidden sm:block">
               <div className="rounded-2xl overflow-hidden border border-[#DFD3C3] bg-[#FFFDF9] shadow-sm flex items-center gap-4 p-3.5">
                 <Image
                   src="/images/origen/bolsa-y-extraccion.png"
                   alt="Bolsa de 250g de café Marsellesa de Altura"
                   width={180}
                   height={140}
-                  className="w-28 sm:w-32 aspect-[4/3] object-cover rounded-xl flex-shrink-0"
+                  className="w-24 sm:w-32 aspect-[4/3] object-cover rounded-xl flex-shrink-0"
                 />
                 <div className="text-xs space-y-1">
                   <span className="font-bold text-sm text-[#143326] block">
@@ -474,24 +477,24 @@ export default function ClubPage() {
               </div>
             </section>
           ) : (
-            <div ref={stepContainerRef} className="scroll-mt-28">
-              {/* Stepper Navigation */}
-              <nav aria-label="Progreso de compra" className="mb-8">
-                <ol className="grid grid-cols-2 gap-3 max-w-lg mx-auto">
-                  {/* Step 1: Configurar & Carrito */}
+            <div ref={stepContainerRef} className="scroll-mt-24">
+              {/* Stepper Tabs Navigation */}
+              <nav aria-label="Progreso de compra" className="mb-6">
+                <ol className="grid grid-cols-3 gap-2 sm:gap-4 max-w-2xl mx-auto">
+                  {/* Step 1: Formato */}
                   <li>
                     <button
                       type="button"
                       onClick={() => goToStep(1)}
-                      className={`w-full text-left p-3 rounded-xl border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
+                      className={`w-full text-left p-2 sm:p-3 rounded-xl border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
                         currentStep === 1
                           ? "bg-[#143326] text-[#FAF6F0] border-[#143326] shadow-sm"
                           : "bg-[#FFFDF9] hover:bg-[#F3ECE1] text-[#143326] border-[#DFD3C3]"
                       }`}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         <span
-                          className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-[9px] sm:text-[10px] font-bold flex-shrink-0 ${
                             currentStep === 1
                               ? "bg-white/20 text-white"
                               : "bg-[#143326] text-white"
@@ -499,329 +502,413 @@ export default function ClubPage() {
                         >
                           1
                         </span>
-                        <span className="font-bold text-xs sm:text-sm truncate">
-                          1. Arma tu Pedido
+                        <span className="font-bold text-[11px] sm:text-sm truncate">
+                          1. Formato
                         </span>
                       </div>
                       <span
-                        className={`block text-[11px] truncate mt-1 ${
+                        className={`block text-[10px] sm:text-[11px] truncate mt-0.5 sm:mt-1 ${
                           currentStep === 1
                             ? "text-[#FAF6F0]/80 font-medium"
                             : "text-[#6E5D4F]"
                         }`}
                       >
-                        {cart.length === 0
-                          ? "Elige formato y molienda"
-                          : `${totalCartUnits} ${
-                              totalCartUnits === 1 ? "variedad" : "variedades"
-                            } en carrito`}
+                        {activeTier.name}
                       </span>
                     </button>
                   </li>
 
-                  {/* Step 2: Despacho y Pago */}
+                  {/* Step 2: Molienda */}
                   <li>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (cart.length === 0) {
-                          handleQuickBuy();
-                        } else {
-                          goToStep(2);
-                        }
-                      }}
-                      className={`w-full text-left p-3 rounded-xl border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
+                      onClick={() => goToStep(2)}
+                      className={`w-full text-left p-2 sm:p-3 rounded-xl border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
                         currentStep === 2
                           ? "bg-[#143326] text-[#FAF6F0] border-[#143326] shadow-sm"
-                          : "bg-[#FFFDF9]/60 text-[#6E5D4F] border-[#DFD3C3]"
+                          : currentStep > 2
+                          ? "bg-[#FFFDF9] text-[#143326] border-[#DFD3C3]"
+                          : "bg-[#FFFDF9]/70 text-[#6E5D4F] border-[#DFD3C3]"
                       }`}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         <span
-                          className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
+                          className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-[9px] sm:text-[10px] font-bold flex-shrink-0 ${
                             currentStep === 2
                               ? "bg-white/20 text-white"
+                              : currentStep > 2
+                              ? "bg-[#143326] text-white"
                               : "bg-[#DFD3C3] text-[#4A3F35]"
                           }`}
                         >
                           2
                         </span>
-                        <span className="font-bold text-xs sm:text-sm truncate">
-                          2. Despacho y Pago
+                        <span className="font-bold text-[11px] sm:text-sm truncate">
+                          2. Molienda
                         </span>
                       </div>
                       <span
-                        className={`block text-[11px] truncate mt-1 ${
+                        className={`block text-[10px] sm:text-[11px] truncate mt-0.5 sm:mt-1 ${
                           currentStep === 2
                             ? "text-[#FAF6F0]/80 font-medium"
                             : "text-[#6E5D4F]"
                         }`}
                       >
+                        {selectedGrind.split("(")[0].trim()}
+                      </span>
+                    </button>
+                  </li>
+
+                  {/* Step 3: Despacho */}
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (cart.length === 0) {
+                          addItemToCart(selectedTierId, selectedGrind, quantity);
+                        }
+                        goToStep(3);
+                      }}
+                      className={`w-full text-left p-2 sm:p-3 rounded-xl border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
+                        currentStep === 3
+                          ? "bg-[#143326] text-[#FAF6F0] border-[#143326] shadow-sm"
+                          : "bg-[#FFFDF9]/70 text-[#6E5D4F] border-[#DFD3C3]"
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span
+                          className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center text-[9px] sm:text-[10px] font-bold flex-shrink-0 ${
+                            currentStep === 3
+                              ? "bg-white/20 text-white"
+                              : "bg-[#DFD3C3] text-[#4A3F35]"
+                          }`}
+                        >
+                          3
+                        </span>
+                        <span className="font-bold text-[11px] sm:text-sm truncate">
+                          3. Despacho
+                        </span>
+                      </div>
+                      <span
+                        className={`block text-[10px] sm:text-[11px] truncate mt-0.5 sm:mt-1 ${
+                          currentStep === 3
+                            ? "text-[#FAF6F0]/80 font-medium"
+                            : "text-[#6E5D4F]"
+                        }`}
+                      >
                         {cart.length === 0
-                          ? "Dirección en Santiago"
-                          : `Total: $${total.toLocaleString("es-CL")}`}
+                          ? `$${activeTier.price.toLocaleString("es-CL")}`
+                          : `$${total.toLocaleString("es-CL")}`}
                       </span>
                     </button>
                   </li>
                 </ol>
               </nav>
 
+              {toastMessage && (
+                <div className="max-w-2xl mx-auto mb-4 bg-[#EFE4D2] border border-[#143326]/40 text-[#143326] rounded-xl p-3 text-xs font-semibold flex items-center justify-between shadow-sm animate-fadeIn">
+                  <span>{toastMessage}</span>
+                  <button
+                    type="button"
+                    onClick={() => goToStep(3)}
+                    className="text-[#9E2A2B] hover:underline font-bold text-xs ml-2"
+                  >
+                    Ver Carrito ({totalCartUnits}) →
+                  </button>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                {/* Left Column: Configurator & Cart or Checkout */}
-                <div className="lg:col-span-7 space-y-8">
-                  {currentStep === 1 ? (
-                    <>
-                      {/* Section: Coffee Configurator */}
-                      <section className="bg-[#FFFDF9]/90 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-5 sm:p-7 space-y-6 shadow-sm">
+                {/* Main Content Area */}
+                <div className="lg:col-span-7 space-y-6">
+                  {/* STEP 1: FORMAT SELECTION */}
+                  {currentStep === 1 && (
+                    <section className="bg-[#FFFDF9]/90 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-4 sm:p-7 space-y-5 shadow-sm">
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold">
+                            Paso 1 de 3
+                          </span>
+                          {cart.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => goToStep(3)}
+                              className="text-xs text-[#9E2A2B] font-semibold hover:underline"
+                            >
+                              🛒 {totalCartUnits} en carrito (${total.toLocaleString("es-CL")})
+                            </button>
+                          )}
+                        </div>
+                        <h2 className="text-xl sm:text-2xl font-bold text-[#143326]">
+                          1. Elige tu formato
+                        </h2>
+                        <p className="text-xs sm:text-sm text-[#4A3F35] mt-1">
+                          Marsellesa de Altura (87.0 SCA). Selecciona el tamaño que prefieras:
+                        </p>
+                      </div>
+
+                      {/* 3 Format cards */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        {VOLUME_TIERS.map((tier) => {
+                          const isActive = selectedTierId === tier.id;
+                          return (
+                            <button
+                              key={tier.id}
+                              type="button"
+                              onClick={() => setSelectedTierId(tier.id)}
+                              className={`relative text-left rounded-xl p-3.5 border transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
+                                isActive
+                                  ? "bg-[#EFE4D2] border-[#9E2A2B] ring-2 ring-[#9E2A2B] shadow-sm"
+                                  : "bg-[#FFFDF9] border-[#DFD3C3] hover:bg-[#F3ECE1]"
+                              }`}
+                            >
+                              {isActive && (
+                                <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-[#9E2A2B]" />
+                              )}
+                              <div className="flex items-center justify-between mb-1 pr-2">
+                                <span className="font-mono text-[10px] uppercase text-[#9E2A2B] font-semibold">
+                                  {tier.bagsCount}
+                                </span>
+                                <span className="font-mono text-[9px] font-bold bg-[#9E2A2B] text-white px-1.5 py-0.5 rounded">
+                                  {tier.discountBadge}
+                                </span>
+                              </div>
+                              <span className="block text-sm font-bold text-[#143326] mb-0.5">
+                                {tier.name}
+                              </span>
+                              <div className="flex items-baseline gap-1.5">
+                                <span className="font-mono text-base font-bold text-[#2A1B12]">
+                                  ${tier.price.toLocaleString("es-CL")}
+                                </span>
+                                <span className="font-mono text-[11px] text-[#6E5D4F] line-through">
+                                  ${tier.oldPrice.toLocaleString("es-CL")}
+                                </span>
+                              </div>
+                              <span className="block text-[10px] text-[#6E5D4F] mt-1">
+                                {tier.unitPriceLabel}
+                              </span>
+                              {isActive && (
+                                <div className="mt-2.5 pt-1.5 border-t border-[#D8C3A5] flex items-center gap-1 text-[11px] font-bold text-[#143326]">
+                                  <span>✓ Seleccionado</span>
+                                </div>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Quantity multiplier for active tier */}
+                      <div className="bg-[#FAF6F0] border border-[#DFD3C3] rounded-xl p-3.5 flex items-center justify-between">
                         <div>
-                          <span className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold block mb-1">
-                            Paso 1 · Configura tu café
+                          <span className="block text-xs font-bold text-[#143326]">
+                            Cantidad de este formato
+                          </span>
+                          <span className="block text-[11px] text-[#6E5D4F]">
+                            {activeTier.name} ({activeTier.bagsCount})
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setQuantity((q) => Math.max(1, q - 1))
+                            }
+                            className="w-8 h-8 rounded-lg bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-sm font-bold text-[#2A1B12] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#9E2A2B]"
+                            aria-label="Disminuir cantidad"
+                          >
+                            -
+                          </button>
+                          <span className="font-mono text-sm font-bold text-[#2A1B12] w-6 text-center">
+                            {quantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setQuantity((q) => q + 1)}
+                            className="w-8 h-8 rounded-lg bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-sm font-bold text-[#2A1B12] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#9E2A2B]"
+                            aria-label="Aumentar cantidad"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Explicit Next Button (Directly visible on mobile without scrolling) */}
+                      <div className="pt-2">
+                        <button
+                          type="button"
+                          onClick={() => goToStep(2)}
+                          className="w-full bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-bold py-4 px-6 rounded-xl text-base shadow-md flex items-center justify-center gap-2 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#143326]"
+                        >
+                          <span>Continuar a Molienda ({activeTier.name})</span>
+                          <span aria-hidden="true" className="text-lg">
+                            →
+                          </span>
+                        </button>
+                        <p className="text-center text-xs text-[#6E5D4F] mt-2">
+                          En el siguiente paso podrás elegir si lo quieres en grano o molido según tu cafetera.
+                        </p>
+                      </div>
+                    </section>
+                  )}
+
+                  {/* STEP 2: GRIND SELECTION */}
+                  {currentStep === 2 && (
+                    <section className="bg-[#FFFDF9]/90 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-4 sm:p-7 space-y-5 shadow-sm">
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold">
+                            Paso 2 de 3
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => goToStep(1)}
+                            className="text-xs text-[#9E2A2B] font-semibold hover:underline"
+                          >
+                            ← Cambiar a {activeTier.name}
+                          </button>
+                        </div>
+                        <h2 className="text-xl sm:text-2xl font-bold text-[#143326]">
+                          2. ¿Cómo preparas este café?
+                        </h2>
+                        <p className="text-xs sm:text-sm text-[#4A3F35] mt-1">
+                          Moleremos tu {activeTier.name} a la medida exacta antes de despachar, o en grano entero con válvula:
+                        </p>
+                      </div>
+
+                      {/* 5 Grind Cards */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {GRIND_METHODS.map((method) => {
+                          const isActive = selectedGrind === method.id;
+                          return (
+                            <button
+                              key={method.id}
+                              type="button"
+                              onClick={() => setSelectedGrind(method.id)}
+                              className={`text-left rounded-xl p-3 border flex items-start gap-3 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
+                                isActive
+                                  ? "bg-[#EFE4D2] border-[#9E2A2B] ring-2 ring-[#9E2A2B] shadow-sm"
+                                  : "bg-[#FFFDF9] border-[#DFD3C3] hover:bg-[#F3ECE1]"
+                              }`}
+                            >
+                              <div className="p-1.5 rounded-lg bg-[#FAF6F0] border border-[#DFD3C3] flex-shrink-0">
+                                <MethodIcon methodId={method.id} />
+                              </div>
+                              <div className="flex-grow">
+                                <div className="flex items-center justify-between">
+                                  <span className="block text-xs font-bold text-[#143326]">
+                                    {method.label}
+                                  </span>
+                                  {isActive && (
+                                    <span className="font-mono text-[9px] font-bold bg-[#9E2A2B] text-white px-1 py-0.5 rounded">
+                                      ✓ Elegida
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="block font-mono text-[10px] text-[#9E2A2B] font-semibold mb-0.5">
+                                  {method.calib}
+                                </span>
+                                <span className="block text-[11px] text-[#4A3F35] leading-snug">
+                                  {method.description}
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Step 2 Actions */}
+                      <div className="space-y-3 pt-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              addItemToCart(selectedTierId, selectedGrind, quantity);
+                              goToStep(1);
+                            }}
+                            className="w-full bg-[#143326] hover:bg-[#1E4D38] text-white font-bold py-3.5 px-4 rounded-xl text-sm shadow-sm flex items-center justify-center gap-1.5 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B]"
+                          >
+                            <span>+ Agregar y sumar otro café</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={handleProceedToDelivery}
+                            className="w-full bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-bold py-3.5 px-4 rounded-xl text-sm shadow-md flex items-center justify-center gap-2 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#143326]"
+                          >
+                            <span>Continuar a Despacho</span>
+                            <span aria-hidden="true">→</span>
+                          </button>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => goToStep(1)}
+                          className="w-full text-center text-xs font-semibold text-[#6E5D4F] hover:text-[#143326] py-1"
+                        >
+                          ← Volver a cambiar formato
+                        </button>
+                      </div>
+                    </section>
+                  )}
+
+                  {/* STEP 3: CHECKOUT & DELIVERY FORM */}
+                  {currentStep === 3 && (
+                    <section className="bg-[#FFFDF9]/95 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-4 sm:p-7 space-y-6 shadow-sm">
+                      <div className="flex items-center justify-between pb-3 border-b border-[#DFD3C3]">
+                        <div>
+                          <span className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold block mb-0.5">
+                            Paso 3 de 3 · Datos de entrega
                           </span>
                           <h2 className="text-xl sm:text-2xl font-bold text-[#143326]">
-                            Elige formato y molienda
+                            ¿Dónde enviamos tu café?
                           </h2>
-                          <p className="text-xs sm:text-sm text-[#4A3F35] mt-1">
-                            Puedes agregar varios paquetes con diferentes tipos de
-                            molienda antes de completar tu pedido.
-                          </p>
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => goToStep(1)}
+                          className="text-xs font-semibold text-[#9E2A2B] hover:underline"
+                        >
+                          + Agregar más cafés
+                        </button>
+                      </div>
 
-                        {/* Format Selection */}
-                        <div>
-                          <label className="block text-xs font-bold uppercase tracking-wider text-[#6E5D4F] mb-2.5">
-                            1. Formato (Bolsas de 250g con válvula)
-                          </label>
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            {VOLUME_TIERS.map((tier) => {
-                              const isActive = selectedTierId === tier.id;
-                              return (
-                                <button
-                                  key={tier.id}
-                                  type="button"
-                                  onClick={() => setSelectedTierId(tier.id)}
-                                  className={`relative text-left rounded-xl p-3.5 border transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
-                                    isActive
-                                      ? "bg-[#EFE4D2] border-[#9E2A2B] ring-2 ring-[#9E2A2B] shadow-sm"
-                                      : "bg-[#FFFDF9] border-[#DFD3C3] hover:bg-[#F3ECE1]"
-                                  }`}
-                                >
-                                  {isActive && (
-                                    <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#9E2A2B]" />
-                                  )}
-                                  <div className="flex items-center justify-between mb-1 pr-2">
-                                    <span className="font-mono text-[10px] uppercase text-[#9E2A2B] font-semibold">
-                                      {tier.bagsCount}
-                                    </span>
-                                    <span className="font-mono text-[9px] font-bold bg-[#9E2A2B] text-white px-1.5 py-0.5 rounded">
-                                      {tier.discountBadge}
-                                    </span>
-                                  </div>
-                                  <span className="block text-sm font-bold text-[#143326] mb-0.5">
-                                    {tier.name}
-                                  </span>
-                                  <div className="flex items-baseline gap-1.5">
-                                    <span className="font-mono text-base font-bold text-[#2A1B12]">
-                                      ${tier.price.toLocaleString("es-CL")}
-                                    </span>
-                                    <span className="font-mono text-[11px] text-[#6E5D4F] line-through">
-                                      ${tier.oldPrice.toLocaleString("es-CL")}
-                                    </span>
-                                  </div>
-                                  <span className="block text-[10px] text-[#6E5D4F] mt-1">
-                                    {tier.unitPriceLabel}
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-
-                        {/* Grind Method Selection */}
-                        <div>
-                          <label className="block text-xs font-bold uppercase tracking-wider text-[#6E5D4F] mb-2.5">
-                            2. ¿Cómo preparas este café? (Molienda)
-                          </label>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {GRIND_METHODS.map((method) => {
-                              const isActive = selectedGrind === method.id;
-                              return (
-                                <button
-                                  key={method.id}
-                                  type="button"
-                                  onClick={() => setSelectedGrind(method.id)}
-                                  className={`text-left rounded-xl p-3 border flex items-start gap-3 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
-                                    isActive
-                                      ? "bg-[#EFE4D2] border-[#9E2A2B] ring-2 ring-[#9E2A2B] shadow-sm"
-                                      : "bg-[#FFFDF9] border-[#DFD3C3] hover:bg-[#F3ECE1]"
-                                  }`}
-                                >
-                                  <div className="p-1.5 rounded-lg bg-[#FAF6F0] border border-[#DFD3C3] flex-shrink-0">
-                                    <MethodIcon methodId={method.id} />
-                                  </div>
-                                  <div className="flex-grow">
-                                    <div className="flex items-center justify-between">
-                                      <span className="block text-xs font-bold text-[#143326]">
-                                        {method.label}
-                                      </span>
-                                      {isActive && (
-                                        <span className="font-mono text-[9px] font-bold bg-[#9E2A2B] text-white px-1 py-0.5 rounded">
-                                          ✓ Elegida
-                                        </span>
-                                      )}
-                                    </div>
-                                    <span className="block font-mono text-[10px] text-[#9E2A2B] font-semibold mb-0.5">
-                                      {method.calib}
-                                    </span>
-                                    <span className="block text-[11px] text-[#4A3F35] leading-snug">
-                                      {method.description}
-                                    </span>
-                                  </div>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-
-                        {/* Quantity Counter for this item */}
-                        <div className="bg-[#FAF6F0] border border-[#DFD3C3] rounded-xl p-3.5 flex items-center justify-between">
-                          <div>
-                            <span className="block text-xs font-bold text-[#143326]">
-                              Cantidad de este formato
-                            </span>
-                            <span className="block text-[11px] text-[#6E5D4F]">
-                              {activeTier.name} · {selectedGrind.split("(")[0].trim()}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setQuantity((q) => Math.max(1, q - 1))
-                              }
-                              className="w-8 h-8 rounded-lg bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-sm font-bold text-[#2A1B12] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#9E2A2B]"
-                              aria-label="Disminuir cantidad"
-                            >
-                              -
-                            </button>
-                            <span className="font-mono text-sm font-bold text-[#2A1B12] w-6 text-center">
-                              {quantity}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => setQuantity((q) => q + 1)}
-                              className="w-8 h-8 rounded-lg bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-sm font-bold text-[#2A1B12] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#9E2A2B]"
-                              aria-label="Aumentar cantidad"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Add to Cart Actions */}
-                        <div className="space-y-2.5 pt-1">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                addToCart(selectedTierId, selectedGrind, quantity)
-                              }
-                              className="w-full bg-[#143326] hover:bg-[#1E4D38] text-white font-bold py-3.5 px-4 rounded-xl text-sm shadow-sm flex items-center justify-center gap-2 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B]"
-                            >
-                              <span>+ Agregar al Carrito</span>
-                              <span className="font-mono text-xs text-white/80">
-                                (${(activeTier.price * quantity).toLocaleString(
-                                  "es-CL"
-                                )})
-                              </span>
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => {
-                                addToCart(selectedTierId, selectedGrind, quantity);
-                                goToStep(2);
-                              }}
-                              className="w-full bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-bold py-3.5 px-4 rounded-xl text-sm shadow-md flex items-center justify-center gap-2 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#143326]"
-                            >
-                              <span>Comprar directo</span>
-                              <span aria-hidden="true">→</span>
-                            </button>
-                          </div>
-
-                          {lastAddedFeedback && (
-                            <div className="bg-[#EFE4D2] border border-[#143326]/30 text-[#143326] rounded-lg p-2.5 text-xs font-semibold flex items-center justify-between animate-fadeIn">
-                              <span>{lastAddedFeedback}</span>
-                              <button
-                                type="button"
-                                onClick={() => goToStep(2)}
-                                className="text-[#9E2A2B] hover:underline font-bold text-[11px]"
-                              >
-                                Ver carrito y pagar →
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </section>
-
-                      {/* Section: Your Current Cart List (Visible in Step 1) */}
-                      <section className="bg-[#FFFDF9]/95 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-5 sm:p-7 space-y-5 shadow-sm">
-                        <div className="flex items-center justify-between border-b border-[#DFD3C3] pb-3">
-                          <div>
-                            <span className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold block">
-                              Tu Carrito de Café
-                            </span>
-                            <h3 className="text-lg font-bold text-[#143326]">
-                              {cart.length === 0
-                                ? "Carrito vacío"
-                                : `${totalCartUnits} ${
-                                    totalCartUnits === 1
-                                      ? "variedad agregada"
-                                      : "variedades agregadas"
-                                  }`}
-                            </h3>
-                          </div>
-                          {cart.length > 0 && (
-                            <span className="font-mono font-bold text-sm text-[#9E2A2B]">
-                              Subtotal: ${subtotal.toLocaleString("es-CL")}
-                            </span>
-                          )}
+                      {/* Items in Cart Summary (Clean list with delete/qty controls) */}
+                      <div className="bg-[#F3ECE1] border border-[#DFD3C3] rounded-xl p-4 space-y-3 text-xs">
+                        <div className="flex items-center justify-between border-b border-[#DFD3C3] pb-2">
+                          <span className="font-bold text-[#143326] text-sm">
+                            Tu Selección ({totalCartUnits} {totalCartUnits === 1 ? "variedad" : "variedades"})
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => goToStep(1)}
+                            className="text-[#9E2A2B] font-semibold text-xs hover:underline"
+                          >
+                            + Sumar otro café
+                          </button>
                         </div>
 
                         {cart.length === 0 ? (
-                          <div className="text-center py-6 px-4 bg-[#FAF6F0] rounded-xl border border-dashed border-[#DFD3C3]">
-                            <p className="text-sm font-semibold text-[#143326] mb-1">
-                              Aún no has agregado cafés al carrito
-                            </p>
-                            <p className="text-xs text-[#6E5D4F]">
-                              Selecciona un formato y molienda arriba y pulsa{" "}
-                              <strong>&ldquo;+ Agregar al Carrito&rdquo;</strong>. Puedes
-                              combinar múltiples tamaños y moliendas.
-                            </p>
+                          <div className="text-center py-3 text-[#6E5D4F]">
+                            Agrega al menos una variedad de café arriba.
                           </div>
                         ) : (
-                          <div className="space-y-3">
+                          <div className="space-y-2.5">
                             {cart.map((item) => (
                               <div
                                 key={item.id}
-                                className="bg-[#FAF6F0] border border-[#DFD3C3] rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                                className="bg-[#FFFDF9] border border-[#DFD3C3] rounded-lg p-2.5 flex items-center justify-between"
                               >
                                 <div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-bold text-sm text-[#143326]">
-                                      {item.name}
-                                    </span>
-                                    <span className="font-mono text-[10px] text-[#6E5D4F]">
-                                      ({item.bagsCount})
-                                    </span>
-                                  </div>
-                                  <span className="block text-xs font-semibold text-[#9E2A2B] mt-0.5">
-                                    Molienda: {item.grind}
+                                  <span className="font-bold text-[#143326] block">
+                                    {item.quantity} × {item.name}
+                                  </span>
+                                  <span className="text-[11px] text-[#9E2A2B] font-semibold block">
+                                    {item.grind}
                                   </span>
                                 </div>
-
-                                <div className="flex items-center justify-between sm:justify-end gap-4">
-                                  {/* Item quantity controls */}
-                                  <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-3">
+                                  {/* Qty controls */}
+                                  <div className="flex items-center gap-1.5">
                                     <button
                                       type="button"
                                       onClick={() =>
@@ -830,12 +917,12 @@ export default function ClubPage() {
                                           item.quantity - 1
                                         )
                                       }
-                                      className="w-7 h-7 rounded bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-xs font-bold text-[#2A1B12]"
-                                      aria-label="Disminuir unidad"
+                                      className="w-6 h-6 rounded bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-xs font-bold"
+                                      aria-label="Disminuir"
                                     >
                                       -
                                     </button>
-                                    <span className="font-mono font-bold text-xs text-[#2A1B12] w-5 text-center">
+                                    <span className="font-mono font-bold w-4 text-center">
                                       {item.quantity}
                                     </span>
                                     <button
@@ -846,129 +933,33 @@ export default function ClubPage() {
                                           item.quantity + 1
                                         )
                                       }
-                                      className="w-7 h-7 rounded bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-xs font-bold text-[#2A1B12]"
-                                      aria-label="Aumentar unidad"
+                                      className="w-6 h-6 rounded bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-xs font-bold"
+                                      aria-label="Aumentar"
                                     >
                                       +
                                     </button>
                                   </div>
 
-                                  {/* Line price */}
-                                  <div className="text-right font-mono min-w-[70px]">
-                                    <span className="font-bold text-sm text-[#2A1B12] block">
-                                      $
-                                      {(
-                                        item.unitPrice * item.quantity
-                                      ).toLocaleString("es-CL")}
-                                    </span>
-                                  </div>
+                                  <span className="font-mono font-bold text-sm text-[#2A1B12] min-w-[65px] text-right">
+                                    $
+                                    {(
+                                      item.unitPrice * item.quantity
+                                    ).toLocaleString("es-CL")}
+                                  </span>
 
-                                  {/* Remove button */}
                                   <button
                                     type="button"
                                     onClick={() => removeFromCart(item.id)}
-                                    className="text-xs text-[#9E2A2B] hover:text-[#7D2021] hover:underline p-1"
-                                    title="Eliminar de carrito"
-                                    aria-label={`Eliminar ${item.name}`}
+                                    className="text-[#9E2A2B] hover:text-[#7D2021] text-xs p-1"
+                                    title="Eliminar"
                                   >
                                     ✕
                                   </button>
                                 </div>
                               </div>
                             ))}
-
-                            {/* Free Shipping helper bar */}
-                            <div className="p-3 bg-[#EFE4D2] border border-[#D8C3A5] rounded-xl text-xs flex items-center justify-between">
-                              <span className="text-[#143326]">
-                                {subtotal >= 39990 ? (
-                                  <strong>
-                                    ✓ ¡Despacho gratis en Santiago aplicado!
-                                  </strong>
-                                ) : (
-                                  <>
-                                    Te faltan{" "}
-                                    <strong className="font-mono text-[#9E2A2B]">
-                                      $
-                                      {(39990 - subtotal).toLocaleString("es-CL")}
-                                    </strong>{" "}
-                                    para envío gratis en Santiago.
-                                  </>
-                                )}
-                              </span>
-                              <span className="font-mono font-semibold text-[#143326]">
-                                {shipping === 0
-                                  ? "Envío: $0"
-                                  : "Envío: $3.900"}
-                              </span>
-                            </div>
-
-                            {/* Proceed to checkout CTA */}
-                            <div className="pt-2">
-                              <button
-                                type="button"
-                                onClick={() => goToStep(2)}
-                                className="w-full bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-bold py-4 px-6 rounded-xl text-base shadow-md flex items-center justify-center gap-2 transition-all active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#143326]"
-                              >
-                                <span>
-                                  Continuar a Datos de Entrega ($
-                                  {total.toLocaleString("es-CL")})
-                                </span>
-                                <span aria-hidden="true" className="text-lg">
-                                  →
-                                </span>
-                              </button>
-                            </div>
                           </div>
                         )}
-                      </section>
-                    </>
-                  ) : (
-                    /* Step 2: Checkout / Delivery Form */
-                    <section className="bg-[#FFFDF9]/95 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-5 sm:p-7 space-y-6 shadow-sm">
-                      <div className="flex items-center justify-between pb-3 border-b border-[#DFD3C3]">
-                        <div>
-                          <span className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold block mb-0.5">
-                            Paso 2 · Datos de entrega
-                          </span>
-                          <h2 className="text-xl sm:text-2xl font-bold text-[#143326]">
-                            ¿Dónde enviamos tu pedido?
-                          </h2>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => goToStep(1)}
-                          className="text-xs font-semibold text-[#9E2A2B] hover:underline"
-                        >
-                          ← Modificar cafés ({totalCartUnits})
-                        </button>
-                      </div>
-
-                      {/* Mobile Cart Summary (shown on mobile inside Step 2) */}
-                      <div className="lg:hidden bg-[#F3ECE1] border border-[#DFD3C3] rounded-xl p-4 space-y-2.5 text-xs">
-                        <span className="font-bold text-[#143326] text-sm block border-b border-[#DFD3C3] pb-1.5">
-                          Resumen del pedido ({totalCartUnits} variedades)
-                        </span>
-                        {cart.map((item) => (
-                          <div
-                            key={item.id}
-                            className="flex justify-between text-[#2A1B12]"
-                          >
-                            <div>
-                              <span className="font-bold">
-                                {item.quantity} × {item.name}
-                              </span>
-                              <span className="block text-[11px] text-[#6E5D4F]">
-                                Molienda: {item.grind}
-                              </span>
-                            </div>
-                            <span className="font-mono font-bold">
-                              $
-                              {(item.unitPrice * item.quantity).toLocaleString(
-                                "es-CL"
-                              )}
-                            </span>
-                          </div>
-                        ))}
 
                         <div className="pt-2 border-t border-[#DFD3C3] space-y-1">
                           <div className="flex justify-between text-[#9E2A2B] font-semibold">
@@ -1188,7 +1179,7 @@ export default function ClubPage() {
                           </button>
                           <button
                             type="submit"
-                            disabled={submitting || cart.length === 0}
+                            disabled={submitting || (cart.length === 0 && !activeTier)}
                             className="order-1 sm:order-2 sm:w-2/3 bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-bold py-3.5 px-6 rounded-xl text-base shadow-md flex items-center justify-center gap-2 transition-all active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#143326]"
                           >
                             {submitting
@@ -1213,29 +1204,27 @@ export default function ClubPage() {
                   <div className="bg-[#FFFDF9]/95 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-6 shadow-sm space-y-5">
                     <div className="flex items-center justify-between pb-3 border-b border-[#DFD3C3]">
                       <span className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold">
-                        Resumen del Carrito
+                        Resumen del Pedido
                       </span>
                       <span className="text-xs text-[#6E5D4F]">
-                        {totalCartUnits}{" "}
-                        {totalCartUnits === 1 ? "variedad" : "variedades"}
+                        Paso {currentStep} de 3
                       </span>
                     </div>
 
                     {cart.length === 0 ? (
-                      <div className="py-8 text-center space-y-2">
+                      <div className="py-6 text-center space-y-2">
                         <span className="text-2xl block">☕</span>
                         <p className="text-xs font-semibold text-[#143326]">
-                          Tu carrito está vacío
+                          Configurando: {activeTier.name}
                         </p>
                         <p className="text-[11px] text-[#6E5D4F] leading-relaxed">
-                          Selecciona un formato y una molienda para armar tu
-                          primer café.
+                          {selectedGrind} · ${activeTier.price.toLocaleString("es-CL")}
                         </p>
                       </div>
                     ) : (
                       <div className="space-y-4">
                         {/* Items list */}
-                        <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                        <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
                           {cart.map((item) => (
                             <div
                               key={item.id}
@@ -1318,6 +1307,16 @@ export default function ClubPage() {
                             onClick={() => goToStep(2)}
                             className="w-full bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-semibold py-3 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
                           >
+                            <span>Elegir Molienda</span>
+                            <span>→</span>
+                          </button>
+                        )}
+                        {currentStep === 2 && (
+                          <button
+                            type="button"
+                            onClick={handleProceedToDelivery}
+                            className="w-full bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-semibold py-3 px-4 rounded-xl text-sm transition-colors flex items-center justify-center gap-2 shadow-sm"
+                          >
                             <span>Ir a Despacho</span>
                             <span>→</span>
                           </button>
@@ -1328,31 +1327,60 @@ export default function ClubPage() {
                 </aside>
               </div>
 
-              {/* Floating Mobile Cart Bar (visible in Step 1 when items exist in cart) */}
-              {cart.length > 0 && currentStep === 1 && (
-                <aside
-                  aria-label="Resumen rápido del carrito"
-                  className="fixed bottom-0 left-0 right-0 z-40 bg-[#FFFDF9]/95 backdrop-blur-md border-t border-[#DFD3C3] p-3 sm:hidden shadow-lg flex items-center justify-between"
-                >
-                  <div>
-                    <span className="text-[11px] text-[#6E5D4F] block">
-                      {totalCartUnits}{" "}
-                      {totalCartUnits === 1 ? "café en carrito" : "cafés en carrito"}
-                    </span>
-                    <span className="font-mono font-bold text-[#143326] text-base">
-                      ${total.toLocaleString("es-CL")}
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => goToStep(2)}
-                    className="bg-[#9E2A2B] hover:bg-[#7D2021] text-white text-xs font-bold py-2.5 px-4 rounded-lg shadow-sm flex items-center gap-1.5 active:scale-95 transition-all"
-                  >
-                    <span>Ir a Despacho</span>
-                    <span aria-hidden="true">→</span>
-                  </button>
-                </aside>
-              )}
+              {/* PERMANENT STICKY BOTTOM BAR ON MOBILE (Always docked under user's thumb) */}
+              <aside
+                aria-label="Barra de acción rápida móvil"
+                className="fixed bottom-0 left-0 right-0 z-50 bg-[#FFFDF9]/95 backdrop-blur-md border-t border-[#DFD3C3] p-3 sm:hidden shadow-2xl flex items-center justify-between"
+              >
+                <div>
+                  <span className="text-[11px] text-[#6E5D4F] block">
+                    {currentStep === 1
+                      ? `Formato: ${activeTier.name}`
+                      : currentStep === 2
+                      ? `${activeTier.name} · ${selectedGrind.split("(")[0].trim()}`
+                      : `${totalCartUnits} variedades en carrito`}
+                  </span>
+                  <span className="font-mono font-bold text-[#143326] text-base">
+                    ${(currentStep === 3 ? total : activeTier.price * quantity).toLocaleString("es-CL")}
+                  </span>
+                </div>
+
+                <div>
+                  {currentStep === 1 && (
+                    <button
+                      type="button"
+                      onClick={() => goToStep(2)}
+                      className="bg-[#9E2A2B] hover:bg-[#7D2021] text-white text-xs font-bold py-2.5 px-4 rounded-lg shadow-sm flex items-center gap-1.5 active:scale-95 transition-all"
+                    >
+                      <span>Elegir Molienda</span>
+                      <span aria-hidden="true">→</span>
+                    </button>
+                  )}
+                  {currentStep === 2 && (
+                    <button
+                      type="button"
+                      onClick={handleProceedToDelivery}
+                      className="bg-[#9E2A2B] hover:bg-[#7D2021] text-white text-xs font-bold py-2.5 px-4 rounded-lg shadow-sm flex items-center gap-1.5 active:scale-95 transition-all"
+                    >
+                      <span>Ir a Despacho</span>
+                      <span aria-hidden="true">→</span>
+                    </button>
+                  )}
+                  {currentStep === 3 && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const submitBtn = document.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+                        submitBtn?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="bg-[#9E2A2B] hover:bg-[#7D2021] text-white text-xs font-bold py-2.5 px-4 rounded-lg shadow-sm flex items-center gap-1.5 active:scale-95 transition-all"
+                    >
+                      <span>Completar Datos</span>
+                      <span aria-hidden="true">↓</span>
+                    </button>
+                  )}
+                </div>
+              </aside>
             </div>
           )}
         </div>
