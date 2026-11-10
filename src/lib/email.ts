@@ -34,7 +34,12 @@ export async function sendOrderConfirmation(order: EmailOrderData) {
     console.warn(
       `[Resend Mock] RESEND_API_KEY no configurada. Confirmación simulada para ${order.customer_email}`
     );
-    return { success: true, mock: true };
+    return {
+      success: false,
+      mock: true,
+      errorMessage:
+        "RESEND_API_KEY no está disponible en este entorno de Vercel (revisa que esté marcada la casilla Preview en Environment Variables).",
+    };
   }
 
   try {
@@ -51,13 +56,21 @@ export async function sendOrderConfirmation(order: EmailOrderData) {
         "[Resend API Error] Falló envío de confirmación a cliente:",
         error
       );
-      return { success: false, error };
+      return {
+        success: false,
+        error,
+        errorMessage: `${error.name || "ResendError"}: ${error.message}`,
+      };
     }
 
     return { success: true, data };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("[Email Error] Excepción enviando confirmación a cliente:", error);
-    return { success: false, error };
+    return {
+      success: false,
+      error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+    };
   }
 }
 
@@ -73,7 +86,12 @@ export async function sendOrderNotification(order: EmailOrderData) {
     console.warn(
       `[Resend Mock] RESEND_API_KEY no configurada. Alerta interna simulada para ${contactEmail}`
     );
-    return { success: true, mock: true };
+    return {
+      success: false,
+      mock: true,
+      errorMessage:
+        "RESEND_API_KEY no está disponible en este entorno de Vercel (revisa que esté marcada la casilla Preview en Environment Variables).",
+    };
   }
 
   try {
@@ -90,16 +108,24 @@ export async function sendOrderNotification(order: EmailOrderData) {
         "[Resend API Error] Falló envío de alerta interna a Selva Alta:",
         error
       );
-      return { success: false, error };
+      return {
+        success: false,
+        error,
+        errorMessage: `${error.name || "ResendError"}: ${error.message}`,
+      };
     }
 
     return { success: true, data };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(
       "[Email Error] Excepción enviando alerta de pedido a Selva Alta:",
       error
     );
-    return { success: false, error };
+    return {
+      success: false,
+      error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+    };
   }
 }
 
@@ -115,7 +141,12 @@ export async function sendB2BNotification(data: EmailB2BData) {
     console.warn(
       `[Resend Mock] RESEND_API_KEY no configurada. Lead B2B simulado para ${contactEmail}`
     );
-    return { success: true, mock: true };
+    return {
+      success: false,
+      mock: true,
+      errorMessage:
+        "RESEND_API_KEY no está disponible en este entorno de Vercel (revisa que esté marcada la casilla Preview).",
+    };
   }
 
   try {
@@ -132,16 +163,24 @@ export async function sendB2BNotification(data: EmailB2BData) {
         "[Resend API Error] Falló envío de lead B2B a Selva Alta:",
         error
       );
-      return { success: false, error };
+      return {
+        success: false,
+        error,
+        errorMessage: `${error.name || "ResendError"}: ${error.message}`,
+      };
     }
 
     return { success: true, data: resData };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(
       "[Email Error] Excepción enviando lead B2B a Selva Alta:",
       error
     );
-    return { success: false, error };
+    return {
+      success: false,
+      error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+    };
   }
 }
 
@@ -160,7 +199,12 @@ export async function sendB2BConfirmation(
     console.warn(
       `[Resend Mock] RESEND_API_KEY no configurada. Confirmación B2B simulada para ${email}`
     );
-    return { success: true, mock: true };
+    return {
+      success: false,
+      mock: true,
+      errorMessage:
+        "RESEND_API_KEY no está disponible en este entorno de Vercel (revisa que esté marcada la casilla Preview).",
+    };
   }
 
   try {
@@ -177,13 +221,21 @@ export async function sendB2BConfirmation(
         "[Resend API Error] Falló envío de confirmación B2B a cliente:",
         error
       );
-      return { success: false, error };
+      return {
+        success: false,
+        error,
+        errorMessage: `${error.name || "ResendError"}: ${error.message}`,
+      };
     }
 
     return { success: true, data };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("[Email Error] Excepción enviando confirmación B2B:", error);
-    return { success: false, error };
+    return {
+      success: false,
+      error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+    };
   }
 }
 

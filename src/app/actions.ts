@@ -234,6 +234,8 @@ export async function createWizardOfOzOrder(payload: {
         internalSent: internalEmailRes.success,
         customerSent: customerEmailRes.success,
         mock: Boolean(internalEmailRes.mock || customerEmailRes.mock),
+        diagnostic:
+          customerEmailRes.errorMessage || internalEmailRes.errorMessage || null,
       },
       message:
         "Pedido recibido. Un representante de Selva Alta se contactará en breve para coordinar la entrega y el pago.",
@@ -323,6 +325,8 @@ export async function addB2BContact(formData: FormData) {
         internalSent: internalB2BRes.success,
         customerSent: customerB2BRes.success,
         mock: Boolean(internalB2BRes.mock || customerB2BRes.mock),
+        diagnostic:
+          customerB2BRes.errorMessage || internalB2BRes.errorMessage || null,
       },
       message:
         "Solicitud enviada al correo de Selva Alta. Un representante se contactará en breve con los detalles y muestras.",

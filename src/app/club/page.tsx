@@ -199,6 +199,7 @@ export default function ClubPage() {
     total: number;
     phone: string;
     email: string;
+    emailDiagnostic?: string | null;
   }>(null);
 
   const activeTier =
@@ -247,6 +248,7 @@ export default function ClubPage() {
         total,
         phone,
         email,
+        emailDiagnostic: result.emailStatus?.diagnostic || null,
       });
       setSubmitting(false);
     } else {
@@ -334,6 +336,11 @@ export default function ClubPage() {
                   </span>
                   .
                 </p>
+                {orderSuccess.emailDiagnostic && (
+                  <p className="font-mono text-xs text-[#9E2A2B] bg-[#FAF6F0] border border-[#DFD3C3] rounded p-2.5 mt-2">
+                    Diagnóstico Resend: {orderSuccess.emailDiagnostic}
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
