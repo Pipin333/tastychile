@@ -63,6 +63,7 @@ export default function PrivacidadPage() {
               <strong className="text-[#2A1B12]">
                 Selva Alta Roasters SpA
               </strong>{" "}
+              (RUT 78.431.121-K){" "}
               cuidamos la confianza de quienes toman nuestro café. Este sitio
               web no vende ni arrienda bases de datos, no instala rastreadores
               publicitarios entre sitios (ad-tracking) ni comparte tu navegación
@@ -128,7 +129,7 @@ export default function PrivacidadPage() {
               <li>
                 Preparar y moler tu lote{" "}
                 <strong className="text-[#2A1B12]">
-                  Marsellesa Orgánico (87.0 SCA)
+                  Marsellesa de Altura (87.0 SCA)
                 </strong>{" "}
                 en el punto exacto para tu método de preparación.
               </li>

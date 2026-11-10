@@ -98,7 +98,7 @@ export function getOrderConfirmationTemplate(order: EmailOrderData): string {
                 <td style="padding: 28px 30px;">
                   <p style="color: #143326; font-size: 16px; font-weight: 700; margin: 0 0 12px 0;">¡Hola ${safeName}!</p>
                   <p style="color: #4A3F35; font-size: 14px; line-height: 22px; margin: 0 0 20px 0;">
-                    Recibimos tu pedido de café <strong>Marsellesa Orgánico (87.0 puntos SCA)</strong>. Un representante de Selva Alta se contactará contigo en breve al teléfono <strong>${safePhone}</strong> o a este correo para coordinar el pago y el despacho en la Región Metropolitana.
+                    Recibimos tu pedido de café <strong>Marsellesa de Altura (87.0 puntos SCA)</strong>. Un representante de Selva Alta se contactará contigo en breve al teléfono <strong>${safePhone}</strong> o a este correo para coordinar el pago y el despacho en la Región Metropolitana.
                   </p>
 
                   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
@@ -237,7 +237,7 @@ export function getB2BNotificationTemplate(data: EmailB2BData): string {
       ${safeGrind ? `<p><strong>Preparación / Molienda:</strong> ${safeGrind}</p>` : ""}
       <p><strong>Mensaje:</strong></p>
       <blockquote style="background: #F3ECE1; padding: 12px; border-left: 3px solid #9E2A2B; margin: 0; color: #4A3F35;">
-        ${safeMessage || "Solicitud de muestras y precios mayoristas de Marsellesa Orgánico 87 SCA."}
+        ${safeMessage || "Solicitud de muestras y precios mayoristas de Marsellesa de Altura 87 SCA."}
       </blockquote>
     </div>
   `;
@@ -259,7 +259,7 @@ export function getB2BConfirmationTemplate(
       <h2 style="color: #143326; margin: 0 0 14px 0;">Recibimos tu consulta comercial</h2>
       <p style="color: #4A3F35; font-size: 14px; line-height: 1.6;">Hola <strong>${safeName}</strong> (${safeCompany}),</p>
       <p style="color: #4A3F35; font-size: 14px; line-height: 1.6;">
-        Muchas gracias por escribirnos. Nuestro equipo revisará tu requerimiento y se pondrá en contacto contigo en breve para coordinar muestras o entrega de nuestro lote <strong>Marsellesa Orgánico (87.0 puntos SCA)</strong> en la Región Metropolitana.
+        Muchas gracias por escribirnos. Nuestro equipo revisará tu requerimiento y se pondrá en contacto contigo en breve para coordinar muestras o entrega de nuestro lote <strong>Marsellesa de Altura (87.0 puntos SCA)</strong> en la Región Metropolitana.
       </p>
       <hr style="border: 0; border-top: 1px solid #DFD3C3; margin: 20px 0;">
       <p style="font-size: 12px; color: #6E5D4F; margin: 0;">
@@ -285,7 +285,7 @@ export function getWaitlistWelcomeTemplate(
       <h2 style="color: #143326; margin: 0 0 14px 0;">¡Gracias por contactarnos!</h2>
       <p style="color: #4A3F35; font-size: 14px; line-height: 1.6;">Hola${safeName ? ` ${safeName}` : ""},</p>
       <p style="color: #4A3F35; font-size: 14px; line-height: 1.6;">
-        Recibimos tu correo (${safeEmail}). En breve te compartiremos las novedades de nuestra cosecha familiar Marsellesa Orgánico (87.0 puntos SCA).
+        Recibimos tu correo (${safeEmail}). En breve te compartiremos las novedades de nuestra cosecha familiar Marsellesa de Altura (87.0 puntos SCA).
       </p>
     </div>
   `;

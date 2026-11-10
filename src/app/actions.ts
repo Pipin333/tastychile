@@ -34,23 +34,23 @@ function sanitizeText(
     .slice(0, maxLength);
 }
 
-// Catalog focused exclusively on Marsellesa Orgánico (87 Puntos SCA) in 250g format with volume tiers
+// Catalog focused exclusively on Marsellesa de Altura (87 Puntos SCA) in 250g format with volume tiers
 const MARSELLESA_CATALOG: Record<
   string,
   { name: string; price: number; detail: string }
 > = {
   "marsellesa-250g": {
-    name: "Marsellesa Orgánico · 250g (1 bolsa)",
+    name: "Marsellesa de Altura · 250g (1 bolsa)",
     price: 11500,
     detail: "1 bolsa de 250g con válvula desgasificadora (Precio normal $13.990)",
   },
   "marsellesa-1kg": {
-    name: "Marsellesa Orgánico · Pack 1 kg (4 × 250g)",
+    name: "Marsellesa de Altura · Pack 1 kg (4 × 250g)",
     price: 39990,
     detail: "4 bolsas de 250g ($9.998 c/u · Precio normal $55.960)",
   },
   "marsellesa-3kg": {
-    name: "Marsellesa Orgánico · Caja 3 kg (12 × 250g)",
+    name: "Marsellesa de Altura · Caja 3 kg (12 × 250g)",
     price: 104990,
     detail: "12 bolsas de 250g ($8.749 c/u · Precio normal $167.880)",
   },

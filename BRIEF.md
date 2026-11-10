@@ -16,7 +16,7 @@
 - Support: "Granos cosechados en Huánuco a 1.820 msnm con trazabilidad directa, equidad de género en la cosecha y evaluación sensorial rigurosa."
 - Action: "Escribir al correo comercial" / "Solicitar muestra sin costo".
 - Below the fold:
-  1. Ficha técnica de variedad insignia: Por ahora exclusivamente Marsellesa Orgánico (87 Puntos SCA, Huánuco, Perú, 1.820 msnm, proceso lavado).
+  1. Ficha técnica de variedad insignia: Por ahora exclusivamente Marsellesa de Altura (87 Puntos SCA, Huánuco, Perú, 1.820 msnm, proceso lavado).
   2. Soluciones para barras de cafeterías y oficinas: Formato estándar de 250g con escala de precio por volumen disponible para pedidos corporativos.
   3. Formulario Mago de Oz y contacto directo por correo y WhatsApp.
 - Cut: Fotos de stock genéricas, pasarelas de pago complejas con tarjeta, pastillas de estado redundantes, emojis de adorno, texto inflado por IA (AI-slop), carruseles con autoscroll forzado.

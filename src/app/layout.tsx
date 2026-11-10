@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | Selva Alta Roasters",
   },
   description:
-    "Café de especialidad Marsellesa Orgánico (87.0 puntos SCA) cultivado a 1.820 msnm frente a La Bella Durmiente en Tingo María, Perú. Tostado fresco y molido a pedido para hogares, cafeterías y oficinas en Santiago.",
+    "Café de especialidad Marsellesa de Altura (87.0 puntos SCA) cultivado a 1.820 msnm frente a La Bella Durmiente en Tingo María, Perú. Tostado fresco y molido a pedido para hogares, cafeterías y oficinas en Santiago.",
   applicationName: "Selva Alta Roasters",
   authors: [{ name: "Selva Alta Roasters SpA", url: siteUrl }],
   creator: "Selva Alta Roasters SpA",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     "Tingo María café",
     "Huánuco café de altura",
     "La Bella Durmiente Tingo María",
-    "Marsellesa Orgánico 87 SCA",
+    "Marsellesa de Altura 87 SCA",
     "café en grano 250g",
     "café molido a pedido",
     "café para cafeterías Santiago",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Selva Alta Roasters | Café de Especialidad de Tingo María (87.0 SCA)",
     description:
-      "Lote familiar Marsellesa Orgánico cultivado a 1.820 msnm en la selva nubosa de Tingo María, Perú. Bolsas de 250g, packs por kilo y abastecimiento para cafeterías y oficinas.",
+      "Lote familiar Marsellesa de Altura cultivado a 1.820 msnm en la selva nubosa de Tingo María, Perú. Bolsas de 250g, packs por kilo y abastecimiento para cafeterías y oficinas.",
     url: siteUrl,
     type: "website",
     locale: "es_CL",
@@ -133,13 +133,13 @@ const jsonLd = {
     {
       "@type": "Product",
       "@id": `${siteUrl}/club#marsellesa-87-sca`,
-      name: "Café de Especialidad Marsellesa Orgánico (87.0 SCA) · Tingo María",
+      name: "Café de Especialidad Marsellesa de Altura (87.0 SCA) · Tingo María",
       brand: {
         "@type": "Brand",
         name: "Selva Alta Roasters",
       },
       description:
-        "Café 100% Arábica variedad Marsellesa Orgánico cultivado bajo sombra a 1.820 msnm frente a La Bella Durmiente en Tingo María, Huánuco, Perú. Notas a chocolate bitter, caramelo de caña y nuez tostada. Disponible en grano entero o molido a pedido en bolsas de 250g.",
+        "Café 100% Arábica variedad Marsellesa de Altura cultivado bajo sombra a 1.820 msnm frente a La Bella Durmiente en Tingo María, Huánuco, Perú. Notas a chocolate bitter, caramelo de caña y nuez tostada. Disponible en grano entero o molido a pedido en bolsas de 250g.",
       image: [
         `${siteUrl}/images/origen/bolsa-y-extraccion.png`,
         `${siteUrl}/images/origen/cerezas-marsellesa.png`,

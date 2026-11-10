@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Selva Alta Roasters · Café de Especialidad",
     short_name: "Selva Alta",
     description:
-      "Café de especialidad Marsellesa Orgánico (87.0 SCA) de Tingo María, Huánuco, Perú. En grano o molido para tu cafetera en Chile.",
+      "Café de especialidad Marsellesa de Altura (87.0 SCA) de Tingo María, Huánuco, Perú. En grano o molido para tu cafetera en Chile.",
     start_url: "/",
     display: "standalone",
     background_color: "#FAF6F0",

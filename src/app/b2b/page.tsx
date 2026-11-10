@@ -84,7 +84,7 @@ export default function B2BPage() {
               <p className="text-base sm:text-lg text-[#4A3F35] leading-relaxed mb-8">
                 Entregamos nuestro lote{" "}
                 <strong className="text-[#2A1B12]">
-                  Marsellesa Orgánico (87 puntos SCA)
+                  Marsellesa de Altura (87 puntos SCA)
                 </strong>{" "}
                 en bolsas de 250g con válvula para que cada apertura conserve su
                 aroma intacto, sin que el grano se oxide en la tolva o en la

@@ -270,7 +270,7 @@ export default function ClubPage() {
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pb-14">
             <div className="lg:col-span-7 bg-[#FAF6F0]/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-[#DFD3C3]/80 shadow-sm">
               <p className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold mb-2">
-                Marsellesa Orgánico · Tingo María (87.0 SCA)
+                Marsellesa de Altura · Tingo María (87.0 SCA)
               </p>
               <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#143326] leading-[1.12] mb-4">
                 Pide tu café en grano o molido para tu cafetera.
@@ -285,7 +285,7 @@ export default function ClubPage() {
               <div className="rounded-2xl overflow-hidden border border-[#DFD3C3] bg-[#FFFDF9] shadow-sm flex items-center gap-4 p-3.5">
                 <Image
                   src="/images/origen/bolsa-y-extraccion.png"
-                  alt="Bolsa de 250g de café Marsellesa Orgánico"
+                  alt="Bolsa de 250g de café Marsellesa de Altura"
                   width={180}
                   height={140}
                   className="w-28 sm:w-32 aspect-[4/3] object-cover rounded-xl flex-shrink-0"

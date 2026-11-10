@@ -108,7 +108,7 @@ export default function OpenGraphImage() {
               fontWeight: 500,
             }}
           >
-            Lote familiar Marsellesa Orgánico cultivado frente a La Bella
+            Lote familiar Marsellesa de Altura cultivado frente a La Bella
             Durmiente. Bolsas de 250g, packs por kilo y muestras para
             cafeterías y oficinas en Santiago.
           </div>
