@@ -10,8 +10,11 @@ import {
 } from "./email-templates";
 
 const getResendClient = () => {
-  const apiKey = process.env.RESEND_API_KEY;
-  return apiKey ? new Resend(apiKey) : null;
+  const apiKey =
+    process.env.RESEND_API_KEY ||
+    process.env.TASTY_RESEND_API_KEY ||
+    process.env.NEXT_PUBLIC_RESEND_API_KEY;
+  return apiKey ? new Resend(apiKey.trim()) : null;
 };
 
 const getFromEmail = () =>
