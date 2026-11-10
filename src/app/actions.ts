@@ -9,6 +9,10 @@ import {
   sendWaitlistWelcome,
 } from "@/lib/email";
 import { EmailOrderData, OrderItem } from "@/lib/email-templates";
+import {
+  normalizeComunaRM,
+  normalizeStreetAddress,
+} from "@/lib/comunas-rm";
 
 const ALLOWED_REGION = "Región Metropolitana de Santiago";
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -73,8 +77,8 @@ export async function createWizardOfOzOrder(payload: {
   const cleanName = sanitizeText(payload.name, 100);
   const cleanEmail = sanitizeText(payload.email, 120).toLowerCase();
   const cleanPhone = sanitizeText(payload.phone, 35);
-  const cleanAddress = sanitizeText(payload.address, 180);
-  const cleanCity = sanitizeText(payload.city, 60);
+  const cleanAddress = normalizeStreetAddress(payload.address);
+  const canonicalComuna = normalizeComunaRM(payload.city);
   const cleanRegion = sanitizeText(payload.region, 80);
   const cleanNotes = sanitizeText(payload.notes, 400);
   const { items } = payload;
@@ -84,7 +88,7 @@ export async function createWizardOfOzOrder(payload: {
     !cleanEmail ||
     !cleanPhone ||
     !cleanAddress ||
-    !cleanCity ||
+    !payload.city ||
     !cleanRegion
   ) {
     return {
@@ -100,11 +104,11 @@ export async function createWizardOfOzOrder(payload: {
     };
   }
 
-  if (cleanRegion !== ALLOWED_REGION) {
+  if (cleanRegion !== ALLOWED_REGION || !canonicalComuna) {
     return {
       success: false,
       error:
-        "Por el momento solo realizamos despachos dentro de la Región Metropolitana de Santiago.",
+        "Por el momento solo realizamos despachos a comunas de la Región Metropolitana de Santiago.",
     };
   }
 
@@ -143,7 +147,7 @@ export async function createWizardOfOzOrder(payload: {
       customer_email: cleanEmail,
       customer_phone: cleanPhone,
       customer_address: cleanAddress,
-      customer_city: cleanCity,
+      customer_city: canonicalComuna,
       customer_region: ALLOWED_REGION,
       items: validatedItems,
       subtotal,
