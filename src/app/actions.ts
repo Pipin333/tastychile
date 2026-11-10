@@ -167,14 +167,21 @@ export async function createWizardOfOzOrder(payload: {
       );
     }
 
-    await sendOrderNotification(orderData);
-    await sendOrderConfirmation(orderData);
+    const internalEmailRes = await sendOrderNotification(orderData);
+    // Pausa breve de 600ms para respetar el rate limit de Resend (2 req/seg en plan gratuito)
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    const customerEmailRes = await sendOrderConfirmation(orderData);
 
     return {
       success: true,
       orderNumber,
       customerName: orderData.customer_name,
       total,
+      emailStatus: {
+        internalSent: internalEmailRes.success,
+        customerSent: customerEmailRes.success,
+        mock: Boolean(internalEmailRes.mock || customerEmailRes.mock),
+      },
       message:
         "Pedido recibido. Un representante de Selva Alta se contactará en breve para coordinar la entrega y el pago.",
     };
@@ -237,7 +244,7 @@ export async function addB2BContact(formData: FormData) {
       console.warn("[DB b2b_contacts] Fallback sin DB:", dbErr);
     }
 
-    await sendB2BNotification({
+    const internalB2BRes = await sendB2BNotification({
       name,
       company,
       email,
@@ -246,10 +253,17 @@ export async function addB2BContact(formData: FormData) {
       grind,
       message,
     });
-    await sendB2BConfirmation(email, name, company);
+    // Pausa breve de 600ms para respetar el rate limit de Resend (2 req/seg en plan gratuito)
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    const customerB2BRes = await sendB2BConfirmation(email, name, company);
 
     return {
       success: true,
+      emailStatus: {
+        internalSent: internalB2BRes.success,
+        customerSent: customerB2BRes.success,
+        mock: Boolean(internalB2BRes.mock || customerB2BRes.mock),
+      },
       message:
         "Solicitud enviada al correo de Selva Alta. Un representante se contactará en breve con los detalles y muestras.",
     };

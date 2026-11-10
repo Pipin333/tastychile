@@ -9,12 +9,15 @@ import {
   getWaitlistWelcomeTemplate,
 } from "./email-templates";
 
-const resendApiKey = process.env.RESEND_API_KEY;
-export const resend = resendApiKey ? new Resend(resendApiKey) : null;
+const getResendClient = () => {
+  const apiKey = process.env.RESEND_API_KEY;
+  return apiKey ? new Resend(apiKey) : null;
+};
 
-const FROM_EMAIL =
+const getFromEmail = () =>
   process.env.RESEND_FROM_EMAIL || "Selva Alta <onboarding@resend.dev>";
-export const CONTACT_EMAIL =
+
+export const getContactEmail = () =>
   process.env.CONTACT_EMAIL ||
   process.env.SALES_EMAIL ||
   "comercial@selvaalta.cl";
@@ -24,22 +27,35 @@ export const CONTACT_EMAIL =
  */
 export async function sendOrderConfirmation(order: EmailOrderData) {
   const html = getOrderConfirmationTemplate(order);
+  const resend = getResendClient();
 
   if (!resend) {
+    console.warn(
+      `[Resend Mock] RESEND_API_KEY no configurada. Confirmación simulada para ${order.customer_email}`
+    );
     return { success: true, mock: true };
   }
 
   try {
-    const response = await resend.emails.send({
-      from: FROM_EMAIL,
+    const { data, error } = await resend.emails.send({
+      from: getFromEmail(),
       to: order.customer_email,
-      subject: `Pedido ${order.order_number} registrado · Selva Alta Roasters`,
+      subject: `Pedido ${order.order_number} recibido · Selva Alta Roasters`,
       html,
-      replyTo: CONTACT_EMAIL,
+      replyTo: getContactEmail(),
     });
-    return { success: true, data: response };
+
+    if (error) {
+      console.error(
+        "[Resend API Error] Falló envío de confirmación a cliente:",
+        error
+      );
+      return { success: false, error };
+    }
+
+    return { success: true, data };
   } catch (error) {
-    console.error("[Email Error] Error enviando confirmación a cliente:", error);
+    console.error("[Email Error] Excepción enviando confirmación a cliente:", error);
     return { success: false, error };
   }
 }
@@ -49,23 +65,37 @@ export async function sendOrderConfirmation(order: EmailOrderData) {
  */
 export async function sendOrderNotification(order: EmailOrderData) {
   const html = getOrderNotificationTemplate(order);
+  const resend = getResendClient();
+  const contactEmail = getContactEmail();
 
   if (!resend) {
+    console.warn(
+      `[Resend Mock] RESEND_API_KEY no configurada. Alerta interna simulada para ${contactEmail}`
+    );
     return { success: true, mock: true };
   }
 
   try {
-    const response = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: CONTACT_EMAIL,
+    const { data, error } = await resend.emails.send({
+      from: getFromEmail(),
+      to: contactEmail,
       subject: `NUEVO PEDIDO ${order.order_number} · ${order.customer_name}`,
       html,
       replyTo: order.customer_email,
     });
-    return { success: true, data: response };
+
+    if (error) {
+      console.error(
+        "[Resend API Error] Falló envío de alerta interna a Selva Alta:",
+        error
+      );
+      return { success: false, error };
+    }
+
+    return { success: true, data };
   } catch (error) {
     console.error(
-      "[Email Error] Error enviando alerta de pedido a Selva Alta:",
+      "[Email Error] Excepción enviando alerta de pedido a Selva Alta:",
       error
     );
     return { success: false, error };
@@ -77,23 +107,37 @@ export async function sendOrderNotification(order: EmailOrderData) {
  */
 export async function sendB2BNotification(data: EmailB2BData) {
   const html = getB2BNotificationTemplate(data);
+  const resend = getResendClient();
+  const contactEmail = getContactEmail();
 
   if (!resend) {
+    console.warn(
+      `[Resend Mock] RESEND_API_KEY no configurada. Lead B2B simulado para ${contactEmail}`
+    );
     return { success: true, mock: true };
   }
 
   try {
-    const response = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: CONTACT_EMAIL,
+    const { data: resData, error } = await resend.emails.send({
+      from: getFromEmail(),
+      to: contactEmail,
       subject: `Solicitud Comercial B2B · ${data.company} (${data.name})`,
       html,
       replyTo: data.email,
     });
-    return { success: true, data: response };
+
+    if (error) {
+      console.error(
+        "[Resend API Error] Falló envío de lead B2B a Selva Alta:",
+        error
+      );
+      return { success: false, error };
+    }
+
+    return { success: true, data: resData };
   } catch (error) {
     console.error(
-      "[Email Error] Error enviando lead B2B a Selva Alta:",
+      "[Email Error] Excepción enviando lead B2B a Selva Alta:",
       error
     );
     return { success: false, error };
@@ -109,22 +153,35 @@ export async function sendB2BConfirmation(
   company: string
 ) {
   const html = getB2BConfirmationTemplate(name, company);
+  const resend = getResendClient();
 
   if (!resend) {
+    console.warn(
+      `[Resend Mock] RESEND_API_KEY no configurada. Confirmación B2B simulada para ${email}`
+    );
     return { success: true, mock: true };
   }
 
   try {
-    const response = await resend.emails.send({
-      from: FROM_EMAIL,
+    const { data, error } = await resend.emails.send({
+      from: getFromEmail(),
       to: email,
       subject: "Solicitud recibida · Selva Alta Roasters",
       html,
-      replyTo: CONTACT_EMAIL,
+      replyTo: getContactEmail(),
     });
-    return { success: true, data: response };
+
+    if (error) {
+      console.error(
+        "[Resend API Error] Falló envío de confirmación B2B a cliente:",
+        error
+      );
+      return { success: false, error };
+    }
+
+    return { success: true, data };
   } catch (error) {
-    console.error("[Email Error] Error enviando confirmación B2B:", error);
+    console.error("[Email Error] Excepción enviando confirmación B2B:", error);
     return { success: false, error };
   }
 }
@@ -134,22 +191,29 @@ export async function sendB2BConfirmation(
  */
 export async function sendWaitlistWelcome(email: string, name?: string) {
   const html = getWaitlistWelcomeTemplate(email, name);
+  const resend = getResendClient();
 
   if (!resend) {
     return { success: true, mock: true };
   }
 
   try {
-    const response = await resend.emails.send({
-      from: FROM_EMAIL,
+    const { data, error } = await resend.emails.send({
+      from: getFromEmail(),
       to: email,
       subject: "Detalles de Marsellesa 87 SCA · Selva Alta Roasters",
       html,
-      replyTo: CONTACT_EMAIL,
+      replyTo: getContactEmail(),
     });
-    return { success: true, data: response };
+
+    if (error) {
+      console.error("[Resend API Error] Falló envío waitlist:", error);
+      return { success: false, error };
+    }
+
+    return { success: true, data };
   } catch (error) {
-    console.error("[Email Error] Error enviando correo de contacto:", error);
+    console.error("[Email Error] Excepción enviando correo de contacto:", error);
     return { success: false, error };
   }
 }
