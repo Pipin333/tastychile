@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Cafeterías, Restaurantes y Oficinas (B2B)",
   description:
-    "Abastecimiento de café de especialidad Marsellesa Orgánico (87.0 puntos SCA) en bolsas de 250g para barras de espresso, restaurantes y oficinas en Santiago. Solicita muestras sin costo.",
+    "Abastecimiento de café de especialidad Marsellesa de Altura (87.0 puntos SCA) en bolsas de 250g para barras de espresso, restaurantes y oficinas en Santiago. Solicita muestras sin costo.",
   alternates: {
     canonical: "/b2b",
   },

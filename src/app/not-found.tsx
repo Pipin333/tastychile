@@ -23,7 +23,7 @@ export default function NotFound() {
           </h1>
           <p className="text-sm sm:text-base text-[#4A3F35] leading-relaxed mb-8">
             La dirección que buscas no existe o cambió de ubicación, pero
-            nuestro lote Marsellesa Orgánico de Tingo María sigue recién
+            nuestro lote Marsellesa de Altura de Tingo María sigue recién
             tostado.
           </p>
 

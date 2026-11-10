@@ -19,7 +19,7 @@ export default function Footer() {
               Perú. Tostado y molido a pedido en Chile.
             </p>
             <p className="font-mono text-xs text-[#A9BFA8]">
-              Cosecha familiar · Marsellesa Orgánico (87.0 SCA)
+              Cosecha familiar · Marsellesa de Altura (87.0 SCA)
             </p>
           </div>
 
@@ -85,7 +85,7 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-[#1E4D38] flex flex-col sm:flex-row items-center justify-between text-xs text-[#D5CBB8] gap-3 font-mono">
           <p>
-            {`© ${new Date().getFullYear()} Selva Alta Roasters SpA. Marca "Tasty". Todos los derechos reservados.`}
+            {`© ${new Date().getFullYear()} Selva Alta Roasters SpA · RUT 78.431.121-K · Santiago, Chile. Todos los derechos reservados.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link

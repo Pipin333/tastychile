@@ -72,7 +72,7 @@ export default function Home() {
               <p className="text-base sm:text-lg text-[#4A3F35] leading-relaxed mb-8">
                 Traemos a Chile nuestro lote familiar{" "}
                 <strong className="text-[#2A1B12]">
-                  Marsellesa Orgánico (87 puntos SCA)
+                  Marsellesa de Altura (87 puntos SCA)
                 </strong>
                 , cultivado en las laderas verdes de La Bella Durmiente. Dulce,
                 achocolatado y sin amargor, para tu casa, tu oficina o tu
@@ -108,7 +108,7 @@ export default function Home() {
                 <div className="p-4 bg-[#FFFDF9]/95 border-t border-[#DFD3C3] flex items-center justify-between text-xs">
                   <div>
                     <span className="font-bold text-[#143326] block">
-                      Lote Marsellesa Orgánico
+                      Lote Marsellesa de Altura
                     </span>
                     <span className="text-[#6E5D4F]">
                       Notas a chocolate bitter, nuez tostada y caramelo
@@ -174,7 +174,7 @@ export default function Home() {
                   Cosecha Activa · Tingo María
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-bold text-[#143326] mb-3">
-                  Marsellesa Orgánico · 87.0 Puntos SCA
+                  Marsellesa de Altura · 87.0 Puntos SCA
                 </h2>
                 <p className="text-sm sm:text-base text-[#4A3F35] leading-relaxed">
                   Un café redondo, aromático y naturalmente dulce, cultivado en armonía con la selva

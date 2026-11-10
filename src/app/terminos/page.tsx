@@ -64,7 +64,7 @@ export default function TerminosPage() {
               <strong className="text-[#2A1B12]">
                 Selva Alta Roasters SpA
               </strong>{" "}
-              (marca comercial{" "}
+              (RUT 78.431.121-K, marca comercial{" "}
               <strong className="text-[#2A1B12]">&quot;Tasty&quot;</strong>) se
               rigen por los presentes Términos de Servicio. Al enviar una
               solicitud de compra o cotización para cafeterías y oficinas,
@@ -85,7 +85,7 @@ export default function TerminosPage() {
               Trabajamos con cosechas seleccionadas de Tingo María, Huánuco,
               Perú (lote activo{" "}
               <strong className="text-[#2A1B12]">
-                Marsellesa Orgánico, 87.0 puntos SCA, cultivado a 1.820 msnm
+                Marsellesa de Altura, 87.0 puntos SCA, cultivado a 1.820 msnm
               </strong>
               ). Al tratarse de un fruto agrícola natural tostado de forma
               artesanal, las notas de cata (chocolate bitter, nuez tostada,
