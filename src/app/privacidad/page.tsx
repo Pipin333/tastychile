@@ -5,9 +5,12 @@ import Footer from "@/components/Footer";
 import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidad | Selva Alta Roasters",
+  title: "Política de Privacidad",
   description:
     "Política de privacidad, protección de datos personales y transparencia en la gestión de pedidos de Selva Alta Roasters.",
+  alternates: {
+    canonical: "/privacidad",
+  },
 };
 
 /**

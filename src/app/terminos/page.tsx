@@ -5,9 +5,12 @@ import Footer from "@/components/Footer";
 import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
 
 export const metadata: Metadata = {
-  title: "Términos de Servicio | Selva Alta Roasters",
+  title: "Términos de Servicio",
   description:
     "Condiciones comerciales, despacho de café de especialidad, solicitudes para cafeterías y marco de responsabilidad de Selva Alta Roasters SpA.",
+  alternates: {
+    canonical: "/terminos",
+  },
 };
 
 /**

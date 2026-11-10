@@ -93,20 +93,26 @@ La aplicación estará disponible inmediatamente en [http://localhost:3000](http
 src/
 ├── app/
 │   ├── actions.ts             # Server Actions (Mago de Oz, Pedidos, B2B y Waitlist)
-│   ├── layout.tsx             # Root layout con metadata y fuentes
-│   ├── page.tsx               # Landing principal rediseñada
+│   ├── icon.svg               # Favicon vectorial de Selva Alta Roasters
+│   ├── layout.tsx             # Root layout con SEO, JSON-LD (Schema.org) y puntero a llms.txt
+│   ├── manifest.ts            # Web App Manifest (/manifest.webmanifest)
+│   ├── not-found.tsx          # Página 404 personalizada
+│   ├── opengraph-image.tsx    # Tarjeta OpenGraph dinámica 1200x630 (/opengraph-image)
+│   ├── page.tsx               # Landing principal con historia fotográfica de origen
+│   ├── robots.ts              # Reglas de indexación buscadores y agentes IA (/robots.txt)
+│   ├── sitemap.ts             # Mapa del sitio XML dinámico (/sitemap.xml)
 │   ├── b2b/
-│   │   ├── layout.tsx         # Layout sección B2B
-│   │   └── page.tsx           # Catálogo técnico y formulario comercial
+│   │   ├── layout.tsx         # Metadata y canonical sección B2B
+│   │   └── page.tsx           # Catálogo mayorista y formulario comercial
 │   ├── club/
-│   │   ├── layout.tsx         # Layout sección Club
-│   │   └── page.tsx           # Catálogo B2C, molienda, carrito y checkout Mago de Oz
+│   │   ├── layout.tsx         # Metadata y canonical sección Club
+│   │   └── page.tsx           # Compra 250g/packs, selector de molienda y checkout directo
 │   ├── privacidad/
 │   │   └── page.tsx           # Política de Privacidad y derechos ARCO
 │   └── terminos/
 │       └── page.tsx           # Términos de Servicio y condiciones comerciales
 ├── components/
-│   ├── BellaDurmienteBackground.tsx # Silueta topográfica con mosaico geométrico
+│   ├── BellaDurmienteBackground.tsx # Silueta de La Bella Durmiente en selva nubosa
 │   ├── Navbar.tsx             # Navegación responsive fija con backdrop blur
 │   └── Footer.tsx             # Pie de página institucional y enlaces legales
 └── lib/
