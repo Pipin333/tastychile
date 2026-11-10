@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
@@ -18,27 +19,27 @@ interface VolumeTier {
 const VOLUME_TIERS: VolumeTier[] = [
   {
     id: "marsellesa-250g",
-    name: "Formato 250g",
-    subtitle: "1 bolsa de 250g con válvula desgasificadora",
+    name: "1 Bolsa (250g)",
+    subtitle: "1 bolsa de 250g recién tostada",
     price: 12900,
-    unitPriceLabel: "$12.900 / bolsa",
-    bagsCount: "1 × 250g",
+    unitPriceLabel: "$12.900 por bolsa",
+    bagsCount: "250 gramos",
   },
   {
     id: "marsellesa-1kg",
-    name: "Volumen 1 kg",
-    subtitle: "4 bolsas de 250g · Despacho carbono neutral incluido",
+    name: "Pack 1 Kilo",
+    subtitle: "4 bolsas de 250g · Envío gratis en Santiago",
     price: 44900,
-    unitPriceLabel: "$11.225 / bolsa (-13%)",
-    bagsCount: "4 × 250g",
+    unitPriceLabel: "$11.225 por bolsa (Ahorras 13%)",
+    bagsCount: "4 × 250g (1 kg)",
   },
   {
     id: "marsellesa-3kg",
-    name: "Volumen 3 kg",
-    subtitle: "12 bolsas de 250g · Ideal para barras, startups y oficinas",
+    name: "Caja 3 Kilos",
+    subtitle: "12 bolsas de 250g · Ideal para grupos, barras y oficinas",
     price: 119900,
-    unitPriceLabel: "$9.990 / bolsa (-22%)",
-    bagsCount: "12 × 250g",
+    unitPriceLabel: "$9.990 por bolsa (Ahorras 22%)",
+    bagsCount: "12 × 250g (3 kg)",
   },
 ];
 
@@ -54,31 +55,31 @@ const GRIND_METHODS: GrindMethod[] = [
     id: "Grano Entero",
     label: "Grano Entero",
     calib: "Sin moler",
-    description: "Para molinos de barra o molienda al instante antes de extraer.",
+    description: "Si tienes molinillo en casa o en tu cafetería.",
   },
   {
     id: "Moka Italiana (Fina)",
-    label: "Moka Italiana",
+    label: "Cafetera Italiana (Moka)",
     calib: "Molienda Fina",
-    description: "Calibrada para cafetera italiana octogonal sin sobre-extracción.",
+    description: "Para la clásica cafetera italiana de cocina.",
   },
   {
     id: "Prensa Francesa (Gruesa)",
     label: "Prensa Francesa",
     calib: "Molienda Gruesa",
-    description: "Partícula uniforme para inmersión limpia y cuerpo sedoso.",
+    description: "Para émbolo o infusión directa con cuerpo suave.",
   },
   {
     id: "Espresso de Barra (Extra Fina)",
-    label: "Espresso",
-    calib: "Extra Fina",
-    description: "Ajustada para portafiltros presurizados o máquinas de 9 bares.",
+    label: "Máquina de Espresso",
+    calib: "Molienda Extra Fina",
+    description: "Para máquinas de brazo o portafiltro de casa y barra.",
   },
   {
     id: "Filtro V60 / Goteo (Media)",
-    label: "Filtro / V60",
+    label: "Filtro / Cafetera Eléctrica",
     calib: "Molienda Media",
-    description: "Para conos de goteo, Chemex y cafeteras eléctricas de oficina.",
+    description: "Para V60, Chemex o cafetera eléctrica de goteo.",
   },
 ];
 
@@ -102,8 +103,8 @@ function MethodIcon({ methodId }: { methodId: string }) {
         viewBox="0 0 40 48"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
-        className="w-7 h-8 text-[#c25e1a]"
+        strokeWidth="1.6"
+        className="w-7 h-8 text-[#9E2A2B]"
         aria-hidden="true"
       >
         <circle cx="20" cy="4" r="2" />
@@ -122,8 +123,8 @@ function MethodIcon({ methodId }: { methodId: string }) {
         viewBox="0 0 40 48"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
-        className="w-7 h-8 text-[#c25e1a]"
+        strokeWidth="1.6"
+        className="w-7 h-8 text-[#9E2A2B]"
         aria-hidden="true"
       >
         <circle cx="20" cy="4" r="2.5" />
@@ -141,8 +142,8 @@ function MethodIcon({ methodId }: { methodId: string }) {
         viewBox="0 0 44 48"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
-        className="w-7 h-8 text-[#c25e1a]"
+        strokeWidth="1.6"
+        className="w-7 h-8 text-[#9E2A2B]"
         aria-hidden="true"
       >
         <path d="M8 14 L28 14 L26 26 L10 26 Z" />
@@ -159,8 +160,8 @@ function MethodIcon({ methodId }: { methodId: string }) {
         viewBox="0 0 40 48"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1.5"
-        className="w-7 h-8 text-[#c25e1a]"
+        strokeWidth="1.6"
+        className="w-7 h-8 text-[#9E2A2B]"
         aria-hidden="true"
       >
         <path d="M8 10 L32 10 L22 28 L18 28 Z" />
@@ -175,8 +176,8 @@ function MethodIcon({ methodId }: { methodId: string }) {
       viewBox="0 0 40 48"
       fill="none"
       stroke="currentColor"
-      strokeWidth="1.5"
-      className="w-7 h-8 text-[#c25e1a]"
+      strokeWidth="1.6"
+      className="w-7 h-8 text-[#9E2A2B]"
       aria-hidden="true"
     >
       <ellipse cx="20" cy="24" rx="10" ry="14" />
@@ -257,54 +258,78 @@ export default function ClubPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#110f0d] text-[#f5f3f0] flex flex-col font-sans selection:bg-[#c25e1a] selection:text-white">
+    <div className="min-h-screen bg-[#FAF6F0] text-[#2A1B12] flex flex-col font-sans selection:bg-[#9E2A2B] selection:text-white">
       <BellaDurmienteBackground variant="club" />
       <Navbar />
 
       <main className="relative z-10 flex-grow pt-28 pb-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <section className="max-w-2xl pb-16">
-            <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-3">
-              Lote Activo · Marsellesa Orgánico · 87.0 Puntos SCA
-            </p>
-            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#f5f3f0] leading-[1.12] mb-5">
-              Configura tu volumen en formato 250g y la molienda para tu método.
-            </h1>
-            <p className="text-base sm:text-lg text-[#b0a89e] leading-relaxed">
-              Cada pedido se registra directamente con nuestro equipo en
-              Santiago. Un representante de Selva Alta se contactará contigo a
-              la brevedad para coordinar el despacho carbono neutral y el pago.
-            </p>
+          {/* Header with Product Photo */}
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pb-14">
+            <div className="lg:col-span-7">
+              <p className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold mb-2">
+                Marsellesa Orgánico · Tingo María (87.0 SCA)
+              </p>
+              <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#143326] leading-[1.12] mb-4">
+                Pide tu café en grano o molido para tu cafetera.
+              </h1>
+              <p className="text-base sm:text-lg text-[#4A3F35] leading-relaxed">
+                Elige cuántas bolsas de 250g quieres y cómo preparas tu café.
+                Recibimos tu pedido de inmediato y nos contactamos contigo para
+                coordinar el envío y el pago.
+              </p>
+            </div>
+            <div className="lg:col-span-5">
+              <div className="rounded-2xl overflow-hidden border border-[#DFD3C3] bg-[#FFFDF9] shadow-sm flex items-center gap-4 p-3.5">
+                <Image
+                  src="/images/origen/bolsa-y-extraccion.png"
+                  alt="Bolsa de 250g de café Marsellesa Orgánico"
+                  width={180}
+                  height={140}
+                  className="w-28 sm:w-32 aspect-[4/3] object-cover rounded-xl flex-shrink-0"
+                />
+                <div className="text-xs space-y-1">
+                  <span className="font-bold text-sm text-[#143326] block">
+                    Cosecha Familiar Tingo María
+                  </span>
+                  <span className="block text-[#4A3F35]">
+                    Notas a chocolate bitter, caramelo y nuez tostada.
+                  </span>
+                  <span className="inline-block font-mono text-[11px] font-semibold text-[#9E2A2B]">
+                    Bolsas de 250g con válvula
+                  </span>
+                </div>
+              </div>
+            </div>
           </section>
 
           {orderSuccess ? (
-            <section className="bg-[#181512]/90 backdrop-blur-md border border-[#c25e1a] rounded-xl p-6 sm:p-10 max-w-2xl space-y-6">
+            <section className="bg-[#FFFDF9]/95 backdrop-blur-md border border-[#9E2A2B] rounded-2xl p-6 sm:p-10 max-w-2xl space-y-6 shadow-md">
               <div>
-                <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-2">
-                  Orden Registrada · {orderSuccess.orderNumber}
+                <p className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold mb-2">
+                  Pedido Recibido · {orderSuccess.orderNumber}
                 </p>
-                <h2 className="text-2xl sm:text-3xl font-bold text-[#f5f3f0]">
-                  Gracias por tu pedido, {orderSuccess.customerName}
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#143326]">
+                  ¡Muchas gracias por tu pedido, {orderSuccess.customerName}!
                 </h2>
               </div>
 
-              <div className="bg-[#241f1b] border border-[#332c25] rounded-lg p-5 space-y-2">
-                <h3 className="font-semibold text-[#f5f3f0] text-base">
+              <div className="bg-[#F3ECE1] border border-[#DFD3C3] rounded-xl p-5 space-y-2">
+                <h3 className="font-bold text-[#2A1B12] text-base">
                   Un representante se contactará en breve
                 </h3>
-                <p className="text-sm text-[#b0a89e] leading-relaxed">
-                  Tu solicitud ha llegado al correo de operaciones de Selva Alta
-                  y enviamos una copia de respaldo a{" "}
-                  <strong className="text-[#f5f3f0]">
+                <p className="text-sm text-[#4A3F35] leading-relaxed">
+                  Ya recibimos tu solicitud en Selva Alta y te enviamos un
+                  comprobante a{" "}
+                  <strong className="text-[#2A1B12]">
                     {orderSuccess.email}
                   </strong>
-                  . Te contactaremos al teléfono{" "}
-                  <strong className="text-[#f5f3f0]">
+                  . Te escribiremos al{" "}
+                  <strong className="text-[#2A1B12]">
                     {orderSuccess.phone}
                   </strong>{" "}
-                  para coordinar la entrega y el método de pago por un total de{" "}
-                  <span className="font-mono font-bold text-[#c25e1a]">
+                  para coordinar el despacho y el pago por{" "}
+                  <span className="font-mono font-bold text-[#9E2A2B]">
                     ${orderSuccess.total.toLocaleString("es-CL")}
                   </span>
                   .
@@ -316,16 +341,16 @@ export default function ClubPage() {
                   href={`mailto:comercial@selvaalta.cl?subject=Pedido%20${encodeURIComponent(
                     orderSuccess.orderNumber
                   )}`}
-                  className="inline-flex items-center justify-center bg-[#c25e1a] hover:bg-[#a84e12] text-white font-semibold text-sm px-6 py-3 rounded-lg transition-colors"
+                  className="inline-flex items-center justify-center bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-semibold text-sm px-6 py-3 rounded-lg transition-colors"
                 >
-                  Escribir directo al correo de Selva Alta
+                  Escribirnos por correo
                 </a>
                 <button
                   type="button"
                   onClick={() => setOrderSuccess(null)}
-                  className="inline-flex items-center justify-center bg-[#241f1b] hover:bg-[#332c25] text-[#f5f3f0] border border-[#332c25] font-medium text-sm px-6 py-3 rounded-lg transition-colors"
+                  className="inline-flex items-center justify-center bg-[#F3ECE1] hover:bg-[#EFE4D2] text-[#143326] border border-[#DFD3C3] font-semibold text-sm px-6 py-3 rounded-lg transition-colors"
                 >
-                  Realizar otro pedido
+                  Hacer otro pedido
                 </button>
               </div>
             </section>
@@ -335,12 +360,9 @@ export default function ClubPage() {
               <div className="lg:col-span-7 space-y-10">
                 {/* Step 1: Volume Tier */}
                 <section>
-                  <div className="flex items-center gap-4 mb-4">
-                    <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e]">
-                      1. Selecciona Tramo de Volumen (Bolsas de 250g)
-                    </h2>
-                    <div className="h-px bg-[#332c25] flex-grow" />
-                  </div>
+                  <h2 className="text-lg font-bold text-[#143326] mb-3">
+                    1. Elige tu formato (Bolsas de 250g)
+                  </h2>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {VOLUME_TIERS.map((tier) => {
@@ -350,22 +372,22 @@ export default function ClubPage() {
                           key={tier.id}
                           type="button"
                           onClick={() => setSelectedTierId(tier.id)}
-                          className={`text-left rounded-xl p-4 border transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a] ${
+                          className={`text-left rounded-xl p-4 border transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
                             isActive
-                              ? "bg-[#241f1b] border-[#c25e1a]"
-                              : "bg-[#181512]/80 border-[#332c25] hover:border-[#7d746b]"
+                              ? "bg-[#EFE4D2] border-[#9E2A2B] ring-1 ring-[#9E2A2B]"
+                              : "bg-[#FFFDF9]/90 border-[#DFD3C3] hover:bg-[#F3ECE1]"
                           }`}
                         >
-                          <span className="block font-mono text-[11px] uppercase text-[#c25e1a] mb-1">
+                          <span className="block font-mono text-[11px] uppercase text-[#9E2A2B] font-semibold mb-1">
                             {tier.bagsCount}
                           </span>
-                          <span className="block text-base font-bold text-[#f5f3f0] mb-1">
+                          <span className="block text-base font-bold text-[#143326] mb-1">
                             {tier.name}
                           </span>
-                          <span className="block font-mono text-lg font-bold text-[#f5f3f0]">
+                          <span className="block font-mono text-xl font-bold text-[#2A1B12]">
                             ${tier.price.toLocaleString("es-CL")}
                           </span>
-                          <span className="block font-mono text-[11px] text-[#b0a89e] mt-1">
+                          <span className="block text-[11px] text-[#4A3F35] mt-1">
                             {tier.unitPriceLabel}
                           </span>
                         </button>
@@ -376,12 +398,9 @@ export default function ClubPage() {
 
                 {/* Step 2: Calibrated Grind */}
                 <section>
-                  <div className="flex items-center gap-4 mb-4">
-                    <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e]">
-                      2. Ajusta la Molienda Según tu Cafetera
-                    </h2>
-                    <div className="h-px bg-[#332c25] flex-grow" />
-                  </div>
+                  <h2 className="text-lg font-bold text-[#143326] mb-3">
+                    2. ¿Cómo preparas tu café? (Molienda)
+                  </h2>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {GRIND_METHODS.map((method) => {
@@ -391,23 +410,23 @@ export default function ClubPage() {
                           key={method.id}
                           type="button"
                           onClick={() => setSelectedGrind(method.id)}
-                          className={`text-left rounded-xl p-4 border flex items-start gap-3.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a] ${
+                          className={`text-left rounded-xl p-4 border flex items-start gap-3.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] ${
                             isActive
-                              ? "bg-[#241f1b] border-[#c25e1a]"
-                              : "bg-[#181512]/80 border-[#332c25] hover:border-[#7d746b]"
+                              ? "bg-[#EFE4D2] border-[#9E2A2B] ring-1 ring-[#9E2A2B]"
+                              : "bg-[#FFFDF9]/90 border-[#DFD3C3] hover:bg-[#F3ECE1]"
                           }`}
                         >
-                          <div className="p-2 rounded-lg bg-[#110f0d] border border-[#332c25] flex-shrink-0">
+                          <div className="p-2 rounded-lg bg-[#FAF6F0] border border-[#DFD3C3] flex-shrink-0">
                             <MethodIcon methodId={method.id} />
                           </div>
                           <div>
-                            <span className="block text-sm font-bold text-[#f5f3f0]">
+                            <span className="block text-sm font-bold text-[#143326]">
                               {method.label}
                             </span>
-                            <span className="block font-mono text-[11px] uppercase text-[#c25e1a] mb-1">
+                            <span className="block font-mono text-[11px] text-[#9E2A2B] font-semibold mb-1">
                               {method.calib}
                             </span>
-                            <span className="block text-xs text-[#b0a89e] leading-snug">
+                            <span className="block text-xs text-[#4A3F35] leading-snug">
                               {method.description}
                             </span>
                           </div>
@@ -418,12 +437,12 @@ export default function ClubPage() {
                 </section>
 
                 {/* Step 3: Quantity multiplier */}
-                <section className="bg-[#181512]/80 backdrop-blur-md border border-[#332c25] rounded-xl p-5 flex items-center justify-between">
+                <section className="bg-[#FFFDF9]/90 backdrop-blur-md border border-[#DFD3C3] rounded-xl p-5 flex items-center justify-between shadow-sm">
                   <div>
-                    <span className="block text-sm font-semibold text-[#f5f3f0]">
-                      Cantidad de unidades del tramo ({activeTier.name})
+                    <span className="block text-sm font-bold text-[#143326]">
+                      Cantidad de unidades ({activeTier.name})
                     </span>
-                    <span className="block text-xs text-[#b0a89e]">
+                    <span className="block text-xs text-[#4A3F35]">
                       {activeTier.subtitle}
                     </span>
                   </div>
@@ -431,18 +450,18 @@ export default function ClubPage() {
                     <button
                       type="button"
                       onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                      className="w-9 h-9 rounded-lg bg-[#241f1b] hover:bg-[#332c25] border border-[#332c25] font-mono text-base font-bold text-[#f5f3f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+                      className="w-9 h-9 rounded-lg bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-base font-bold text-[#2A1B12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B]"
                       aria-label="Disminuir cantidad"
                     >
                       -
                     </button>
-                    <span className="font-mono text-base font-bold text-[#f5f3f0] w-6 text-center">
+                    <span className="font-mono text-base font-bold text-[#2A1B12] w-6 text-center">
                       {quantity}
                     </span>
                     <button
                       type="button"
                       onClick={() => setQuantity((q) => q + 1)}
-                      className="w-9 h-9 rounded-lg bg-[#241f1b] hover:bg-[#332c25] border border-[#332c25] font-mono text-base font-bold text-[#f5f3f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+                      className="w-9 h-9 rounded-lg bg-[#F3ECE1] hover:bg-[#EFE4D2] border border-[#DFD3C3] font-mono text-base font-bold text-[#2A1B12] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B]"
                       aria-label="Aumentar cantidad"
                     >
                       +
@@ -451,18 +470,18 @@ export default function ClubPage() {
                 </section>
               </div>
 
-              {/* Right Column: Wizard of Oz Order Form */}
-              <div className="lg:col-span-5 bg-[#181512]/90 backdrop-blur-md border border-[#332c25] rounded-xl p-6 sm:p-7">
-                <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-1">
-                  Confirmación Directa
+              {/* Right Column: Order Form */}
+              <div className="lg:col-span-5 bg-[#FFFDF9]/95 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-6 sm:p-7 shadow-sm">
+                <p className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold mb-1">
+                  Atención Directa
                 </p>
-                <h2 className="text-xl font-bold text-[#f5f3f0] mb-4">
-                  Datos de Entrega
+                <h2 className="text-xl font-bold text-[#143326] mb-4">
+                  ¿Dónde enviamos tu café?
                 </h2>
 
                 {/* Summary Box */}
-                <div className="bg-[#241f1b] border border-[#332c25] rounded-lg p-4 mb-5 space-y-2 text-xs">
-                  <div className="flex justify-between text-[#f5f3f0] font-semibold">
+                <div className="bg-[#F3ECE1] border border-[#DFD3C3] rounded-xl p-4 mb-5 space-y-2 text-xs">
+                  <div className="flex justify-between text-[#2A1B12] font-bold">
                     <span>
                       {quantity} × Marsellesa ({activeTier.name})
                     </span>
@@ -470,23 +489,23 @@ export default function ClubPage() {
                       ${subtotal.toLocaleString("es-CL")}
                     </span>
                   </div>
-                  <div className="flex justify-between text-[#b0a89e]">
-                    <span>Molienda</span>
-                    <span className="font-mono text-[#c25e1a]">
+                  <div className="flex justify-between text-[#4A3F35]">
+                    <span>Preparación</span>
+                    <span className="font-semibold text-[#143326]">
                       {selectedGrind}
                     </span>
                   </div>
-                  <div className="flex justify-between text-[#b0a89e]">
-                    <span>Despacho carbono neutral</span>
-                    <span className="font-mono text-[#f5f3f0]">
+                  <div className="flex justify-between text-[#4A3F35]">
+                    <span>Despacho</span>
+                    <span className="font-mono font-semibold text-[#1E4D38]">
                       {shipping === 0
-                        ? "Incluido ($0)"
+                        ? "Gratis en Santiago ($0)"
                         : `$${shipping.toLocaleString("es-CL")}`}
                     </span>
                   </div>
-                  <div className="pt-2 border-t border-[#332c25] flex justify-between text-sm font-bold text-[#f5f3f0]">
-                    <span>Total a coordinar</span>
-                    <span className="font-mono text-[#c25e1a]">
+                  <div className="pt-2 border-t border-[#DFD3C3] flex justify-between text-sm font-bold text-[#2A1B12]">
+                    <span>Total del pedido</span>
+                    <span className="font-mono text-[#9E2A2B]">
                       ${total.toLocaleString("es-CL")}
                     </span>
                   </div>
@@ -496,7 +515,7 @@ export default function ClubPage() {
                   <div>
                     <label
                       htmlFor="order-name"
-                      className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                      className="block text-xs font-semibold text-[#2A1B12] mb-1"
                     >
                       Nombre y Apellido *
                     </label>
@@ -505,9 +524,9 @@ export default function ClubPage() {
                       name="name"
                       required
                       type="text"
-                      placeholder="Nombre completo"
+                      placeholder="Tu nombre completo"
                       disabled={submitting}
-                      className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
+                      className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2.5 text-sm text-[#2A1B12] placeholder-[#6E5D4F] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B]"
                     />
                   </div>
 
@@ -515,7 +534,7 @@ export default function ClubPage() {
                     <div>
                       <label
                         htmlFor="order-email"
-                        className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                        className="block text-xs font-semibold text-[#2A1B12] mb-1"
                       >
                         Correo *
                       </label>
@@ -526,15 +545,15 @@ export default function ClubPage() {
                         type="email"
                         placeholder="nombre@correo.cl"
                         disabled={submitting}
-                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
+                        className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2.5 text-sm text-[#2A1B12] placeholder-[#6E5D4F] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="order-phone"
-                        className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                        className="block text-xs font-semibold text-[#2A1B12] mb-1"
                       >
-                        Teléfono *
+                        Teléfono / WhatsApp *
                       </label>
                       <input
                         id="order-phone"
@@ -543,7 +562,7 @@ export default function ClubPage() {
                         type="tel"
                         placeholder="+56 9 1234 5678"
                         disabled={submitting}
-                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
+                        className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2.5 text-sm text-[#2A1B12] placeholder-[#6E5D4F] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B]"
                       />
                     </div>
                   </div>
@@ -552,7 +571,7 @@ export default function ClubPage() {
                     <div>
                       <label
                         htmlFor="order-address"
-                        className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                        className="block text-xs font-semibold text-[#2A1B12] mb-1"
                       >
                         Dirección y N° *
                       </label>
@@ -561,15 +580,15 @@ export default function ClubPage() {
                         name="address"
                         required
                         type="text"
-                        placeholder="Calle, número, depto u oficina"
+                        placeholder="Calle, número, depto"
                         disabled={submitting}
-                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
+                        className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2.5 text-sm text-[#2A1B12] placeholder-[#6E5D4F] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B]"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor="order-city"
-                        className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                        className="block text-xs font-semibold text-[#2A1B12] mb-1"
                       >
                         Comuna *
                       </label>
@@ -578,9 +597,9 @@ export default function ClubPage() {
                         name="city"
                         required
                         type="text"
-                        placeholder="Providencia, Santiago..."
+                        placeholder="Ej: Ñuñoa, Providencia..."
                         disabled={submitting}
-                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
+                        className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2.5 text-sm text-[#2A1B12] placeholder-[#6E5D4F] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B]"
                       />
                     </div>
                   </div>
@@ -588,7 +607,7 @@ export default function ClubPage() {
                   <div>
                     <label
                       htmlFor="order-region"
-                      className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                      className="block text-xs font-semibold text-[#2A1B12] mb-1"
                     >
                       Región *
                     </label>
@@ -598,7 +617,7 @@ export default function ClubPage() {
                       required
                       defaultValue={REGIONES_CHILE[0]}
                       disabled={submitting}
-                      className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
+                      className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2.5 text-sm text-[#2A1B12] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B]"
                     >
                       {REGIONES_CHILE.map((r) => (
                         <option key={r} value={r}>
@@ -611,22 +630,22 @@ export default function ClubPage() {
                   <div>
                     <label
                       htmlFor="order-notes"
-                      className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                      className="block text-xs font-semibold text-[#2A1B12] mb-1"
                     >
-                      Indicaciones de entrega o facturación
+                      Notas o datos de factura (opcional)
                     </label>
                     <textarea
                       id="order-notes"
                       name="notes"
                       rows={2}
-                      placeholder="RUT empresa si requieres factura, horario de recepción, conserjería..."
+                      placeholder="Conserjería, horario o RUT si necesitas factura..."
                       disabled={submitting}
-                      className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] resize-none"
+                      className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2 text-sm text-[#2A1B12] placeholder-[#6E5D4F] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B] resize-none"
                     />
                   </div>
 
                   {orderError && (
-                    <p className="text-red-400 text-xs font-medium">
+                    <p className="text-[#9E2A2B] text-xs font-semibold">
                       {orderError}
                     </p>
                   )}
@@ -634,17 +653,16 @@ export default function ClubPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full bg-[#c25e1a] hover:bg-[#a84e12] text-white font-semibold py-3.5 px-6 rounded-lg text-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f5f3f0]"
+                    className="w-full bg-[#9E2A2B] hover:bg-[#7D2021] text-white font-semibold py-3.5 px-6 rounded-lg text-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#143326]"
                   >
                     {submitting
-                      ? "Enviando pedido al correo de Selva Alta..."
-                      : "Confirmar Pedido"}
+                      ? "Enviando pedido..."
+                      : "Encargar mi café"}
                   </button>
 
-                  <p className="text-[11px] text-[#7d746b] leading-relaxed">
-                    Al confirmar, el pedido llega de inmediato al correo de
-                    Selva Alta y un representante te contactará para coordinar
-                    la entrega y el pago.
+                  <p className="text-[11px] text-[#6E5D4F] leading-relaxed">
+                    Te enviaremos un comprobante inmediato a tu correo y te
+                    contactaremos para coordinar el pago y la entrega.
                   </p>
                 </form>
               </div>

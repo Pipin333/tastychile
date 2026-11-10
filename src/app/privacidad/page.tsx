@@ -7,199 +7,157 @@ import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
 export const metadata: Metadata = {
   title: "Política de Privacidad | Selva Alta Roasters",
   description:
-    "Política de privacidad, protección de datos comerciales y transparencia en el tratamiento de información de clientes y empresas en Selva Alta Roasters.",
+    "Política de privacidad, protección de datos personales y transparencia en la gestión de pedidos de Selva Alta Roasters.",
 };
 
 /**
- * Privacy Policy page modeled after the editorial-technical structure of feliperiquel.me.
+ * Privacy Policy page in the warm Selva Nubosa & Pergamino palette.
  */
 export default function PrivacidadPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#110f0d] text-[#f5f3f0] relative">
+    <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#2A1B12] relative">
       <BellaDurmienteBackground variant="home" />
       <Navbar />
 
       <main
         id="main-content"
-        className="relative z-10 flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20"
+        className="relative z-10 flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 sm:pb-20"
       >
-        {/* Breadcrumb */}
         <nav
-          className="flex items-center gap-2 font-mono text-xs text-[#b0a89e] mb-8"
+          className="flex items-center gap-2 font-mono text-xs text-[#6E5D4F] mb-8"
           aria-label="Ruta de navegación"
         >
           <Link
             href="/"
-            className="hover:text-[#f5f3f0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a] rounded"
+            className="hover:text-[#143326] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B] rounded"
           >
             Inicio
           </Link>
-          <span aria-hidden="true" className="text-[#7d746b]">
+          <span aria-hidden="true" className="text-[#DFD3C3]">
             /
           </span>
-          <span className="text-[#c25e1a] font-medium" aria-current="page">
+          <span className="text-[#9E2A2B] font-medium" aria-current="page">
             Política de Privacidad
           </span>
         </nav>
 
-        {/* Page Header */}
-        <header className="mb-12 border-b border-[#332c25] pb-8">
-          <h1 className="text-3xl sm:text-5xl font-bold text-[#f5f3f0] tracking-tight mb-4">
+        <header className="mb-12 border-b border-[#DFD3C3] pb-8">
+          <h1 className="text-3xl sm:text-5xl font-bold text-[#143326] tracking-tight mb-4">
             Política de Privacidad
           </h1>
-          <p className="font-mono text-xs text-[#b0a89e]">
-            Última actualización: 10 de noviembre de 2026 // Versión 1.0
+          <p className="font-mono text-xs text-[#6E5D4F]">
+            Última actualización: 10 de noviembre de 2026 // Versión 1.1
           </p>
         </header>
 
-        {/* Content Sections */}
-        <article className="space-y-8 text-[#b0a89e] text-sm sm:text-base leading-relaxed">
-          <section className="p-6 sm:p-8 bg-[#181512]/85 backdrop-blur-md border border-[#332c25] rounded-xl">
-            <h2 className="text-xl font-bold text-[#c25e1a] mb-3">
-              1. Declaración de Principios y Cero Rastreo Publicitario
+        <article className="space-y-8 text-[#4A3F35] text-sm sm:text-base leading-relaxed">
+          <section className="p-6 sm:p-8 bg-[#FFFDF9]/90 backdrop-blur-md border border-[#DFD3C3] rounded-xl shadow-sm">
+            <h2 className="text-xl font-bold text-[#143326] mb-3">
+              1. Respeto por tus Datos y Cero Rastreo Publicitario
             </h2>
             <p className="mb-3">
               En{" "}
-              <strong className="text-[#f5f3f0]">
+              <strong className="text-[#2A1B12]">
                 Selva Alta Roasters SpA
               </strong>{" "}
-              la privacidad y la reserva comercial constituyen un estándar de
-              diseño técnico. Este sitio web no comercializa bases de datos, no
-              instala píxeles de seguimiento publicitario entre sitios
-              (ad-tracking), ni transfiere el comportamiento de navegación de
-              sus visitantes a corredores de datos (data brokers).
+              cuidamos la confianza de quienes toman nuestro café. Este sitio
+              web no vende ni arrienda bases de datos, no instala rastreadores
+              publicitarios entre sitios (ad-tracking) ni comparte tu navegación
+              con corredores de datos.
             </p>
             <p>
-              La exploración del catálogo y de nuestras fichas técnicas de
-              origen no exige la creación de cuentas con contraseña ni el
-              almacenamiento de tarjetas bancarias en nuestros servidores.
+              Puedes recorrer nuestra historia, conocer el origen de Tingo María
+              y revisar nuestros formatos sin obligación de crear cuentas ni
+              entregar datos bancarios en línea.
             </p>
           </section>
 
-          <section className="p-6 sm:p-8 bg-[#181512]/85 backdrop-blur-md border border-[#332c25] rounded-xl">
-            <h2 className="text-xl font-bold text-[#f5f3f0] mb-3">
-              2. Datos Recopilados en Pedidos y Solicitudes B2B
+          <section className="p-6 sm:p-8 bg-[#FFFDF9]/90 backdrop-blur-md border border-[#DFD3C3] rounded-xl shadow-sm">
+            <h2 className="text-xl font-bold text-[#9E2A2B] mb-3">
+              2. Qué Información Solicitamos al Hacer un Pedido
             </h2>
             <p className="mb-3">
-              Recopilamos únicamente la información estrictamente necesaria que
-              tú decides proporcionar al completar una solicitud de pedido en{" "}
+              Solo registramos los datos que tú nos entregas voluntariamente al
+              encargar bolsas en{" "}
               <Link
                 href="/club"
-                className="text-[#c25e1a] underline underline-offset-4 hover:text-[#f5f3f0]"
+                className="text-[#9E2A2B] font-medium underline underline-offset-4 hover:text-[#143326]"
               >
                 /club
               </Link>{" "}
-              o un requerimiento de abastecimiento corporativo en{" "}
+              o al pedir muestras y precios mayoristas en{" "}
               <Link
                 href="/b2b"
-                className="text-[#c25e1a] underline underline-offset-4 hover:text-[#f5f3f0]"
+                className="text-[#9E2A2B] font-medium underline underline-offset-4 hover:text-[#143326]"
               >
                 /b2b
               </Link>
               :
             </p>
-            <ul className="list-disc pl-5 space-y-2.5 text-xs sm:text-sm text-[#b0a89e] font-mono">
+            <ul className="list-disc pl-5 space-y-2.5 text-xs sm:text-sm text-[#4A3F35]">
               <li>
-                <strong className="text-[#f5f3f0]">
-                  Pedidos en Formato 250g y Volumen (/club):
+                <strong className="text-[#2A1B12]">
+                  En pedidos de café (/club):
                 </strong>{" "}
-                Nombre completo, dirección de correo electrónico, teléfono de
-                contacto para el courier, dirección de despacho, comuna, formato
-                de volumen seleccionado (250g, 1 kg o 3 kg), tipo de molienda
-                calibrada y frecuencia de reposición deseada.
+                Tu nombre, correo electrónico, teléfono de contacto para la
+                entrega, dirección, comuna, cantidad de bolsas (250g, 1 kg o 3
+                kg) y el tipo de molienda que necesitas para tu cafetera.
               </li>
               <li>
-                <strong className="text-[#f5f3f0]">
-                  Consultas Mayoristas y Muestras (/b2b):
+                <strong className="text-[#2A1B12]">
+                  En consultas de cafeterías y oficinas (/b2b):
                 </strong>{" "}
-                Razón social o nombre comercial de la cafetería u oficina,
-                nombre de la persona de contacto, correo corporativo, teléfono,
-                consumo mensual estimado en kilos y notas operativas de
-                equipamiento.
-              </li>
-              <li>
-                <strong className="text-[#f5f3f0]">
-                  Contacto Directo por Correo:
-                </strong>{" "}
-                Cuando nos escribes directamente a{" "}
-                <code className="font-mono text-xs text-[#c25e1a]">
-                  comercial@selvaalta.cl
-                </code>
-                , conservamos el hilo de correo exclusivamente para dar
-                seguimiento comercial y técnico a tu requerimiento.
+                Nombre de tu cafetería, restaurante o empresa, persona de
+                contacto, correo electrónico, teléfono y consumo mensual
+                aproximado.
               </li>
             </ul>
           </section>
 
-          <section className="p-6 sm:p-8 bg-[#181512]/85 backdrop-blur-md border border-[#332c25] rounded-xl">
-            <h2 className="text-xl font-bold text-[#c25e1a] mb-3">
-              3. Finalidad del Tratamiento y Flujo Operativo
+          <section className="p-6 sm:p-8 bg-[#FFFDF9]/90 backdrop-blur-md border border-[#DFD3C3] rounded-xl shadow-sm">
+            <h2 className="text-xl font-bold text-[#143326] mb-3">
+              3. Para Qué Usamos tus Datos
             </h2>
             <p className="mb-3">
-              Los datos suministrados en nuestros formularios se utilizan única
-              y exclusivamente para:
+              Utilizamos tu información exclusivamente para:
             </p>
-            <ul className="list-disc pl-5 space-y-2 text-xs sm:text-sm text-[#b0a89e] font-mono mb-3">
+            <ul className="list-disc pl-5 space-y-2 text-xs sm:text-sm text-[#4A3F35] mb-3">
               <li>
-                Calibrar la molienda del lote{" "}
-                <strong className="text-[#f5f3f0]">Marsellesa 87.0 SCA</strong>{" "}
-                según la cafetera o máquina de espresso del cliente.
+                Preparar y moler tu lote{" "}
+                <strong className="text-[#2A1B12]">
+                  Marsellesa Orgánico (87.0 SCA)
+                </strong>{" "}
+                en el punto exacto para tu método de preparación.
               </li>
               <li>
-                Emitir el comprobante automático de recepción de solicitud y
-                permitir que un representante comercial coordine el pago y la
-                facturación tributaria correspondiente.
-              </li>
-              <li>
-                Coordinar la ruta de entrega carbono neutral en Santiago o el
-                despacho a regiones.
+                Enviarte el comprobante inmediato de solicitud y contactarte
+                para coordinar el pago y el despacho a domicilio o a tu local.
               </li>
             </ul>
             <p>
-              Bajo ninguna circunstancia tu correo o teléfono será cedido a
-              terceros ajenos a la operación logística de entrega ni incorporado
-              a listas masivas de publicidad no solicitada.
+              Jamás enviamos spam ni compartimos tu teléfono o correo con
+              empresas externas ajenas al reparto de tu pedido.
             </p>
           </section>
 
-          <section className="p-6 sm:p-8 bg-[#181512]/85 backdrop-blur-md border border-[#332c25] rounded-xl">
-            <h2 className="text-xl font-bold text-[#f5f3f0] mb-3">
-              4. Infraestructura y Seguridad de Almacenamiento
+          <section className="p-6 sm:p-8 bg-[#FFFDF9]/90 backdrop-blur-md border border-[#DFD3C3] rounded-xl shadow-sm">
+            <h2 className="text-xl font-bold text-[#143326] mb-3">
+              4. Tus Derechos (Ley N° 19.628 y Ley N° 21.719)
             </h2>
             <p className="mb-3">
-              Los registros de pedidos y prospectos B2B se almacenan en bases de
-              datos relacionales cifradas en tránsito mediante TLS (PostgreSQL
-              serverless) y las notificaciones transaccionales se despachan a
-              través de infraestructura de correo autenticada (SPF/DKIM).
+              De acuerdo con la legislación chilena sobre Protección de la Vida
+              Privada, puedes solicitar en cualquier momento conocer, actualizar,
+              rectificar o eliminar tus datos de contacto de nuestros registros.
             </p>
             <p>
-              El acceso a las órdenes recibidas está restringido exclusivamente
-              al equipo de operaciones y tueste de Selva Alta Roasters SpA.
-            </p>
-          </section>
-
-          <section className="p-6 sm:p-8 bg-[#181512]/85 backdrop-blur-md border border-[#332c25] rounded-xl">
-            <h2 className="text-xl font-bold text-[#c25e1a] mb-3">
-              5. Derechos ARCO y Normativa Aplicable
-            </h2>
-            <p className="mb-3">
-              De conformidad con la Ley N° 19.628 sobre Protección de la Vida
-              Privada y las disposiciones actualizadas por la Ley N° 21.719 de
-              la República de Chile, todo titular de datos tiene derecho a
-              solicitar el acceso, rectificación, cancelación u oposición (ARCO)
-              respecto de sus datos personales o comerciales registrados en
-              nuestro sistema.
-            </p>
-            <p>
-              Para ejercer cualquiera de estos derechos o solicitar la
-              eliminación de tus registros de contacto, escribe directamente a{" "}
+              Para hacerlo, basta con escribirnos a{" "}
               <a
                 href="mailto:comercial@selvaalta.cl?subject=Solicitud%20Privacidad%20de%20Datos"
-                className="font-mono text-xs text-[#c25e1a] underline underline-offset-4 hover:text-[#f5f3f0]"
+                className="font-mono text-xs text-[#9E2A2B] font-semibold underline underline-offset-4 hover:text-[#143326]"
               >
                 comercial@selvaalta.cl
               </a>{" "}
-              indicando tu requerimiento en el asunto.
+              y atenderemos tu solicitud de inmediato.
             </p>
           </section>
         </article>

@@ -1,49 +1,28 @@
 # BRAND.md: Selva Alta Roasters
 
 ## 1. Direction and Origin
-- **Carrier**: Estructura limpia, relieve topográfico de origen y tipografía editorial-técnica de alta legibilidad.
-- **Physical origin**: Silueta de la cordillera La Bella Durmiente en Tingo María (Huánuco, Perú, 1.820 msnm), grano tostado oscuro y cereza madura de café.
-- **Register**: Editorial-técnico. Sin fotos de stock, sin emojis, sin pastillas redundantes, sin texto AI-slop, sin guiones largos (em/en dashes).
+- **Carrier**: Calidez gastronómica y cafetera de origen, fotografías de plantación, cereza y tueste, y relieve de selva nubosa amazónica.
+- **Physical origin**: Silueta verde de La Bella Durmiente cubierta de bosque nuboso en Tingo María (Huánuco, Perú, 1.820 msnm), pergamino de secado al sol, cereza roja madura de variedad Marsellesa y grano recién tostado.
+- **Register**: Editorial-gastronómico cálido, directo y cercano. Sin jerga fría de consultoría, sin colores mineros (cobre/carbón), sin emojis, sin guiones largos (em/en dashes).
 
-## 2. Palette Tokens
-- `--bg-ground`: `#110f0d` (Fondo base grano tostado profundo)
-- `--bg-surface`: `#181512` (Superficie de tarjetas, usada con transparencia `rgba(24, 21, 18, 0.80)` y `backdrop-filter: blur(14px)`)
-- `--bg-surface-raised`: `#241f1b` (Paneles internos de especificaciones y selectores)
-- `--border-subtle`: `#332c25` (Línea divisoria técnica de 1px)
-- `--text-primary`: `#f5f3f0` (Texto principal, contraste 13.8:1 sobre fondo)
-- `--text-secondary`: `#b0a89e` (Lectura secundaria descansada, contraste 6.2:1)
-- `--text-muted`: `#7d746b` (Etiquetas técnicas en mayúsculas)
-- `--accent`: `#c25e1a` (Ámbar tostado y cereza madura)
-- `--accent-hover`: `#a84e12` (Estado hover de botones principales)
-- `--on-accent`: `#ffffff` (Texto sobre acento, contraste 4.6:1)
+## 2. Palette Tokens (Selva Nubosa & Pergamino)
+- `--bg-ground`: `#FAF6F0` (Fondo crema pergamino cálido)
+- `--bg-surface`: `#FFFDF9` (Superficie de tarjetas con transparencia `rgba(255, 253, 249, 0.88)` y `backdrop-filter: blur(12px)`)
+- `--bg-surface-raised`: `#F3ECE1` (Paneles cálidos de lino y pergamino)
+- `--border-subtle`: `#DFD3C3` (Borde suave de fibra natural)
+- `--text-primary`: `#143326` (Verde bosque amazónico profundo, contraste 12.8:1 sobre fondo)
+- `--text-espresso`: `#2A1B12` (Grano tostado oscuro para títulos gastronómicos, contraste 14.5:1)
+- `--text-secondary`: `#4A3F35` (Lectura secundaria cacao/tierra, contraste 8.7:1)
+- `--text-muted`: `#6E5D4F` (Etiquetas de origen y notas, contraste 5.4:1)
+- `--accent`: `#9E2A2B` (Cereza de café Marsellesa madura, contraste 6.8:1 con blanco)
+- `--accent-hover`: `#7D2021` (Estado hover cereza intensa)
+- `--accent-forest`: `#1E4D38` (Verde hoja de cafeto para acentos botánicos y B2B)
+- `--on-accent`: `#FFFFFF` (Texto blanco cálido sobre acento)
 
 ## 3. Typography
 - **Primary Sans**: `Geist Sans`, `-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, sans-serif.
-- **Data / Tech Font**: `Geist Mono`, `ui-monospace`, monospace. Exclusiva para cotas (`1.820 msnm`), puntaje (`87.0 Puntos SCA`), pesos (`250g`, `1 kg`, `3 kg`), precios y códigos de pedido (`SAR-XXXXXX`).
-- **Scale**:
-  - Hero display: `clamp(2.25rem, 1.8rem + 2vw, 3.35rem)`, `line-height: 1.12`, `letter-spacing: -0.025em`
-  - Section heading: `clamp(1.5rem, 1.3rem + 0.8vw, 2.1rem)`, `line-height: 1.2`
-  - Body: `1rem` (16px), `line-height: 1.65`
-  - Technical labels: `0.75rem` (12px) a `0.8125rem` (13px) en monoespaciado
+- **Data / Origin Font**: `Geist Mono`, `ui-monospace`, monospace. Usada con moderación para puntaje (`87.0 SCA`), altitud (`1.820 msnm`), pesos (`250g`, `1 kg`, `3 kg`) y precios.
 
-## 4. Signature Element: La Bella Durmiente (Mosaico Geométrico + 4 Capas)
-- Fondo fijo a pantalla completa con el perfil anatómico real de la cordillera La Bella Durmiente de Tingo María (frente, nariz al cielo, labios, mentón, cuello y cumbre de 1.820 msnm).
-- La silueta se repite 4 veces hacia abajo. En cada iteración inferior disminuye la opacidad del mosaico (`0.95`, `0.58`, `0.30`, `0.12`) mientras el relleno base de cada capa se oscurece progresivamente hasta fundirse con `#110f0d`.
-- Variación sutil por ruta:
-  - `/`: Vista general con iluminación ámbar sobre la cumbre principal.
-  - `/b2b`: Énfasis en las cotas topográficas y grilla técnica de abastecimiento.
-  - `/club`: Tono cálido de acento sobre las laderas y enfoque en los métodos de extracción (Moka Italiana, Prensa Francesa, Espresso, Filtro V60) en íconos vectoriales de línea de 1.5px.
-
-## 5. Composition and Gutter
-- Gutter horizontal: `16px` bajo `640px`, `24px` en tablet, `32px` sobre `1024px`.
-- Ancho máximo: `1040px` (`max-w-5xl`).
-- Layer stack:
-  - `z-0`: Lienzo SVG fijo de La Bella Durmiente.
-  - `z-10`: Contenido estructural y tarjetas con cristal esmerilado (`backdrop-blur-md`).
-  - `z-40`: Barra de navegación superior fija.
-  - `z-50`: Modal de confirmación de pedido Mago de Oz.
-
-## 6. Entrance Choreography and Interaction Inventory
-- Entrada sobria en reposo; sin animaciones disparadas por scroll ni carruseles automáticos.
-- Todos los controles interactivos (navegación, selector de volumen, selector de molienda, botones de envío) transicionan en `150ms cubic-bezier(0.16, 1, 0.3, 1)` sobre color de borde y fondo.
-- Anillo de foco visible `:focus-visible:ring-2 :focus-visible:ring-[#c25e1a]`.
+## 4. Signature Element: La Bella Durmiente en Selva Nubosa + Fotografía de Origen
+- Fondo fijo a pantalla completa sobre cielo matinal color pergamino (`#FAF6F0`) con la silueta de **La Bella Durmiente de Tingo María** cubierta de vegetación amazónica en 4 capas de verde bosque (`#52796F`, `#2D6A4F`, `#1E4D38`, `#143326`), neblina suave entre las laderas y follaje de cafeto bajo sombra.
+- Galería fotográfica de origen en `public/images/origen/` (plantación en selva alta, cerezas rojas en rama, grano verde vs. tostado, y preparación en barra), lista para ser reemplazada directamente por las fotografías propias de la finca cuando estén disponibles.
