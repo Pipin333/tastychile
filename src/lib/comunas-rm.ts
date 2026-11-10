@@ -109,6 +109,21 @@ export function normalizeComunaRM(raw: string | undefined | null): string | null
 }
 
 /**
+ * Filters the 52 RM comunas accent-insensitively and alias-aware
+ * so searching "nuno", "nunos", "stgo" or "pena" matches "Ñuñoa", "Santiago", "Peñalolén"/"Peñaflor".
+ */
+export function filterComunasRM(query: string): string[] {
+  const key = toLookupKey(query);
+  if (!key) return [...COMUNAS_RM];
+
+  const aliasTarget = COMUNA_ALIASES[key];
+  return COMUNAS_RM.filter((comuna) => {
+    if (aliasTarget && comuna === aliasTarget) return true;
+    return toLookupKey(comuna).includes(key);
+  });
+}
+
+/**
  * Normalizes street addresses to consistent Title Case and clean punctuation
  * so "AV. PROVIDENCIA   1234,  DEPTO 502" becomes "Av. Providencia 1234, Depto 502".
  */

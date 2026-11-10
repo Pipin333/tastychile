@@ -5,8 +5,8 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
+import ComunaCombobox from "@/components/ComunaCombobox";
 import { createWizardOfOzOrder } from "@/app/actions";
-import { COMUNAS_RM } from "@/lib/comunas-rm";
 
 interface VolumeTier {
   id: string;
@@ -621,20 +621,12 @@ export default function ClubPage() {
                       >
                         Comuna (RM) *
                       </label>
-                      <select
+                      <ComunaCombobox
                         id="order-city"
                         name="city"
-                        required
                         defaultValue="Providencia"
                         disabled={submitting}
-                        className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2.5 text-sm text-[#2A1B12] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B]"
-                      >
-                        {COMUNAS_RM.map((comuna) => (
-                          <option key={comuna} value={comuna}>
-                            {comuna}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
                   </div>
 
