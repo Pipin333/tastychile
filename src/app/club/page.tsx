@@ -534,9 +534,8 @@ export default function ClubPage() {
 
                 <form onSubmit={handleOrderSubmit} className="space-y-3.5">
                   <div className="bg-[#EFE4D2] border border-[#D8C3A5] rounded-lg px-3.5 py-2.5 text-xs text-[#143326]">
-                    <strong>Despacho exclusivo en la Región Metropolitana:</strong>{" "}
-                    Por ahora realizamos entregas únicamente dentro de las
-                    comunas de la RM.
+                    <strong>Despacho en bicimensajería:</strong>{" "}
+                    Tarifa plana de $3.900 (gratis sobre $39.990) a las 35 comunas del Gran Santiago urbano mediante Pantera Courier.
                   </div>
 
                   <div>
