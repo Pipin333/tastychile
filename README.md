@@ -98,12 +98,17 @@ src/
 │   ├── b2b/
 │   │   ├── layout.tsx         # Layout sección B2B
 │   │   └── page.tsx           # Catálogo técnico y formulario comercial
-│   └── club/
-│       ├── layout.tsx         # Layout sección Club
-│       └── page.tsx           # Catálogo B2C, molienda, carrito y checkout Mago de Oz
+│   ├── club/
+│   │   ├── layout.tsx         # Layout sección Club
+│   │   └── page.tsx           # Catálogo B2C, molienda, carrito y checkout Mago de Oz
+│   ├── privacidad/
+│   │   └── page.tsx           # Política de Privacidad y derechos ARCO
+│   └── terminos/
+│       └── page.tsx           # Términos de Servicio y condiciones comerciales
 ├── components/
+│   ├── BellaDurmienteBackground.tsx # Silueta topográfica con mosaico geométrico
 │   ├── Navbar.tsx             # Navegación responsive fija con backdrop blur
-│   └── Footer.tsx             # Pie de página institucional y enlaces
+│   └── Footer.tsx             # Pie de página institucional y enlaces legales
 └── lib/
     ├── db.ts                  # Cliente Neon SQL con fallback seguro
     ├── email.ts               # Envío de correos y alertas (Resend / Mago de Oz)

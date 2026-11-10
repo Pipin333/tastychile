@@ -83,12 +83,32 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-[#332c25] flex flex-col sm:flex-row items-center justify-between text-xs text-[#7d746b] gap-3">
+        <div className="mt-10 pt-6 border-t border-[#332c25] flex flex-col sm:flex-row items-center justify-between text-xs text-[#b0a89e] gap-3 font-mono">
           <p>
             © {new Date().getFullYear()} Selva Alta Roasters SpA. Marca
             &quot;Tasty&quot;. Todos los derechos reservados.
           </p>
-          <p className="font-mono">Cosecha inclusiva · Despacho carbono neutral</p>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/privacidad"
+              className="hover:text-[#f5f3f0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a] rounded"
+            >
+              Privacidad
+            </Link>
+            <span className="text-[#332c25]" aria-hidden="true">
+              /
+            </span>
+            <Link
+              href="/terminos"
+              className="hover:text-[#f5f3f0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a] rounded"
+            >
+              Términos
+            </Link>
+            <span className="text-[#332c25]" aria-hidden="true">
+              /
+            </span>
+            <span className="text-[#7d746b]">Despacho carbono neutral</span>
+          </div>
         </div>
       </div>
     </footer>
