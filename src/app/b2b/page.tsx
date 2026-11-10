@@ -52,13 +52,9 @@ export default function B2BPage() {
 
     if (result.success) {
       setContactStatus("success");
-      const diag = result.emailStatus?.diagnostic
-        ? ` (Diagnóstico Resend: ${result.emailStatus.diagnostic})`
-        : "";
       setContactMessage(
-        (result.message ||
-          "Solicitud enviada al correo de Selva Alta. Un representante se contactará en breve.") +
-          diag
+        result.message ||
+          "Solicitud enviada al correo de Selva Alta. Un representante se contactará en breve."
       );
     } else {
       setContactStatus("error");
