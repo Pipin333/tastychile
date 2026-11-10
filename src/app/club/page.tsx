@@ -1,255 +1,228 @@
 "use client";
 
-import React, { useState } from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { createWizardOfOzOrder, addContactToWaitlist } from '@/app/actions';
+import React, { useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
+import { createWizardOfOzOrder } from "@/app/actions";
 
-interface ProductItem {
+interface VolumeTier {
   id: string;
   name: string;
-  points: string;
+  subtitle: string;
   price: number;
-  description: string;
-  origin: string;
-  altitude: string;
-  process: string;
-  notes: string[];
-  emoji: string;
-  category: 'coffee' | 'subscription';
-  badge?: string;
+  unitPriceLabel: string;
+  bagsCount: string;
 }
 
-const PRODUCTS: ProductItem[] = [
+const VOLUME_TIERS: VolumeTier[] = [
   {
-    id: 'marsellesa',
-    name: 'Marsellesa Orgánico',
-    points: '87 Puntos SCA',
+    id: "marsellesa-250g",
+    name: "Formato 250g",
+    subtitle: "1 bolsa de 250g con válvula desgasificadora",
     price: 12900,
-    description: 'Cultivado de forma orgánica a 1.820 msnm. Maduración lenta que otorga una complejidad sensorial excepcional y taza limpia.',
-    origin: 'Huánuco, Perú',
-    altitude: '1.820 msnm',
-    process: 'Lavado / Orgánico',
-    notes: ['🍫 Chocolate Suave', '🍬 Caramelo', '🍒 Frutos Rojos'],
-    emoji: '🍫',
-    category: 'coffee',
-    badge: 'Más Vendido'
+    unitPriceLabel: "$12.900 / bolsa",
+    bagsCount: "1 × 250g",
   },
   {
-    id: 'catimore',
-    name: 'Catimore Suave',
-    points: '84 Puntos SCA',
-    price: 11900,
-    description: 'Perfil dulce y balanceado con cuerpo cremoso. Resalta por sus notas a postres clásicos, ideal tanto para espresso como filtrados diarios.',
-    origin: 'Huánuco, Perú',
-    altitude: '1.600 msnm',
-    process: 'Lavado',
-    notes: ['🍯 Miel', '🌰 Avellanas', '🍫 Cacao Puro'],
-    emoji: '🍯',
-    category: 'coffee',
-    badge: 'Ideal Espresso'
+    id: "marsellesa-1kg",
+    name: "Volumen 1 kg",
+    subtitle: "4 bolsas de 250g · Despacho carbono neutral incluido",
+    price: 44900,
+    unitPriceLabel: "$11.225 / bolsa (-13%)",
+    bagsCount: "4 × 250g",
   },
   {
-    id: 'caturra',
-    name: 'Caturra Clásico',
-    points: '85 Puntos SCA',
-    price: 12500,
-    description: 'Un clásico sudamericano conocido por su acidez cítrica brillante y cuerpo medio sedoso. Dulzor prolongado en boca.',
-    origin: 'Alta Amazonía',
-    altitude: '1.650 msnm',
-    process: 'Lavado',
-    notes: ['🍋 Cítrico', '🍯 Miel', '🍫 Cacao'],
-    emoji: '🍋',
-    category: 'coffee',
+    id: "marsellesa-3kg",
+    name: "Volumen 3 kg",
+    subtitle: "12 bolsas de 250g · Ideal para barras, startups y oficinas",
+    price: 119900,
+    unitPriceLabel: "$9.990 / bolsa (-22%)",
+    bagsCount: "12 × 250g",
   },
-  {
-    id: 'pink-bourbon',
-    name: 'Pink Bourbon (Reserva)',
-    points: '88 Puntos SCA',
-    price: 14900,
-    description: 'Variedad exótica y codiciada en el café de especialidad. Notas complejas florales y frutales con una taza brillante y dulce.',
-    origin: 'Alta Amazonía',
-    altitude: '1.800 msnm',
-    process: 'Lavado Fermentado',
-    notes: ['🌸 Floral', '🍑 Frutos Rojos', '🍯 Miel Silvestre'],
-    emoji: '🌸',
-    category: 'coffee',
-    badge: 'Microlote Limitado'
-  },
-  {
-    id: 'geisha',
-    name: 'Geisha de Altura',
-    points: '89 Puntos SCA',
-    price: 19900,
-    description: 'La reina de las variedades de especialidad. Exquisita fragancia a jazmín, bergamota y té negro con acidez málica delicada.',
-    origin: 'Huánuco, Perú',
-    altitude: '1.850 msnm',
-    process: 'Lavado Anaeróbico',
-    notes: ['🌺 Jazmín', '🍋 Bergamota', '🍑 Durazno'],
-    emoji: '🌺',
-    category: 'coffee',
-    badge: 'Joyas de Selva Alta'
-  },
-  {
-    id: 'sub-explorador',
-    name: 'Suscripción Explorador (1 bolsa/mes)',
-    points: '84-87 SCA',
-    price: 14900,
-    description: '1 bolsa de 250g al mes seleccionada por nuestro tostador. Recibe un origen o variedad distinta cada mes.',
-    origin: 'Huánuco, Perú',
-    altitude: '1.600 - 1.820 msnm',
-    process: 'Lavado',
-    notes: ['☕ Café rotativo', '📦 Entrega mensual', '🌱 Tueste fresco'],
-    emoji: '🌱',
-    category: 'subscription'
-  },
-  {
-    id: 'sub-aventurero',
-    name: 'Suscripción Aventurero (2 bolsas/mes)',
-    points: '84-88 SCA',
-    price: 18900,
-    description: '2 bolsas de 250g mensuales con despacho incluido a tu hogar. Perfecto para parejas o consumo diario constante.',
-    origin: 'Huánuco, Perú',
-    altitude: '1.600 - 1.820 msnm',
-    process: 'Lavado / Microlotes',
-    notes: ['🚚 Despacho Gratis', '🎁 Acceso a microlotes', '☕ 500g totales'],
-    emoji: '🤠',
-    category: 'subscription',
-    badge: 'Recomendada'
-  },
-  {
-    id: 'sub-maestro',
-    name: 'Suscripción Maestro Barista (3 bolsas/mes)',
-    points: '85-89 SCA',
-    price: 28900,
-    description: '3 bolsas de 250g al mes incluyendo siempre un microlote exclusivo (Pink Bourbon o Geisha) con despacho gratis.',
-    origin: 'Alta Amazonía',
-    altitude: '1.800+ msnm',
-    process: 'Selección Especial',
-    notes: ['👑 Incluye microlotes top', '🚚 Despacho Gratis', '☕ 750g totales'],
-    emoji: '👑',
-    category: 'subscription'
-  }
 ];
 
-const GRIND_OPTIONS = [
-  'Grano Entero (Recomendado)',
-  'Molido para Espresso / Moka Italiana',
-  'Molido para Filtro / V60 / Cafetera Eléctrica',
-  'Molido para Prensa Francesa / Cold Brew'
+interface GrindMethod {
+  id: string;
+  label: string;
+  calib: string;
+  description: string;
+}
+
+const GRIND_METHODS: GrindMethod[] = [
+  {
+    id: "Grano Entero",
+    label: "Grano Entero",
+    calib: "Sin moler",
+    description: "Para molinos de barra o molienda al instante antes de extraer.",
+  },
+  {
+    id: "Moka Italiana (Fina)",
+    label: "Moka Italiana",
+    calib: "Molienda Fina",
+    description: "Calibrada para cafetera italiana octogonal sin sobre-extracción.",
+  },
+  {
+    id: "Prensa Francesa (Gruesa)",
+    label: "Prensa Francesa",
+    calib: "Molienda Gruesa",
+    description: "Partícula uniforme para inmersión limpia y cuerpo sedoso.",
+  },
+  {
+    id: "Espresso de Barra (Extra Fina)",
+    label: "Espresso",
+    calib: "Extra Fina",
+    description: "Ajustada para portafiltros presurizados o máquinas de 9 bares.",
+  },
+  {
+    id: "Filtro V60 / Goteo (Media)",
+    label: "Filtro / V60",
+    calib: "Molienda Media",
+    description: "Para conos de goteo, Chemex y cafeteras eléctricas de oficina.",
+  },
 ];
 
 const REGIONES_CHILE = [
-  'Región Metropolitana de Santiago',
-  'Región de Valparaíso',
-  'Región de O’Higgins',
-  'Región del Maule',
-  'Región del Biobío',
-  'Región de La Araucanía',
-  'Región de Los Lagos',
-  'Región de Coquimbo',
-  'Región de Antofagasta',
-  'Otra Región'
+  "Región Metropolitana de Santiago",
+  "Región de Valparaíso",
+  "Región de O'Higgins",
+  "Región del Maule",
+  "Región del Biobío",
+  "Región de La Araucanía",
+  "Región de Los Lagos",
+  "Región de Coquimbo",
+  "Región de Antofagasta",
+  "Otra Región",
 ];
 
-interface SelectedItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  grind: string;
-  emoji: string;
+function MethodIcon({ methodId }: { methodId: string }) {
+  if (methodId.startsWith("Moka")) {
+    return (
+      <svg
+        viewBox="0 0 40 48"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className="w-7 h-8 text-[#c25e1a]"
+        aria-hidden="true"
+      >
+        <circle cx="20" cy="4" r="2" />
+        <path d="M10 10 L20 6 L30 10 Z" />
+        <path d="M10 10 L13 24 L27 24 L30 10 Z" />
+        <rect x="12" y="24" width="16" height="3" rx="0.5" />
+        <path d="M13 27 L10 44 L30 44 L27 27 Z" />
+        <path d="M30 15 C36 16 36 24 32 30" />
+        <path d="M10 12 L5 16 L11 20" />
+      </svg>
+    );
+  }
+  if (methodId.startsWith("Prensa")) {
+    return (
+      <svg
+        viewBox="0 0 40 48"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className="w-7 h-8 text-[#c25e1a]"
+        aria-hidden="true"
+      >
+        <circle cx="20" cy="4" r="2.5" />
+        <line x1="20" y1="6.5" x2="20" y2="30" />
+        <path d="M10 11 L30 11 L28 14 L12 14 Z" />
+        <rect x="11" y="14" width="18" height="30" rx="1.5" />
+        <rect x="12" y="30" width="16" height="3" />
+        <path d="M29 19 C35 20 35 36 29 38" />
+      </svg>
+    );
+  }
+  if (methodId.startsWith("Espresso")) {
+    return (
+      <svg
+        viewBox="0 0 44 48"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className="w-7 h-8 text-[#c25e1a]"
+        aria-hidden="true"
+      >
+        <path d="M8 14 L28 14 L26 26 L10 26 Z" />
+        <line x1="6" y1="14" x2="30" y2="14" strokeWidth="2" />
+        <path d="M14 26 L12 32" />
+        <path d="M22 26 L24 32" />
+        <path d="M28 17 L42 21 L40 25 L27 20" />
+      </svg>
+    );
+  }
+  if (methodId.startsWith("Filtro")) {
+    return (
+      <svg
+        viewBox="0 0 40 48"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        className="w-7 h-8 text-[#c25e1a]"
+        aria-hidden="true"
+      >
+        <path d="M8 10 L32 10 L22 28 L18 28 Z" />
+        <line x1="6" y1="10" x2="34" y2="10" strokeWidth="2" />
+        <path d="M12 30 L28 30 L26 44 L14 44 Z" />
+        <path d="M28 33 C33 34 33 41 27 42" />
+      </svg>
+    );
+  }
+  return (
+    <svg
+      viewBox="0 0 40 48"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      className="w-7 h-8 text-[#c25e1a]"
+      aria-hidden="true"
+    >
+      <ellipse cx="20" cy="24" rx="10" ry="14" />
+      <path d="M20 10 C17 18 23 30 20 38" />
+    </svg>
+  );
 }
 
 export default function ClubPage() {
-  // Order selection state
-  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'all' | 'coffee' | 'subscription'>('all');
+  const [selectedTierId, setSelectedTierId] = useState<string>("marsellesa-1kg");
+  const [selectedGrind, setSelectedGrind] = useState<string>(
+    GRIND_METHODS[0].id
+  );
+  const [quantity, setQuantity] = useState<number>(1);
 
-  // Per-card grind selection
-  const [cardGrinds, setCardGrinds] = useState<Record<string, string>>({});
-
-  // Checkout submission states
   const [submitting, setSubmitting] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
   const [orderSuccess, setOrderSuccess] = useState<null | {
     orderNumber: string;
     customerName: string;
     total: number;
     phone: string;
+    email: string;
   }>(null);
-  const [orderError, setOrderError] = useState<string | null>(null);
 
-  // Newsletter waitlist state
-  const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [newsletterMsg, setNewsletterMsg] = useState('');
-
-  // Filtering
-  const filteredProducts = activeTab === 'all' 
-    ? PRODUCTS 
-    : PRODUCTS.filter((p) => p.category === activeTab);
-
-  // Add item to order
-  const handleQuickOrder = (product: ProductItem) => {
-    const grind = cardGrinds[product.id] || GRIND_OPTIONS[0];
-    
-    setSelectedItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id && item.grind === grind);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === product.id && item.grind === grind
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [
-        ...prev,
-        {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          quantity: 1,
-          grind: product.category === 'coffee' ? grind : 'Grano Entero (o según selección)',
-          emoji: product.emoji
-        }
-      ];
-    });
-
-    setIsModalOpen(true);
-  };
-
-  const updateQuantity = (index: number, newQty: number) => {
-    if (newQty <= 0) {
-      setSelectedItems((prev) => prev.filter((_, i) => i !== index));
-    } else {
-      setSelectedItems((prev) =>
-        prev.map((item, i) => (i === index ? { ...item, quantity: newQty } : item))
-      );
-    }
-  };
-
-  // Price calculations
-  const subtotal = selectedItems.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
-  const hasSubscription = selectedItems.some((item) => item.id.startsWith('sub-'));
-  const shipping = (hasSubscription || subtotal >= 30000 || subtotal === 0) ? 0 : 3900;
+  const activeTier =
+    VOLUME_TIERS.find((t) => t.id === selectedTierId) || VOLUME_TIERS[0];
+  const subtotal = activeTier.price * quantity;
+  const shipping = subtotal >= 30000 ? 0 : 3900;
   const total = subtotal + shipping;
 
-  // Checkout form submit
-  const handleCheckoutSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleOrderSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setOrderError(null);
 
     const formData = new FormData(e.currentTarget);
-    const name = formData.get('name')?.toString() || '';
-    const email = formData.get('email')?.toString() || '';
-    const phone = formData.get('phone')?.toString() || '';
-    const address = formData.get('address')?.toString() || '';
-    const city = formData.get('city')?.toString() || '';
-    const region = formData.get('region')?.toString() || '';
-    const notes = formData.get('notes')?.toString() || '';
+    const name = formData.get("name")?.toString() || "";
+    const email = formData.get("email")?.toString() || "";
+    const phone = formData.get("phone")?.toString() || "";
+    const address = formData.get("address")?.toString() || "";
+    const city = formData.get("city")?.toString() || "";
+    const region = formData.get("region")?.toString() || "";
+    const notes = formData.get("notes")?.toString() || "";
 
-    const payload = {
+    const result = await createWizardOfOzOrder({
       name,
       email,
       phone,
@@ -257,420 +230,311 @@ export default function ClubPage() {
       city,
       region,
       notes,
-      items: selectedItems.map((item) => ({
-        id: item.id,
-        quantity: item.quantity,
-        grind: item.grind
-      }))
-    };
-
-    const result = await createWizardOfOzOrder(payload);
+      items: [
+        {
+          id: activeTier.id,
+          quantity,
+          grind: selectedGrind,
+        },
+      ],
+    });
 
     if (result.success && result.orderNumber) {
       setOrderSuccess({
         orderNumber: result.orderNumber,
         customerName: name,
         total,
-        phone
+        phone,
+        email,
       });
-      setSelectedItems([]);
       setSubmitting(false);
     } else {
-      setOrderError(result.error || 'Ocurrió un error al registrar el pedido.');
+      setOrderError(
+        result.error || "Ocurrió un error al registrar tu solicitud."
+      );
       setSubmitting(false);
-    }
-  };
-
-  // Newsletter submit
-  const handleNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setNewsletterStatus('loading');
-    const formData = new FormData(e.currentTarget);
-    const res = await addContactToWaitlist(formData);
-    if (res.success) {
-      setNewsletterStatus('success');
-      setNewsletterMsg(res.message || '¡Gracias por suscribirte!');
-    } else {
-      setNewsletterStatus('error');
-      setNewsletterMsg(res.error || 'Error al suscribirse');
     }
   };
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 flex flex-col font-sans selection:bg-amber-800 selection:text-white">
+    <div className="min-h-screen bg-[#110f0d] text-[#f5f3f0] flex flex-col font-sans selection:bg-[#c25e1a] selection:text-white">
+      <BellaDurmienteBackground variant="club" />
       <Navbar />
 
-      {/* Hero Header */}
-      <section className="pt-32 pb-16 md:pt-40 md:pb-24 border-b border-stone-800 bg-gradient-to-b from-stone-900 via-stone-950 to-stone-950 relative overflow-hidden">
-        <div className="absolute top-1/4 right-1/4 w-80 h-80 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 bg-amber-950/80 border border-amber-800/40 px-3.5 py-1.5 rounded-full mb-6">
-            ☕ El Club Selva Alta · Café de Especialidad
-          </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6">
-            Tu Café Favorito, Tostado a Pedido
-          </h1>
-          <p className="text-stone-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
-            Selecciona tu variedad o suscríbete mensualmente. Tostamos en pequeños lotes y molemos a la medida de tu cafetera favorita.
-          </p>
+      <main className="relative z-10 flex-grow pt-28 pb-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <section className="max-w-2xl pb-16">
+            <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-3">
+              Lote Activo · Marsellesa Orgánico · 87.0 Puntos SCA
+            </p>
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#f5f3f0] leading-[1.12] mb-5">
+              Configura tu volumen en formato 250g y la molienda para tu método.
+            </h1>
+            <p className="text-base sm:text-lg text-[#b0a89e] leading-relaxed">
+              Cada pedido se registra directamente con nuestro equipo en
+              Santiago. Un representante de Selva Alta se contactará contigo a
+              la brevedad para coordinar el despacho carbono neutral y el pago.
+            </p>
+          </section>
 
-          <div className="inline-flex items-center gap-3 bg-stone-900/80 border border-stone-800 px-5 py-2.5 rounded-2xl text-xs sm:text-sm text-stone-300">
-            <span>✨ <strong>Backend Mago de Oz:</strong> Haz tu pedido en línea y un representante se contactará a la brevedad para coordinar la entrega y el pago.</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Filter Tabs */}
-      <section id="catalogo" className="py-8 bg-stone-900/60 border-b border-stone-800 sticky top-20 z-40 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 p-1 bg-stone-950 border border-stone-800 rounded-xl">
-            <button
-              type="button"
-              onClick={() => setActiveTab('all')}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition ${
-                activeTab === 'all'
-                  ? 'bg-amber-600 text-white shadow'
-                  : 'text-stone-400 hover:text-white'
-              }`}
-            >
-              Todo el Catálogo
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('coffee')}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition ${
-                activeTab === 'coffee'
-                  ? 'bg-amber-600 text-white shadow'
-                  : 'text-stone-400 hover:text-white'
-              }`}
-            >
-              Bolsas de 250g
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('subscription')}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition ${
-                activeTab === 'subscription'
-                  ? 'bg-amber-600 text-white shadow'
-                  : 'text-stone-400 hover:text-white'
-              }`}
-            >
-              Suscripciones Mensuales
-            </button>
-          </div>
-
-          {/* Cart status badge button */}
-          {selectedItems.length > 0 && (
-            <button
-              type="button"
-              onClick={() => setIsModalOpen(true)}
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-lg animate-pulse"
-            >
-              <span>🛒 {selectedItems.reduce((acc, curr) => acc + curr.quantity, 0)} café(s) en pedido (${total.toLocaleString('es-CL')})</span>
-              <span aria-hidden="true">→</span>
-            </button>
-          )}
-        </div>
-      </section>
-
-      {/* Catalog Grid */}
-      <section className="py-16 bg-stone-950 flex-grow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProducts.map((p) => {
-              const currentGrind = cardGrinds[p.id] || GRIND_OPTIONS[0];
-
-              return (
-                <div
-                  key={p.id}
-                  className="bg-stone-900/60 border border-stone-800 rounded-3xl p-6 flex flex-col justify-between hover:border-amber-600/40 transition-all duration-300 hover:bg-stone-900 group shadow-lg"
-                >
-                  <div>
-                    {/* Top Tag & Price */}
-                    <div className="flex justify-between items-start gap-2 mb-4">
-                      <span className="text-xs font-bold uppercase text-amber-300 bg-amber-950/70 border border-amber-800/40 px-3 py-1 rounded-full">
-                        {p.badge || (p.category === 'subscription' ? 'Suscripción' : 'Bolsa 250g')}
-                      </span>
-                      <span className="text-lg font-black text-amber-400">
-                        ${p.price.toLocaleString('es-CL')}
-                        {p.category === 'subscription' ? <span className="text-xs text-stone-400 font-normal">/mes</span> : ''}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-3xl" role="img" aria-hidden="true">{p.emoji}</span>
-                      <div>
-                        <h2 className="text-xl font-extrabold text-white group-hover:text-amber-300 transition-colors">
-                          {p.name}
-                        </h2>
-                        <span className="text-xs font-semibold text-amber-500">
-                          {p.points} · {p.altitude}
-                        </span>
-                      </div>
-                    </div>
-
-                    <p className="text-stone-300 text-xs sm:text-sm leading-relaxed mb-4">
-                      {p.description}
-                    </p>
-
-                    {/* Tasting notes */}
-                    <div className="mb-5">
-                      <div className="flex flex-wrap gap-1.5">
-                        {p.notes.map((note, idx) => (
-                          <span
-                            key={idx}
-                            className="text-xs bg-stone-800 text-stone-300 px-2.5 py-1 rounded-md"
-                          >
-                            {note}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Grind Selector for Coffee */}
-                    {p.category === 'coffee' && (
-                      <div className="mb-6">
-                        <label htmlFor={`grind-${p.id}`} className="block text-xs font-bold uppercase tracking-wider text-stone-400 mb-1.5">
-                          Tipo de Molienda:
-                        </label>
-                        <select
-                          id={`grind-${p.id}`}
-                          value={currentGrind}
-                          onChange={(e) =>
-                            setCardGrinds({ ...cardGrinds, [p.id]: e.target.value })
-                          }
-                          className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3 py-2 text-xs text-stone-200 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        >
-                          {GRIND_OPTIONS.map((g, i) => (
-                            <option key={i} value={g}>
-                              {g}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Add to Order Button */}
-                  <button
-                    type="button"
-                    onClick={() => handleQuickOrder(p)}
-                    className="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-3.5 px-4 rounded-xl text-sm shadow transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2"
-                  >
-                    <span>Pedir este Café</span>
-                    <span aria-hidden="true">→</span>
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Waitlist / Newsletter Section */}
-      <section className="py-16 bg-stone-900 border-t border-stone-800">
-        <div className="max-w-xl mx-auto px-4 text-center">
-          <span className="text-3xl mb-3 block">📬</span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
-            ¿Prefieres recibir avisos de nuevos microlotes?
-          </h2>
-          <p className="text-stone-400 text-sm mb-6">
-            Déjanos tu correo y sé el primero en enterarte cuando tostemos variedades exclusivas como Geisha y Pink Bourbon.
-          </p>
-
-          <form onSubmit={handleNewsletter} className="flex flex-col sm:flex-row gap-3">
-            <label htmlFor="newsletter-email" className="sr-only">Correo electrónico</label>
-            <input
-              id="newsletter-email"
-              type="email"
-              name="email"
-              required
-              placeholder="tu@email.com"
-              disabled={newsletterStatus === 'loading' || newsletterStatus === 'success'}
-              className="flex-grow bg-stone-950 border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-100 placeholder-stone-500 focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
-            />
-            <button
-              type="submit"
-              disabled={newsletterStatus === 'loading' || newsletterStatus === 'success'}
-              className="bg-amber-700 hover:bg-amber-600 text-white font-bold px-6 py-3 rounded-xl text-sm transition disabled:opacity-50"
-            >
-              {newsletterStatus === 'loading' ? 'Enviando...' : 'Suscribirme'}
-            </button>
-          </form>
-
-          {newsletterStatus === 'success' && (
-            <p className="text-green-400 text-sm mt-3 font-semibold">{newsletterMsg}</p>
-          )}
-          {newsletterStatus === 'error' && (
-            <p className="text-red-400 text-sm mt-3 font-semibold">{newsletterMsg}</p>
-          )}
-        </div>
-      </section>
-
-      {/* Wizard of Oz Order Modal */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-        >
-          <div className="bg-stone-900 border border-stone-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative my-8">
-            {/* Close button */}
-            <button
-              type="button"
-              onClick={() => {
-                setIsModalOpen(false);
-                setOrderSuccess(null);
-                setOrderError(null);
-              }}
-              className="absolute top-5 right-5 text-stone-400 hover:text-white p-2 rounded-lg hover:bg-stone-800 transition"
-              aria-label="Cerrar ventana"
-            >
-              ✕
-            </button>
-
-            {/* If Order Success */}
-            {orderSuccess ? (
-              <div className="text-center py-6">
-                <span className="text-6xl mb-4 block" role="img" aria-label="Celebración">🎉</span>
-                <span className="inline-block bg-green-950/80 border border-green-600/40 text-green-300 text-xs font-bold px-3 py-1 rounded-full mb-3">
-                  Pedido #{orderSuccess.orderNumber} Registrado
-                </span>
-                <h3 id="modal-title" className="text-2xl sm:text-3xl font-extrabold text-white mb-4">
-                  ¡Gracias por tu pedido, {orderSuccess.customerName}!
-                </h3>
-
-                {/* The core Wizard of Oz message */}
-                <div className="bg-amber-950/70 border border-amber-600/50 rounded-2xl p-5 mb-6 text-left">
-                  <div className="flex gap-3">
-                    <span className="text-2xl" role="img" aria-hidden="true">⏳</span>
-                    <div>
-                      <h4 className="font-bold text-amber-200 text-base mb-1">
-                        Un representante se contactará en breve
-                      </h4>
-                      <p className="text-stone-300 text-xs sm:text-sm leading-relaxed">
-                        Hemos enviado el detalle de tu solicitud al correo del equipo de Selva Alta. En breve te contactaremos por WhatsApp o correo a tu teléfono (<strong>{orderSuccess.phone}</strong>) para confirmar la fecha de entrega y coordinar el pago.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <a
-                    href={`https://wa.me/56900000000?text=${encodeURIComponent(
-                      `Hola Selva Alta, acabo de realizar el pedido ${orderSuccess.orderNumber} a nombre de ${orderSuccess.customerName}. Me gustaría coordinar la entrega.`
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold py-3.5 px-6 rounded-xl text-sm transition shadow-lg"
-                  >
-                    <span>💬 Abrir WhatsApp con Selva Alta</span>
-                  </a>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      setOrderSuccess(null);
-                    }}
-                    className="bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold py-3.5 px-6 rounded-xl text-sm transition"
-                  >
-                    Volver a la tienda
-                  </button>
-                </div>
-              </div>
-            ) : (
+          {orderSuccess ? (
+            <section className="bg-[#181512]/90 backdrop-blur-md border border-[#c25e1a] rounded-xl p-6 sm:p-10 max-w-2xl space-y-6">
               <div>
-                <h3 id="modal-title" className="text-2xl font-extrabold text-white mb-2">
-                  Finalizar tu Pedido
-                </h3>
-                <p className="text-xs sm:text-sm text-stone-400 mb-6">
-                  Revisa tus cafés seleccionados y déjanos tus datos de entrega. No se requiere tarjeta de crédito ahora; un asesor coordinará tu entrega y pago directamente.
+                <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-2">
+                  Orden Registrada · {orderSuccess.orderNumber}
                 </p>
+                <h2 className="text-2xl sm:text-3xl font-bold text-[#f5f3f0]">
+                  Gracias por tu pedido, {orderSuccess.customerName}
+                </h2>
+              </div>
 
-                {/* Items in cart */}
-                {selectedItems.length === 0 ? (
-                  <div className="text-center py-8 bg-stone-950/60 rounded-2xl border border-stone-800/80 mb-6">
-                    <p className="text-stone-400 text-sm">Tu pedido está vacío.</p>
-                  </div>
-                ) : (
-                  <div className="bg-stone-950 border border-stone-800 rounded-2xl p-4 mb-6 max-h-56 overflow-y-auto divide-y divide-stone-800">
-                    {selectedItems.map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between py-3 gap-3">
-                        <div className="min-w-0">
-                          <p className="text-sm font-bold text-white truncate">{item.name}</p>
-                          <p className="text-xs text-amber-400">{item.grind}</p>
-                          <p className="text-xs text-stone-400">${item.price.toLocaleString('es-CL')} c/u</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => updateQuantity(idx, item.quantity - 1)}
-                            className="w-7 h-7 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-md font-bold text-xs"
-                            aria-label={`Disminuir cantidad de ${item.name}`}
-                          >
-                            -
-                          </button>
-                          <span className="text-sm font-bold text-white w-5 text-center">
-                            {item.quantity}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => updateQuantity(idx, item.quantity + 1)}
-                            className="w-7 h-7 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-md font-bold text-xs"
-                            aria-label={`Aumentar cantidad de ${item.name}`}
-                          >
-                            +
-                          </button>
-                          <span className="text-sm font-extrabold text-amber-300 ml-2">
-                            ${(item.price * item.quantity).toLocaleString('es-CL')}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              <div className="bg-[#241f1b] border border-[#332c25] rounded-lg p-5 space-y-2">
+                <h3 className="font-semibold text-[#f5f3f0] text-base">
+                  Un representante se contactará en breve
+                </h3>
+                <p className="text-sm text-[#b0a89e] leading-relaxed">
+                  Tu solicitud ha llegado al correo de operaciones de Selva Alta
+                  y enviamos una copia de respaldo a{" "}
+                  <strong className="text-[#f5f3f0]">
+                    {orderSuccess.email}
+                  </strong>
+                  . Te contactaremos al teléfono{" "}
+                  <strong className="text-[#f5f3f0]">
+                    {orderSuccess.phone}
+                  </strong>{" "}
+                  para coordinar la entrega y el método de pago por un total de{" "}
+                  <span className="font-mono font-bold text-[#c25e1a]">
+                    ${orderSuccess.total.toLocaleString("es-CL")}
+                  </span>
+                  .
+                </p>
+              </div>
 
-                {/* Totals */}
-                <div className="bg-stone-950/40 rounded-xl p-3 border border-stone-800 mb-6 space-y-1 text-xs sm:text-sm">
-                  <div className="flex justify-between text-stone-400">
-                    <span>Subtotal:</span>
-                    <span>${subtotal.toLocaleString('es-CL')}</span>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <a
+                  href={`mailto:comercial@selvaalta.cl?subject=Pedido%20${encodeURIComponent(
+                    orderSuccess.orderNumber
+                  )}`}
+                  className="inline-flex items-center justify-center bg-[#c25e1a] hover:bg-[#a84e12] text-white font-semibold text-sm px-6 py-3 rounded-lg transition-colors"
+                >
+                  Escribir directo al correo de Selva Alta
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setOrderSuccess(null)}
+                  className="inline-flex items-center justify-center bg-[#241f1b] hover:bg-[#332c25] text-[#f5f3f0] border border-[#332c25] font-medium text-sm px-6 py-3 rounded-lg transition-colors"
+                >
+                  Realizar otro pedido
+                </button>
+              </div>
+            </section>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Left Column: 1. Volume Selection & 2. Grind Method */}
+              <div className="lg:col-span-7 space-y-10">
+                {/* Step 1: Volume Tier */}
+                <section>
+                  <div className="flex items-center gap-4 mb-4">
+                    <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e]">
+                      1. Selecciona Tramo de Volumen (Bolsas de 250g)
+                    </h2>
+                    <div className="h-px bg-[#332c25] flex-grow" />
                   </div>
-                  <div className="flex justify-between text-stone-400">
-                    <span>Despacho:</span>
-                    <span className={shipping === 0 ? 'text-green-400 font-bold' : ''}>
-                      {shipping === 0 ? 'Gratis' : `$${shipping.toLocaleString('es-CL')}`}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {VOLUME_TIERS.map((tier) => {
+                      const isActive = selectedTierId === tier.id;
+                      return (
+                        <button
+                          key={tier.id}
+                          type="button"
+                          onClick={() => setSelectedTierId(tier.id)}
+                          className={`text-left rounded-xl p-4 border transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a] ${
+                            isActive
+                              ? "bg-[#241f1b] border-[#c25e1a]"
+                              : "bg-[#181512]/80 border-[#332c25] hover:border-[#7d746b]"
+                          }`}
+                        >
+                          <span className="block font-mono text-[11px] uppercase text-[#c25e1a] mb-1">
+                            {tier.bagsCount}
+                          </span>
+                          <span className="block text-base font-bold text-[#f5f3f0] mb-1">
+                            {tier.name}
+                          </span>
+                          <span className="block font-mono text-lg font-bold text-[#f5f3f0]">
+                            ${tier.price.toLocaleString("es-CL")}
+                          </span>
+                          <span className="block font-mono text-[11px] text-[#b0a89e] mt-1">
+                            {tier.unitPriceLabel}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {/* Step 2: Calibrated Grind */}
+                <section>
+                  <div className="flex items-center gap-4 mb-4">
+                    <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e]">
+                      2. Ajusta la Molienda Según tu Cafetera
+                    </h2>
+                    <div className="h-px bg-[#332c25] flex-grow" />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {GRIND_METHODS.map((method) => {
+                      const isActive = selectedGrind === method.id;
+                      return (
+                        <button
+                          key={method.id}
+                          type="button"
+                          onClick={() => setSelectedGrind(method.id)}
+                          className={`text-left rounded-xl p-4 border flex items-start gap-3.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a] ${
+                            isActive
+                              ? "bg-[#241f1b] border-[#c25e1a]"
+                              : "bg-[#181512]/80 border-[#332c25] hover:border-[#7d746b]"
+                          }`}
+                        >
+                          <div className="p-2 rounded-lg bg-[#110f0d] border border-[#332c25] flex-shrink-0">
+                            <MethodIcon methodId={method.id} />
+                          </div>
+                          <div>
+                            <span className="block text-sm font-bold text-[#f5f3f0]">
+                              {method.label}
+                            </span>
+                            <span className="block font-mono text-[11px] uppercase text-[#c25e1a] mb-1">
+                              {method.calib}
+                            </span>
+                            <span className="block text-xs text-[#b0a89e] leading-snug">
+                              {method.description}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {/* Step 3: Quantity multiplier */}
+                <section className="bg-[#181512]/80 backdrop-blur-md border border-[#332c25] rounded-xl p-5 flex items-center justify-between">
+                  <div>
+                    <span className="block text-sm font-semibold text-[#f5f3f0]">
+                      Cantidad de unidades del tramo ({activeTier.name})
+                    </span>
+                    <span className="block text-xs text-[#b0a89e]">
+                      {activeTier.subtitle}
                     </span>
                   </div>
-                  <div className="flex justify-between text-base font-extrabold text-white pt-2 border-t border-stone-800">
-                    <span>Total Estimado:</span>
-                    <span className="text-amber-400">${total.toLocaleString('es-CL')}</span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                      className="w-9 h-9 rounded-lg bg-[#241f1b] hover:bg-[#332c25] border border-[#332c25] font-mono text-base font-bold text-[#f5f3f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+                      aria-label="Disminuir cantidad"
+                    >
+                      -
+                    </button>
+                    <span className="font-mono text-base font-bold text-[#f5f3f0] w-6 text-center">
+                      {quantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity((q) => q + 1)}
+                      className="w-9 h-9 rounded-lg bg-[#241f1b] hover:bg-[#332c25] border border-[#332c25] font-mono text-base font-bold text-[#f5f3f0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+                      aria-label="Aumentar cantidad"
+                    >
+                      +
+                    </button>
+                  </div>
+                </section>
+              </div>
+
+              {/* Right Column: Wizard of Oz Order Form */}
+              <div className="lg:col-span-5 bg-[#181512]/90 backdrop-blur-md border border-[#332c25] rounded-xl p-6 sm:p-7">
+                <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-1">
+                  Confirmación Directa
+                </p>
+                <h2 className="text-xl font-bold text-[#f5f3f0] mb-4">
+                  Datos de Entrega
+                </h2>
+
+                {/* Summary Box */}
+                <div className="bg-[#241f1b] border border-[#332c25] rounded-lg p-4 mb-5 space-y-2 text-xs">
+                  <div className="flex justify-between text-[#f5f3f0] font-semibold">
+                    <span>
+                      {quantity} × Marsellesa ({activeTier.name})
+                    </span>
+                    <span className="font-mono">
+                      ${subtotal.toLocaleString("es-CL")}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[#b0a89e]">
+                    <span>Molienda</span>
+                    <span className="font-mono text-[#c25e1a]">
+                      {selectedGrind}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[#b0a89e]">
+                    <span>Despacho carbono neutral</span>
+                    <span className="font-mono text-[#f5f3f0]">
+                      {shipping === 0
+                        ? "Incluido ($0)"
+                        : `$${shipping.toLocaleString("es-CL")}`}
+                    </span>
+                  </div>
+                  <div className="pt-2 border-t border-[#332c25] flex justify-between text-sm font-bold text-[#f5f3f0]">
+                    <span>Total a coordinar</span>
+                    <span className="font-mono text-[#c25e1a]">
+                      ${total.toLocaleString("es-CL")}
+                    </span>
                   </div>
                 </div>
 
-                {/* Checkout Form */}
-                <form onSubmit={handleCheckoutSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <form onSubmit={handleOrderSubmit} className="space-y-3.5">
+                  <div>
+                    <label
+                      htmlFor="order-name"
+                      className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                    >
+                      Nombre y Apellido *
+                    </label>
+                    <input
+                      id="order-name"
+                      name="name"
+                      required
+                      type="text"
+                      placeholder="Nombre completo"
+                      disabled={submitting}
+                      className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label htmlFor="order-name" className="block text-xs font-bold text-stone-300 mb-1">
-                        Nombre Completo *
+                      <label
+                        htmlFor="order-email"
+                        className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                      >
+                        Correo *
                       </label>
                       <input
-                        id="order-name"
-                        name="name"
+                        id="order-email"
+                        name="email"
                         required
-                        type="text"
-                        placeholder="Ej: Carolina Morales"
-                        className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        disabled={submitting || selectedItems.length === 0}
+                        type="email"
+                        placeholder="nombre@correo.cl"
+                        disabled={submitting}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
                       />
                     </div>
                     <div>
-                      <label htmlFor="order-phone" className="block text-xs font-bold text-stone-300 mb-1">
-                        Teléfono / WhatsApp *
+                      <label
+                        htmlFor="order-phone"
+                        className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                      >
+                        Teléfono *
                       </label>
                       <input
                         id="order-phone"
@@ -678,60 +542,54 @@ export default function ClubPage() {
                         required
                         type="tel"
                         placeholder="+56 9 1234 5678"
-                        className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        disabled={submitting || selectedItems.length === 0}
+                        disabled={submitting}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
                       />
                     </div>
                   </div>
 
-                  <div>
-                    <label htmlFor="order-email" className="block text-xs font-bold text-stone-300 mb-1">
-                      Correo Electrónico *
-                    </label>
-                    <input
-                      id="order-email"
-                      name="email"
-                      required
-                      type="email"
-                      placeholder="tu@email.com"
-                      className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      disabled={submitting || selectedItems.length === 0}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label htmlFor="order-address" className="block text-xs font-bold text-stone-300 mb-1">
-                        Dirección y Número *
+                      <label
+                        htmlFor="order-address"
+                        className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                      >
+                        Dirección y N° *
                       </label>
                       <input
                         id="order-address"
                         name="address"
                         required
                         type="text"
-                        placeholder="Av. Providencia 1234, Depto 402"
-                        className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        disabled={submitting || selectedItems.length === 0}
+                        placeholder="Calle, número, depto u oficina"
+                        disabled={submitting}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
                       />
                     </div>
                     <div>
-                      <label htmlFor="order-city" className="block text-xs font-bold text-stone-300 mb-1">
-                        Comuna / Ciudad *
+                      <label
+                        htmlFor="order-city"
+                        className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                      >
+                        Comuna *
                       </label>
                       <input
                         id="order-city"
                         name="city"
                         required
                         type="text"
-                        placeholder="Ej: Providencia / Santiago"
-                        className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        disabled={submitting || selectedItems.length === 0}
+                        placeholder="Providencia, Santiago..."
+                        disabled={submitting}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label htmlFor="order-region" className="block text-xs font-bold text-stone-300 mb-1">
+                    <label
+                      htmlFor="order-region"
+                      className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                    >
                       Región *
                     </label>
                     <select
@@ -739,11 +597,11 @@ export default function ClubPage() {
                       name="region"
                       required
                       defaultValue={REGIONES_CHILE[0]}
-                      className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3.5 py-2.5 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      disabled={submitting || selectedItems.length === 0}
+                      disabled={submitting}
+                      className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] focus:outline-none focus:ring-2 focus:ring-[#c25e1a]"
                     >
-                      {REGIONES_CHILE.map((r, i) => (
-                        <option key={i} value={r}>
+                      {REGIONES_CHILE.map((r) => (
+                        <option key={r} value={r}>
                           {r}
                         </option>
                       ))}
@@ -751,49 +609,49 @@ export default function ClubPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="order-notes" className="block text-xs font-bold text-stone-300 mb-1">
-                      Instrucciones de entrega o notas (opcional)
+                    <label
+                      htmlFor="order-notes"
+                      className="block font-mono text-[11px] uppercase tracking-wider text-[#b0a89e] mb-1"
+                    >
+                      Indicaciones de entrega o facturación
                     </label>
                     <textarea
                       id="order-notes"
                       name="notes"
                       rows={2}
-                      placeholder="Dejar en conserjería, timbre malo, molienda especial..."
-                      className="w-full bg-stone-950 border border-stone-800 rounded-xl px-3.5 py-2 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
-                      disabled={submitting || selectedItems.length === 0}
-                    ></textarea>
+                      placeholder="RUT empresa si requieres factura, horario de recepción, conserjería..."
+                      disabled={submitting}
+                      className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] resize-none"
+                    />
                   </div>
 
                   {orderError && (
-                    <p className="text-red-400 text-xs font-semibold">{orderError}</p>
+                    <p className="text-red-400 text-xs font-medium">
+                      {orderError}
+                    </p>
                   )}
 
                   <button
                     type="submit"
-                    disabled={submitting || selectedItems.length === 0}
-                    className="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-extrabold py-4 px-6 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    disabled={submitting}
+                    className="w-full bg-[#c25e1a] hover:bg-[#a84e12] text-white font-semibold py-3.5 px-6 rounded-lg text-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f5f3f0]"
                   >
-                    {submitting ? (
-                      <>
-                        <span className="animate-spin text-lg">⏳</span>
-                        <span>Enviando pedido a Selva Alta...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Confirmar Pedido (Mago de Oz)</span>
-                        <span aria-hidden="true">→</span>
-                      </>
-                    )}
+                    {submitting
+                      ? "Enviando pedido al correo de Selva Alta..."
+                      : "Confirmar Pedido"}
                   </button>
-                  <p className="text-center text-[11px] text-stone-500">
-                    🔒 Recibirás confirmación instantánea por correo y te contactaremos por WhatsApp.
+
+                  <p className="text-[11px] text-[#7d746b] leading-relaxed">
+                    Al confirmar, el pedido llega de inmediato al correo de
+                    Selva Alta y un representante te contactará para coordinar
+                    la entrega y el pago.
                   </p>
                 </form>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      )}
+      </main>
 
       <Footer />
     </div>

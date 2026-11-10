@@ -1,402 +1,431 @@
 "use client";
 
-import React, { useState } from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import { addB2BContact } from '@/app/actions';
+import React, { useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
+import { addB2BContact } from "@/app/actions";
 
 export default function B2BPage() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [contactStatus, setContactStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [contactMessage, setContactMessage] = useState('');
+  const [contactStatus, setContactStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
+  const [contactMessage, setContactMessage] = useState("");
+  const [selectedTier, setSelectedTier] = useState("Volumen 3 kg (12 × 250g)");
 
-  const varieties = [
+  const volumeTable = [
     {
-      name: "Marsellesa Orgánico",
-      points: "87 Puntos SCA",
-      description: "Cultivado de forma orgánica a 1.820 msnm en Huánuco. Maduración lenta que otorga una complejidad sensorial excepcional y notable limpieza en taza.",
-      origin: "Huánuco, Perú",
-      altitude: "1.820 msnm",
-      process: "Lavado / Orgánico",
-      tastingNotes: ["🍫 Chocolate Suave", "🍬 Caramelo", "🍒 Frutas Dulces"],
-      recommendation: "Excelente para espresso de origen y filtrados complejos."
+      tier: "Muestra / Unidad (250g)",
+      bags: "1 bolsa × 250g",
+      price: "$12.900",
+      unitCost: "$12.900 / bolsa",
+      useCase: "Catación inicial en barra o equipo pequeño",
     },
     {
-      name: "Catimore Suave",
-      points: "84 Puntos SCA",
-      description: "Perfil dulce, achocolatado y balanceado con cuerpo cremoso. Un café muy versátil que corta perfectamente con leche y rinde en barra de alto flujo.",
-      origin: "Huánuco, Perú",
-      altitude: "1.600 msnm",
-      process: "Lavado",
-      tastingNotes: ["🍯 Miel", "🌰 Avellanas", "🍫 Cacao puro"],
-      recommendation: "La opción más eficiente para bebidas con leche y espresso diario."
+      tier: "Volumen 1 kg (4 × 250g)",
+      bags: "4 bolsas × 250g",
+      price: "$44.900",
+      unitCost: "$11.225 / bolsa (-13%)",
+      useCase: "Oficinas de 8 a 15 personas o barra de filtrado",
     },
     {
-      name: "Caturra Clásico",
-      points: "85 Puntos SCA",
-      description: "Un clásico sudamericano conocido por su acidez cítrica brillante y cuerpo sedoso. Notas dulces vibrantes de larga persistencia.",
-      origin: "Alta Amazonía",
-      altitude: "1.650 msnm",
-      process: "Lavado",
-      tastingNotes: ["🍋 Cítrico", "🍯 Miel", "🍫 Cacao"],
-      recommendation: "Ideal para filtrados manuales (V60, Chemex, Aeropress)."
+      tier: "Volumen 3 kg (12 × 250g)",
+      bags: "12 bolsas × 250g",
+      price: "$119.900",
+      unitCost: "$9.990 / bolsa (-22%)",
+      useCase: "Cafeterías de especialidad, startups y coworks",
     },
-    {
-      name: "Pink Bourbon (Reserva)",
-      points: "88 Puntos SCA",
-      description: "Microlote exclusivo de alta demanda. Perfil exótico con matices florales intensos y delicada dulzura a frutos de carozo.",
-      origin: "Alta Amazonía",
-      altitude: "1.800 msnm",
-      process: "Lavado Anaeróbico",
-      tastingNotes: ["🌸 Floral", "🍑 Frutos Rojos", "🍯 Miel Silvestre"],
-      recommendation: "Para barras specialty que buscan sorprender a conocedores."
-    },
-    {
-      name: "Tupi Estructurado",
-      points: "84 Puntos SCA",
-      description: "Variedad robusta que destaca por su estructura densa y notas especiadas cálidas, ideal para mezclas de la casa con carácter.",
-      origin: "Alta Amazonía",
-      altitude: "1.600 msnm",
-      process: "Natural",
-      tastingNotes: ["🌰 Nuez", "🍫 Cacao", "🪵 Especias"],
-      recommendation: "Base sólida para espresso intenso o cold brew."
-    },
-    {
-      name: "Geisha de Altura",
-      points: "89 Puntos SCA",
-      description: "Lote de concurso. Notas florales a jazmín, frutas blancas y acidez elegante y sedosa.",
-      origin: "Huánuco, Perú",
-      altitude: "1.850 msnm",
-      process: "Lavado Especial",
-      tastingNotes: ["🌺 Jazmín", "🍋 Bergamota", "🍑 Durazno"],
-      recommendation: "Microlote de autor para catas y experiencias gourmet."
-    }
   ];
 
   const handleB2BSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setContactStatus('loading');
+    setContactStatus("loading");
     const formData = new FormData(e.currentTarget);
     const result = await addB2BContact(formData);
 
     if (result.success) {
-      setContactStatus('success');
-      setContactMessage(result.message || '¡Solicitud recibida! Un representante de Selva Alta se contactará a la brevedad.');
+      setContactStatus("success");
+      setContactMessage(
+        result.message ||
+          "Solicitud enviada al correo de Selva Alta. Un representante se contactará en breve."
+      );
     } else {
-      setContactStatus('error');
-      setContactMessage(result.error || 'Ocurrió un error al enviar tu solicitud.');
+      setContactStatus("error");
+      setContactMessage(
+        result.error || "Ocurrió un error al enviar tu solicitud."
+      );
     }
   };
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 flex flex-col font-sans selection:bg-amber-800 selection:text-white">
+    <div className="min-h-screen bg-[#110f0d] text-[#f5f3f0] flex flex-col font-sans selection:bg-[#c25e1a] selection:text-white">
+      <BellaDurmienteBackground variant="b2b" />
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 md:pt-40 md:pb-28 border-b border-stone-800 bg-gradient-to-b from-stone-900 via-stone-950 to-stone-950 relative overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-amber-400 bg-amber-950/80 border border-amber-800/40 px-3.5 py-1.5 rounded-full mb-6">
-            🏢 Suministro Mayorista · Cafeterías, HORECA & Empresas
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6 max-w-4xl mx-auto leading-tight">
-            Café de Especialidad Confiable para tu Barra o Negocio
-          </h1>
-
-          <p className="text-stone-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-            Lotes con trazabilidad de origen en Huánuco (Perú), evaluados bajo protocolo SCA y tostados en Chile. Consistencia en cada extracción, precios por volumen y asesoría personalizada.
-          </p>
-
-          <a
-            href="#contacto"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 text-sm sm:text-base"
-          >
-            <span>Solicitar Muestra sin Costo</span>
-            <span aria-hidden="true">↓</span>
-          </a>
-        </div>
-      </section>
-
-      {/* Varieties Slider / Showcase */}
-      <section className="py-20 bg-stone-900/70 border-b border-stone-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-amber-400 block mb-2">
-              Fichas Técnicas
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Nuestras Variedades de Altura
-            </h2>
-            <p className="text-stone-400 text-sm mt-3">
-              Información agronómica y sensorial para baristas y encargados de compras.
+      <main className="relative z-10 flex-grow pt-28 pb-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <section className="max-w-2xl pb-20">
+            <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-3">
+              Abastecimiento B2B · Barras, Startups y Oficinas
             </p>
-          </div>
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#f5f3f0] leading-[1.12] mb-5">
+              Marsellesa Orgánico de 87 puntos SCA en formato de 250g con escala
+              por volumen.
+            </h1>
+            <p className="text-base sm:text-lg text-[#b0a89e] leading-relaxed mb-8">
+              Empaque fraccionado en bolsas de 250g con válvula desgasificadora
+              para preservar la frescura de cada apertura en barra o cocina de
+              oficina. Molienda ajustable y entregas carbono neutrales en
+              Santiago.
+            </p>
 
-          {/* Interactive Variety Display */}
-          <div className="bg-stone-950 border border-stone-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
-              {/* Left Column: Description & Notes */}
-              <div className="lg:w-1/2 space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-bold uppercase text-amber-300 bg-amber-950/80 border border-amber-800/40 px-3 py-1 rounded-full">
-                    {varieties[currentSlide].points}
-                  </span>
-                  <span className="text-xs text-stone-400">
-                    {varieties[currentSlide].process}
-                  </span>
-                </div>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <a
+                href="#contacto"
+                className="inline-flex items-center justify-center bg-[#c25e1a] hover:bg-[#a84e12] text-white font-semibold text-sm px-6 py-3.5 rounded-lg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f5f3f0]"
+              >
+                Escribir al correo pidiendo más detalles
+              </a>
+              <a
+                href="mailto:comercial@selvaalta.cl?subject=Consulta%20Comercial%20Marsellesa%2087%20SCA"
+                className="inline-flex items-center justify-center bg-[#181512]/90 hover:bg-[#241f1b] text-[#f5f3f0] border border-[#332c25] font-mono text-xs sm:text-sm px-5 py-3.5 rounded-lg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+              >
+                comercial@selvaalta.cl
+              </a>
+            </div>
+          </section>
 
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-                  {varieties[currentSlide].name}
+          {/* Technical Datasheet: Marsellesa 87 SCA */}
+          <section className="mb-16">
+            <div className="flex items-center gap-4 mb-5">
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e] whitespace-nowrap">
+                Ficha Técnica del Lote Activo
+              </h2>
+              <div className="h-px bg-[#332c25] flex-grow" />
+            </div>
+
+            <div className="bg-[#181512]/80 backdrop-blur-md border border-[#332c25] rounded-xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-6 space-y-4">
+                <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a]">
+                  Cosecha Tingo María · Huánuco, Perú
+                </p>
+                <h3 className="text-2xl font-bold text-[#f5f3f0]">
+                  Marsellesa Orgánico · 87.0 Puntos SCA
                 </h3>
-
-                <p className="text-stone-300 text-sm sm:text-base leading-relaxed">
-                  {varieties[currentSlide].description}
+                <p className="text-sm text-[#b0a89e] leading-relaxed">
+                  Cultivado de forma orgánica a 1.820 msnm en la cordillera de
+                  La Bella Durmiente. Su proceso lavado entrega una extracción
+                  estable en máquina de espresso y excelente claridad en
+                  métodos de filtro y cafeteras de oficina.
                 </p>
 
-                <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">
-                    Perfil Sensorial en Taza:
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {varieties[currentSlide].tastingNotes.map((note, idx) => (
-                      <span
-                        key={idx}
-                        className="text-xs sm:text-sm bg-stone-900 border border-stone-800 text-stone-200 px-3 py-1.5 rounded-lg"
-                      >
-                        {note}
-                      </span>
-                    ))}
+                <div className="pt-2 grid grid-cols-2 gap-3">
+                  <div className="bg-[#241f1b] border border-[#332c25] rounded-lg p-3.5">
+                    <span className="block font-mono text-[10px] uppercase tracking-wider text-[#7d746b]">
+                      Notas en Taza
+                    </span>
+                    <span className="font-mono text-xs font-semibold text-[#f5f3f0]">
+                      Chocolate · Caramelo · Frutos dulces
+                    </span>
                   </div>
-                </div>
-
-                <div className="pt-2">
-                  <div className="bg-amber-950/30 border border-amber-800/30 rounded-xl p-3 text-xs text-amber-300">
-                    <strong>Recomendación de Barra:</strong> {varieties[currentSlide].recommendation}
+                  <div className="bg-[#241f1b] border border-[#332c25] rounded-lg p-3.5">
+                    <span className="block font-mono text-[10px] uppercase tracking-wider text-[#7d746b]">
+                      Calibración de Molienda
+                    </span>
+                    <span className="font-mono text-xs font-semibold text-[#f5f3f0]">
+                      Grano, Espresso, Moka, Filtro o Prensa
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Agronomic Data Grid */}
-              <div className="lg:w-1/2 grid grid-cols-2 gap-4 w-full">
-                <div className="bg-stone-900/60 p-5 rounded-2xl border border-stone-800">
-                  <h5 className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-1">Origen</h5>
-                  <p className="text-base font-bold text-white">{varieties[currentSlide].origin}</p>
+              <div className="lg:col-span-6 grid grid-cols-2 gap-3">
+                <div className="bg-[#241f1b]/90 border border-[#332c25] rounded-lg p-4">
+                  <span className="block font-mono text-[10px] uppercase tracking-wider text-[#7d746b] mb-1">
+                    Altitud de Cosecha
+                  </span>
+                  <span className="font-mono text-base font-bold text-[#f5f3f0]">
+                    1.820 msnm
+                  </span>
                 </div>
-                <div className="bg-stone-900/60 p-5 rounded-2xl border border-stone-800">
-                  <h5 className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-1">Altitud</h5>
-                  <p className="text-base font-bold text-white">{varieties[currentSlide].altitude}</p>
+                <div className="bg-[#241f1b]/90 border border-[#332c25] rounded-lg p-4">
+                  <span className="block font-mono text-[10px] uppercase tracking-wider text-[#7d746b] mb-1">
+                    Evaluación Sensorial
+                  </span>
+                  <span className="font-mono text-base font-bold text-[#c25e1a]">
+                    87.0 Puntos SCA
+                  </span>
                 </div>
-                <div className="bg-stone-900/60 p-5 rounded-2xl border border-stone-800">
-                  <h5 className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-1">Beneficio</h5>
-                  <p className="text-base font-bold text-white">{varieties[currentSlide].process}</p>
+                <div className="bg-[#241f1b]/90 border border-[#332c25] rounded-lg p-4">
+                  <span className="block font-mono text-[10px] uppercase tracking-wider text-[#7d746b] mb-1">
+                    Impacto Social
+                  </span>
+                  <span className="font-mono text-sm font-semibold text-[#f5f3f0]">
+                    Cosecha Inclusiva
+                  </span>
                 </div>
-                <div className="bg-stone-900/60 p-5 rounded-2xl border border-stone-800">
-                  <h5 className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-1">Puntaje Catación</h5>
-                  <p className="text-base font-bold text-amber-400">{varieties[currentSlide].points}</p>
+                <div className="bg-[#241f1b]/90 border border-[#332c25] rounded-lg p-4">
+                  <span className="block font-mono text-[10px] uppercase tracking-wider text-[#7d746b] mb-1">
+                    Distribución Local
+                  </span>
+                  <span className="font-mono text-sm font-semibold text-[#f5f3f0]">
+                    Carbono Neutral
+                  </span>
                 </div>
               </div>
             </div>
+          </section>
 
-            {/* Variety Selector Buttons */}
-            <div className="mt-8 pt-6 border-t border-stone-800/80 flex flex-wrap gap-2 justify-center">
-              {varieties.map((v, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => setCurrentSlide(idx)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition ${
-                    currentSlide === idx
-                      ? 'bg-amber-600 text-white font-bold shadow'
-                      : 'bg-stone-900 text-stone-400 hover:text-white hover:bg-stone-800'
-                  }`}
-                >
-                  {v.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services and Commercial Value */}
-      <section className="py-20 bg-stone-950 border-b border-stone-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-amber-400 block mb-2">
-              Soluciones a Medida
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              ¿Por qué elegir Selva Alta para tu negocio?
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-stone-900/60 border border-stone-800 rounded-3xl p-8 hover:border-amber-600/30 transition shadow-lg">
-              <span className="text-3xl mb-4 block">☕</span>
-              <h3 className="text-xl font-bold text-white mb-2">Cafeterías & Specialty</h3>
-              <p className="text-stone-300 text-sm leading-relaxed">
-                Relaciones de largo plazo con entregas programadas semanales o quincenales. Tueste fresco que garantiza un ratio óptimo de extracción y consistencia en tus recetas.
-              </p>
+          {/* Volume Pricing Table */}
+          <section className="mb-16">
+            <div className="flex items-center gap-4 mb-5">
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e] whitespace-nowrap">
+                Escala de Precios por Volumen (Formato 250g)
+              </h2>
+              <div className="h-px bg-[#332c25] flex-grow" />
             </div>
 
-            <div className="bg-stone-900/60 border border-stone-800 rounded-3xl p-8 hover:border-amber-600/30 transition shadow-lg">
-              <span className="text-3xl mb-4 block">📦</span>
-              <h3 className="text-xl font-bold text-white mb-2">Retail & Tiendas Gourmet</h3>
-              <p className="text-stone-300 text-sm leading-relaxed">
-                Bolsas de 250g con empaque premium y válvula desgasificadora bajo la marca &quot;Tasty&quot; de Selva Alta. Excelente rotación en estantería y trazabilidad completa.
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {volumeTable.map((row) => {
+                const isSelected = selectedTier === row.tier;
+                return (
+                  <div
+                    key={row.tier}
+                    className={`bg-[#181512]/85 backdrop-blur-md border rounded-xl p-6 flex flex-col justify-between transition-colors duration-150 ${
+                      isSelected ? "border-[#c25e1a]" : "border-[#332c25]"
+                    }`}
+                  >
+                    <div>
+                      <p className="font-mono text-xs text-[#c25e1a] uppercase tracking-wider mb-1">
+                        {row.bags}
+                      </p>
+                      <h3 className="text-lg font-bold text-[#f5f3f0] mb-2">
+                        {row.tier}
+                      </h3>
+                      <p className="font-mono text-2xl font-bold text-[#f5f3f0] mb-1">
+                        {row.price}
+                      </p>
+                      <p className="font-mono text-xs text-[#b0a89e] mb-4">
+                        {row.unitCost}
+                      </p>
+                      <p className="text-xs text-[#b0a89e] leading-relaxed mb-6">
+                        {row.useCase}
+                      </p>
+                    </div>
+
+                    <a
+                      href="#contacto"
+                      onClick={() => setSelectedTier(row.tier)}
+                      className="w-full text-center bg-[#241f1b] hover:bg-[#c25e1a] text-[#f5f3f0] hover:text-white font-semibold text-xs py-2.5 px-4 rounded-lg border border-[#332c25] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+                    >
+                      Solicitar este tramo por correo
+                    </a>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Direct Email & Wizard of Oz Form */}
+          <section id="contacto">
+            <div className="flex items-center gap-4 mb-5">
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e] whitespace-nowrap">
+                Solicitar Más Detalles al Correo de Selva Alta
+              </h2>
+              <div className="h-px bg-[#332c25] flex-grow" />
             </div>
 
-            <div className="bg-stone-900/60 border border-stone-800 rounded-3xl p-8 hover:border-amber-600/30 transition shadow-lg">
-              <span className="text-3xl mb-4 block">🏢</span>
-              <h3 className="text-xl font-bold text-white mb-2">Oficinas & Espacios Cowork</h3>
-              <p className="text-stone-300 text-sm leading-relaxed">
-                Mejora la experiencia diaria de tus colaboradores y clientes con café de especialidad superior al estándar comercial, en formato de grano entero o molido para tus cafeteras.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section B2B (Backend Mago de Oz) */}
-      <section id="contacto" className="py-20 bg-stone-900/90 border-b border-stone-800">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <span className="text-xs font-bold uppercase tracking-widest text-amber-400 block mb-2">
-              Contacto Comercial
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-              Solicita Muestras y Cotización B2B
-            </h2>
-            <p className="text-stone-300 text-sm sm:text-base">
-              Envíanos los requerimientos de tu local u oficina. Te contactaremos a la brevedad con fichas técnicas y opciones de degustación.
-            </p>
-          </div>
-
-          <div className="bg-stone-950 border border-stone-800 rounded-3xl p-6 sm:p-10 shadow-2xl">
-            {contactStatus === 'success' ? (
-              <div className="text-center py-8">
-                <span className="text-5xl mb-4 block" role="img" aria-label="Éxito">✅</span>
-                <h3 className="text-2xl font-bold text-white mb-3">¡Solicitud B2B Enviada!</h3>
-                <div className="bg-amber-950/70 border border-amber-600/50 rounded-2xl p-5 mb-6 text-left max-w-lg mx-auto">
-                  <p className="text-stone-300 text-sm leading-relaxed">
-                    Hemos recibido tus antecedentes y notificado al equipo comercial de Selva Alta. <strong>Un representante se contactará a la brevedad</strong> vía correo o WhatsApp para coordinar el envío de tus muestras y lista de precios por volumen.
+            <div className="bg-[#181512]/85 backdrop-blur-md border border-[#332c25] rounded-xl p-6 sm:p-8 max-w-2xl">
+              {contactStatus === "success" ? (
+                <div className="py-6 space-y-4">
+                  <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a]">
+                    Confirmación de Solicitud
                   </p>
+                  <h3 className="text-2xl font-bold text-[#f5f3f0]">
+                    Solicitud enviada a Selva Alta
+                  </h3>
+                  <p className="text-sm text-[#b0a89e] leading-relaxed">
+                    {contactMessage}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setContactStatus("idle")}
+                    className="bg-[#241f1b] hover:bg-[#332c25] text-[#f5f3f0] border border-[#332c25] font-semibold text-xs px-5 py-2.5 rounded-lg transition-colors"
+                  >
+                    Enviar otra consulta
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setContactStatus('idle')}
-                  className="bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold py-3 px-6 rounded-xl text-sm transition"
-                >
-                  Enviar otra consulta
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleB2BSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              ) : (
+                <form onSubmit={handleB2BSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor="b2b-name"
+                        className="block font-mono text-xs uppercase tracking-wider text-[#b0a89e] mb-1.5"
+                      >
+                        Nombre y Apellido *
+                      </label>
+                      <input
+                        id="b2b-name"
+                        name="name"
+                        required
+                        type="text"
+                        placeholder="Nombre de contacto"
+                        disabled={contactStatus === "loading"}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] disabled:opacity-50"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="b2b-company"
+                        className="block font-mono text-xs uppercase tracking-wider text-[#b0a89e] mb-1.5"
+                      >
+                        Cafetería, Startup u Oficina *
+                      </label>
+                      <input
+                        id="b2b-company"
+                        name="company"
+                        required
+                        type="text"
+                        placeholder="Nombre del lugar o empresa"
+                        disabled={contactStatus === "loading"}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] disabled:opacity-50"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor="b2b-email"
+                        className="block font-mono text-xs uppercase tracking-wider text-[#b0a89e] mb-1.5"
+                      >
+                        Correo Electrónico *
+                      </label>
+                      <input
+                        id="b2b-email"
+                        name="email"
+                        required
+                        type="email"
+                        placeholder="nombre@empresa.cl"
+                        disabled={contactStatus === "loading"}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] disabled:opacity-50"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="b2b-phone"
+                        className="block font-mono text-xs uppercase tracking-wider text-[#b0a89e] mb-1.5"
+                      >
+                        Teléfono de Contacto
+                      </label>
+                      <input
+                        id="b2b-phone"
+                        name="phone"
+                        type="tel"
+                        placeholder="+56 9 1234 5678"
+                        disabled={contactStatus === "loading"}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] disabled:opacity-50"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor="b2b-volume"
+                        className="block font-mono text-xs uppercase tracking-wider text-[#b0a89e] mb-1.5"
+                      >
+                        Tramo de Volumen
+                      </label>
+                      <select
+                        id="b2b-volume"
+                        name="volume"
+                        value={selectedTier}
+                        onChange={(e) => setSelectedTier(e.target.value)}
+                        disabled={contactStatus === "loading"}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] disabled:opacity-50"
+                      >
+                        {volumeTable.map((row) => (
+                          <option key={row.tier} value={row.tier}>
+                            {row.tier} ({row.price})
+                          </option>
+                        ))}
+                        <option value="Volumen mayor a 5 kg mensuales">
+                          Volumen mayor a 5 kg mensuales
+                        </option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="b2b-grind"
+                        className="block font-mono text-xs uppercase tracking-wider text-[#b0a89e] mb-1.5"
+                      >
+                        Molienda Requerida
+                      </label>
+                      <select
+                        id="b2b-grind"
+                        name="grind"
+                        defaultValue="Grano Entero"
+                        disabled={contactStatus === "loading"}
+                        className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] disabled:opacity-50"
+                      >
+                        <option value="Grano Entero">Grano Entero</option>
+                        <option value="Molienda Espresso de Barra">
+                          Molienda Espresso de Barra
+                        </option>
+                        <option value="Molienda Moka Italiana">
+                          Molienda Moka Italiana
+                        </option>
+                        <option value="Molienda Filtro V60 / Goteo">
+                          Molienda Filtro V60 / Goteo
+                        </option>
+                        <option value="Molienda Prensa Francesa">
+                          Molienda Prensa Francesa
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
                   <div>
-                    <label htmlFor="b2b-name" className="block text-xs font-bold text-stone-300 mb-1">
-                      Nombre y Apellido *
+                    <label
+                      htmlFor="b2b-message"
+                      className="block font-mono text-xs uppercase tracking-wider text-[#b0a89e] mb-1.5"
+                    >
+                      Consulta o Requerimiento
                     </label>
-                    <input
-                      id="b2b-name"
-                      name="name"
-                      required
-                      type="text"
-                      placeholder="Ej: Rodrigo Valenzuela"
-                      disabled={contactStatus === 'loading'}
-                      className="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
+                    <textarea
+                      id="b2b-message"
+                      name="message"
+                      rows={3}
+                      placeholder="Indícanos tu máquina o método de extracción y dirección en Santiago para coordinar muestra o entrega."
+                      disabled={contactStatus === "loading"}
+                      className="w-full bg-[#241f1b] border border-[#332c25] rounded-lg px-3.5 py-2.5 text-sm text-[#f5f3f0] placeholder-[#7d746b] focus:outline-none focus:ring-2 focus:ring-[#c25e1a] resize-none disabled:opacity-50"
                     />
                   </div>
-                  <div>
-                    <label htmlFor="b2b-company" className="block text-xs font-bold text-stone-300 mb-1">
-                      Empresa o Cafetería *
-                    </label>
-                    <input
-                      id="b2b-company"
-                      name="company"
-                      required
-                      type="text"
-                      placeholder="Ej: Café Huánuco Barrio Italia"
-                      disabled={contactStatus === 'loading'}
-                      className="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
-                    />
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="b2b-email" className="block text-xs font-bold text-stone-300 mb-1">
-                      Correo Corporativo *
-                    </label>
-                    <input
-                      id="b2b-email"
-                      name="email"
-                      required
-                      type="email"
-                      placeholder="contacto@tucafeteria.cl"
-                      disabled={contactStatus === 'loading'}
-                      className="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="b2b-phone" className="block text-xs font-bold text-stone-300 mb-1">
-                      Teléfono / WhatsApp de contacto
-                    </label>
-                    <input
-                      id="b2b-phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="+56 9 8765 4321"
-                      disabled={contactStatus === 'loading'}
-                      className="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-50"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="b2b-message" className="block text-xs font-bold text-stone-300 mb-1">
-                    Volumen estimado o requerimiento
-                  </label>
-                  <textarea
-                    id="b2b-message"
-                    name="message"
-                    rows={4}
-                    placeholder="¿Cuántos kg/mes estiman consumir? ¿Qué métodos utilizan (Espresso, Filtro)? ¿Desean coordinar cata de muestras?"
-                    disabled={contactStatus === 'loading'}
-                    className="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-sm text-stone-100 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none disabled:opacity-50"
-                  ></textarea>
-                </div>
-
-                {contactStatus === 'error' && (
-                  <p className="text-red-400 text-xs font-semibold">{contactMessage}</p>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={contactStatus === 'loading'}
-                  className="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition transform hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {contactStatus === 'loading' ? (
-                    <>
-                      <span className="animate-spin text-lg">⏳</span>
-                      <span>Enviando requerimiento...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Contactar a Selva Alta Roasters</span>
-                      <span aria-hidden="true">→</span>
-                    </>
+                  {contactStatus === "error" && (
+                    <p className="text-red-400 text-xs font-medium">
+                      {contactMessage}
+                    </p>
                   )}
-                </button>
-              </form>
-            )}
-          </div>
+
+                  <button
+                    type="submit"
+                    disabled={contactStatus === "loading"}
+                    className="w-full bg-[#c25e1a] hover:bg-[#a84e12] text-white font-semibold py-3.5 px-6 rounded-lg text-sm transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f5f3f0]"
+                  >
+                    {contactStatus === "loading"
+                      ? "Enviando al correo de Selva Alta..."
+                      : "Escribir al correo pidiendo más detalles"}
+                  </button>
+                </form>
+              )}
+            </div>
+          </section>
         </div>
-      </section>
+      </main>
 
       <Footer />
     </div>

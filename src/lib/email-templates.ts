@@ -3,7 +3,6 @@ export interface OrderItem {
   name: string;
   price: number;
   quantity: number;
-  emoji: string;
   grind?: string;
   detail?: string;
 }
@@ -28,6 +27,8 @@ export interface EmailB2BData {
   company: string;
   email: string;
   phone?: string;
+  volume?: string;
+  grind?: string;
   message?: string;
 }
 
@@ -39,22 +40,21 @@ export function getOrderConfirmationTemplate(order: EmailOrderData): string {
     .map(
       (item) => `
     <tr>
-      <td style="padding: 12px 0; border-bottom: 1px solid #e5e7eb; font-size: 14px; color: #1f2937;">
-        <span style="font-size: 18px; margin-right: 8px;">${item.emoji}</span>
+      <td style="padding: 12px 0; border-bottom: 1px solid #332c25; font-size: 14px; color: #f5f3f0;">
         <strong>${item.name}</strong>
-        ${item.grind ? `<span style="display: block; font-size: 12px; color: #78350f; margin-left: 26px;">Molienda: ${item.grind}</span>` : ''}
-        ${item.detail ? `<span style="display: block; font-size: 12px; color: #6b7280; margin-left: 26px;">${item.detail}</span>` : ''}
+        ${item.grind ? `<span style="display: block; font-size: 12px; color: #c25e1a; margin-top: 2px;">Molienda: ${item.grind}</span>` : ""}
+        ${item.detail ? `<span style="display: block; font-size: 12px; color: #b0a89e;">${item.detail}</span>` : ""}
       </td>
-      <td style="padding: 12px 0; border-bottom: 1px solid #e5e7eb; font-size: 14px; color: #1f2937; text-align: center;">
+      <td style="padding: 12px 0; border-bottom: 1px solid #332c25; font-size: 14px; color: #f5f3f0; text-align: center; font-family: monospace;">
         ${item.quantity}
       </td>
-      <td style="padding: 12px 0; border-bottom: 1px solid #e5e7eb; font-size: 14px; color: #1f2937; text-align: right; font-weight: bold;">
-        $${(item.price * item.quantity).toLocaleString('es-CL')}
+      <td style="padding: 12px 0; border-bottom: 1px solid #332c25; font-size: 14px; color: #f5f3f0; text-align: right; font-weight: bold; font-family: monospace;">
+        $${(item.price * item.quantity).toLocaleString("es-CL")}
       </td>
     </tr>
   `
     )
-    .join('');
+    .join("");
 
   return `
     <!DOCTYPE html>
@@ -63,49 +63,30 @@ export function getOrderConfirmationTemplate(order: EmailOrderData): string {
       <meta charset="UTF-8">
       <title>Confirmación de Pedido - Selva Alta Roasters</title>
     </head>
-    <body style="margin: 0; padding: 0; background-color: #fafaf9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1c1917;">
-      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #fafaf9; padding: 30px 15px;">
+    <body style="margin: 0; padding: 0; background-color: #110f0d; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f5f3f0;">
+      <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #110f0d; padding: 32px 16px;">
         <tr>
           <td align="center">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border: 1px solid #e7e5e4;">
-              <!-- Header -->
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px; background-color: #181512; border-radius: 12px; overflow: hidden; border: 1px solid #332c25;">
               <tr>
-                <td style="background-color: #78350f; padding: 36px 30px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.02em;">Selva Alta Roasters</h1>
-                  <p style="color: #fde68a; margin: 6px 0 0 0; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;">Café de Especialidad · Amazonía Peruana</p>
+                <td style="padding: 28px 30px; border-bottom: 1px solid #332c25;">
+                  <p style="color: #c25e1a; margin: 0 0 6px 0; font-family: monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em;">Selva Alta Roasters · 1.820 msnm</p>
+                  <h1 style="color: #f5f3f0; margin: 0; font-size: 24px; font-weight: 700;">Pedido ${order.order_number} registrado</h1>
                 </td>
               </tr>
-              <!-- Notice Highlight -->
               <tr>
-                <td style="background-color: #fef3c7; padding: 18px 24px; border-bottom: 1px solid #fde68a; text-align: center;">
-                  <p style="margin: 0; font-size: 15px; color: #92400e; font-weight: 700;">
-                    ⏳ ¡Pedido recibido con éxito! Un representante se contactará contigo a la brevedad.
-                  </p>
-                </td>
-              </tr>
-              <!-- Content -->
-              <tr>
-                <td style="padding: 32px 30px;">
-                  <h2 style="color: #292524; margin: 0 0 12px 0; font-size: 20px;">¡Hola, ${order.customer_name}!</h2>
-                  <p style="color: #57534e; font-size: 15px; line-height: 24px; margin: 0 0 24px 0;">
-                    Hemos registrado tu pedido con el código <strong>${order.order_number}</strong>. En Selva Alta tostamos a pedido para garantizar que recibas granos en su punto óptimo de frescura.
+                <td style="padding: 28px 30px;">
+                  <p style="color: #f5f3f0; font-size: 16px; margin: 0 0 12px 0;">Hola ${order.customer_name},</p>
+                  <p style="color: #b0a89e; font-size: 14px; line-height: 22px; margin: 0 0 20px 0;">
+                    Hemos recibido tu solicitud de café Marsellesa Orgánico (87 puntos SCA). Un representante de Selva Alta se contactará en breve a tu correo o teléfono (${order.customer_phone}) para coordinar la entrega carbono neutral y el método de pago.
                   </p>
 
-                  <div style="background-color: #f5f5f4; border-radius: 12px; padding: 18px; margin-bottom: 24px; border: 1px solid #e7e5e4;">
-                    <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: bold; color: #78350f;">Próximo paso:</p>
-                    <p style="margin: 0; font-size: 14px; color: #44403c; line-height: 20px;">
-                      Nuestro equipo revisará tu orden y <strong>te escribirá o llamará a tu teléfono (${order.customer_phone})</strong> para coordinar la fecha exacta de entrega y el método de pago más cómodo (transferencia bancaria o enlace seguro).
-                    </p>
-                  </div>
-
-                  <!-- Details Table -->
-                  <h3 style="color: #292524; margin: 0 0 12px 0; font-size: 16px; border-bottom: 2px solid #78350f; padding-bottom: 6px;">Resumen del Pedido</h3>
                   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 24px;">
                     <thead>
                       <tr>
-                        <th style="text-align: left; font-size: 12px; text-transform: uppercase; color: #78716c; padding-bottom: 8px;">Variedad</th>
-                        <th style="text-align: center; font-size: 12px; text-transform: uppercase; color: #78716c; padding-bottom: 8px;">Cant.</th>
-                        <th style="text-align: right; font-size: 12px; text-transform: uppercase; color: #78716c; padding-bottom: 8px;">Subtotal</th>
+                        <th style="text-align: left; font-size: 11px; text-transform: uppercase; color: #7d746b; padding-bottom: 8px; border-bottom: 1px solid #332c25;">Formato</th>
+                        <th style="text-align: center; font-size: 11px; text-transform: uppercase; color: #7d746b; padding-bottom: 8px; border-bottom: 1px solid #332c25;">Cant.</th>
+                        <th style="text-align: right; font-size: 11px; text-transform: uppercase; color: #7d746b; padding-bottom: 8px; border-bottom: 1px solid #332c25;">Valor</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -113,43 +94,33 @@ export function getOrderConfirmationTemplate(order: EmailOrderData): string {
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="2" style="padding-top: 12px; font-size: 14px; color: #57534e;">Subtotal</td>
-                        <td style="padding-top: 12px; font-size: 14px; color: #292524; text-align: right;">$${order.subtotal.toLocaleString('es-CL')}</td>
+                        <td colspan="2" style="padding-top: 12px; font-size: 13px; color: #b0a89e;">Subtotal</td>
+                        <td style="padding-top: 12px; font-size: 13px; color: #f5f3f0; text-align: right; font-family: monospace;">$${order.subtotal.toLocaleString("es-CL")}</td>
                       </tr>
                       <tr>
-                        <td colspan="2" style="padding-top: 6px; font-size: 14px; color: #57534e;">Despacho</td>
-                        <td style="padding-top: 6px; font-size: 14px; color: #15803d; text-align: right; font-weight: 600;">
-                          ${order.shipping === 0 ? 'Gratis' : `$${order.shipping.toLocaleString('es-CL')}`}
+                        <td colspan="2" style="padding-top: 6px; font-size: 13px; color: #b0a89e;">Despacho carbono neutral</td>
+                        <td style="padding-top: 6px; font-size: 13px; color: #f5f3f0; text-align: right; font-family: monospace;">
+                          ${order.shipping === 0 ? "Sin costo" : `$${order.shipping.toLocaleString("es-CL")}`}
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="2" style="padding-top: 12px; font-size: 16px; font-weight: 800; color: #78350f; border-top: 2px solid #e7e5e4;">Total a Pagar</td>
-                        <td style="padding-top: 12px; font-size: 18px; font-weight: 800; color: #78350f; text-align: right; border-top: 2px solid #e7e5e4;">$${order.total.toLocaleString('es-CL')}</td>
+                        <td colspan="2" style="padding-top: 12px; font-size: 15px; font-weight: 700; color: #c25e1a;">Total</td>
+                        <td style="padding-top: 12px; font-size: 16px; font-weight: 700; color: #c25e1a; text-align: right; font-family: monospace;">$${order.total.toLocaleString("es-CL")}</td>
                       </tr>
                     </tfoot>
                   </table>
 
-                  <!-- Shipping Address -->
-                  <div style="background-color: #fafaf9; border-radius: 12px; padding: 16px; border: 1px solid #e7e5e4; margin-bottom: 24px;">
-                    <h4 style="margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; color: #78716c;">Dirección de Entrega</h4>
-                    <p style="margin: 0; font-size: 14px; color: #292524;">${order.customer_address}, ${order.customer_city}, ${order.customer_region}</p>
-                    ${order.notes ? `<p style="margin: 6px 0 0 0; font-size: 13px; color: #78716c;"><em>Notas: "${order.notes}"</em></p>` : ''}
-                  </div>
-
-                  <!-- Direct WhatsApp Contact Button -->
-                  <div style="text-align: center; margin-top: 28px;">
-                    <a href="https://wa.me/56900000000?text=${encodeURIComponent(`Hola Selva Alta, realicé el pedido ${order.order_number} por un total de $${order.total.toLocaleString('es-CL')}.`)}" 
-                       style="display: inline-block; background-color: #15803d; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; padding: 12px 24px; border-radius: 10px;">
-                      💬 ¿Dudas? Escríbenos directamente a WhatsApp
-                    </a>
+                  <div style="background-color: #241f1b; border-radius: 8px; padding: 14px 16px; border: 1px solid #332c25;">
+                    <p style="margin: 0 0 4px 0; font-size: 11px; text-transform: uppercase; color: #7d746b; font-family: monospace;">Dirección de despacho</p>
+                    <p style="margin: 0; font-size: 13px; color: #f5f3f0;">${order.customer_address}, ${order.customer_city}, ${order.customer_region}</p>
+                    ${order.notes ? `<p style="margin: 6px 0 0 0; font-size: 12px; color: #b0a89e;">Indicaciones: ${order.notes}</p>` : ""}
                   </div>
                 </td>
               </tr>
-              <!-- Footer -->
               <tr>
-                <td style="background-color: #f5f5f4; padding: 20px 30px; text-align: center; border-top: 1px solid #e7e5e4;">
-                  <p style="margin: 0; font-size: 12px; color: #78716c;">
-                    © ${new Date().getFullYear()} Selva Alta Roasters SpA. Huánuco, Perú · Santiago de Chile.
+                <td style="background-color: #110f0d; padding: 18px 30px; text-align: center; border-top: 1px solid #332c25;">
+                  <p style="margin: 0; font-size: 12px; color: #7d746b;">
+                    Selva Alta Roasters SpA · Tingo María, Perú · Santiago de Chile · comercial@selvaalta.cl
                   </p>
                 </td>
               </tr>
@@ -166,59 +137,48 @@ export function getOrderConfirmationTemplate(order: EmailOrderData): string {
  * Generates the notification email sent internally to Selva Alta Roasters team.
  */
 export function getOrderNotificationTemplate(order: EmailOrderData): string {
-  const cleanPhone = order.customer_phone.replace(/\D/g, '');
-  const waUrl = `https://wa.me/${cleanPhone.startsWith('56') ? cleanPhone : '56' + cleanPhone}?text=${encodeURIComponent(`Hola ${order.customer_name}, te contactamos de Selva Alta Roasters respecto a tu pedido ${order.order_number}.`)}`;
-
   const itemsList = order.items
     .map(
       (item) => `
       <li style="margin-bottom: 6px;">
-        <strong>${item.quantity}x ${item.name}</strong> 
-        ${item.grind ? `<span style="color: #78350f;">[Molienda: ${item.grind}]</span>` : ''} 
-        — $${(item.price * item.quantity).toLocaleString('es-CL')}
+        <strong>${item.quantity}x ${item.name}</strong>
+        ${item.grind ? ` [Molienda: ${item.grind}]` : ""}
+        ($${(item.price * item.quantity).toLocaleString("es-CL")})
       </li>
     `
     )
-    .join('');
+    .join("");
 
   return `
     <!DOCTYPE html>
     <html lang="es">
     <head>
       <meta charset="UTF-8">
-      <title>🚨 NUEVO PEDIDO MAGO DE OZ</title>
+      <title>Nuevo Pedido ${order.order_number}</title>
     </head>
-    <body style="font-family: Arial, sans-serif; background-color: #f5f5f4; padding: 20px; color: #1c1917;">
-      <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 30px; border: 2px solid #78350f;">
-        <div style="background-color: #78350f; color: #ffffff; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
-          <h2 style="margin: 0; font-size: 20px;">🚨 NUEVO PEDIDO ${order.order_number}</h2>
-          <p style="margin: 4px 0 0 0; font-size: 13px; color: #fde68a;">Acción requerida: Contactar al cliente para coordinar entrega</p>
-        </div>
+    <body style="font-family: Arial, sans-serif; background-color: #110f0d; padding: 20px; color: #f5f3f0;">
+      <div style="max-width: 600px; margin: 0 auto; background: #181512; border-radius: 10px; padding: 28px; border: 1px solid #c25e1a;">
+        <p style="font-family: monospace; font-size: 11px; color: #c25e1a; text-transform: uppercase; margin: 0 0 6px 0;">Backend Mago de Oz · Nuevo Pedido</p>
+        <h2 style="margin: 0 0 18px 0; font-size: 20px; color: #f5f3f0;">Orden ${order.order_number}</h2>
 
-        <h3 style="margin-top: 0; color: #78350f;">Datos del Cliente:</h3>
-        <ul style="line-height: 1.6; font-size: 15px;">
+        <h3 style="font-size: 14px; color: #c25e1a; margin-bottom: 8px;">Datos del Comprador</h3>
+        <ul style="line-height: 1.6; font-size: 14px; color: #f5f3f0; padding-left: 18px;">
           <li><strong>Nombre:</strong> ${order.customer_name}</li>
-          <li><strong>Email:</strong> <a href="mailto:${order.customer_email}">${order.customer_email}</a></li>
-          <li><strong>Teléfono:</strong> <a href="tel:${order.customer_phone}">${order.customer_phone}</a></li>
+          <li><strong>Email:</strong> <a href="mailto:${order.customer_email}" style="color: #c25e1a;">${order.customer_email}</a></li>
+          <li><strong>Teléfono:</strong> <a href="tel:${order.customer_phone}" style="color: #c25e1a;">${order.customer_phone}</a></li>
           <li><strong>Dirección:</strong> ${order.customer_address}, ${order.customer_city}, ${order.customer_region}</li>
-          ${order.notes ? `<li><strong>Notas del cliente:</strong> <em>${order.notes}</em></li>` : ''}
+          ${order.notes ? `<li><strong>Notas:</strong> ${order.notes}</li>` : ""}
         </ul>
 
-        <div style="margin: 20px 0;">
-          <a href="${waUrl}" style="display: inline-block; background-color: #22c55e; color: #ffffff; padding: 12px 20px; border-radius: 8px; font-weight: bold; text-decoration: none;">
-            📲 Abrir chat de WhatsApp con el Cliente
-          </a>
-        </div>
-
-        <h3 style="color: #78350f; border-top: 1px solid #e7e5e4; padding-top: 15px;">Productos Solicitados:</h3>
-        <ul style="line-height: 1.6; font-size: 15px;">
+        <h3 style="font-size: 14px; color: #c25e1a; border-top: 1px solid #332c25; padding-top: 14px; margin-top: 16px;">Detalle Solicitado</h3>
+        <ul style="line-height: 1.6; font-size: 14px; color: #f5f3f0; padding-left: 18px;">
           ${itemsList}
         </ul>
 
-        <div style="background-color: #fef3c7; padding: 12px 16px; border-radius: 8px; margin-top: 20px; font-size: 16px;">
-          <p style="margin: 0;"><strong>Subtotal:</strong> $${order.subtotal.toLocaleString('es-CL')}</p>
-          <p style="margin: 4px 0;"><strong>Despacho:</strong> $${order.shipping.toLocaleString('es-CL')}</p>
-          <p style="margin: 4px 0 0 0; font-size: 18px; font-weight: bold; color: #92400e;"><strong>Total a Cobrar:</strong> $${order.total.toLocaleString('es-CL')}</p>
+        <div style="background-color: #241f1b; padding: 12px 16px; border-radius: 8px; margin-top: 18px; font-family: monospace; font-size: 14px; border: 1px solid #332c25;">
+          <p style="margin: 0;">Subtotal: $${order.subtotal.toLocaleString("es-CL")}</p>
+          <p style="margin: 4px 0;">Despacho: $${order.shipping.toLocaleString("es-CL")}</p>
+          <p style="margin: 4px 0 0 0; font-size: 16px; font-weight: bold; color: #c25e1a;">Total a coordinar: $${order.total.toLocaleString("es-CL")}</p>
         </div>
       </div>
     </body>
@@ -231,17 +191,18 @@ export function getOrderNotificationTemplate(order: EmailOrderData): string {
  */
 export function getB2BNotificationTemplate(data: EmailB2BData): string {
   return `
-    <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; border: 1px solid #e7e5e4; border-radius: 12px;">
-      <h2 style="color: #78350f;">💼 Nueva Solicitud B2B (Empresas / Cafeterías)</h2>
-      <p><strong>Nombre:</strong> ${data.name}</p>
-      <p><strong>Empresa / Local:</strong> ${data.company}</p>
-      <p><strong>Email:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
-      ${data.phone ? `<p><strong>Teléfono:</strong> ${data.phone}</p>` : ''}
-      <p><strong>Mensaje / Requerimiento:</strong></p>
-      <blockquote style="background: #f5f5f4; padding: 12px; border-left: 4px solid #78350f; margin: 0;">
-        ${data.message || 'Sin mensaje adicional'}
+    <div style="font-family: Arial, sans-serif; padding: 24px; max-width: 600px; margin: 0 auto; border: 1px solid #c25e1a; border-radius: 10px; background: #181512; color: #f5f3f0;">
+      <p style="font-family: monospace; font-size: 11px; color: #c25e1a; text-transform: uppercase; margin: 0 0 6px 0;">Solicitud Comercial B2B · Barras y Oficinas</p>
+      <h2 style="color: #f5f3f0; margin: 0 0 16px 0;">${data.company}</h2>
+      <p><strong>Contacto:</strong> ${data.name}</p>
+      <p><strong>Correo:</strong> <a href="mailto:${data.email}" style="color: #c25e1a;">${data.email}</a></p>
+      ${data.phone ? `<p><strong>Teléfono:</strong> ${data.phone}</p>` : ""}
+      ${data.volume ? `<p><strong>Volumen estimado:</strong> ${data.volume}</p>` : ""}
+      ${data.grind ? `<p><strong>Molienda requerida:</strong> ${data.grind}</p>` : ""}
+      <p><strong>Detalles adicionales:</strong></p>
+      <blockquote style="background: #241f1b; padding: 12px; border-left: 3px solid #c25e1a; margin: 0; color: #b0a89e;">
+        ${data.message || "Solicitud de información comercial y precios por volumen de Marsellesa 87 SCA."}
       </blockquote>
-      <p style="margin-top: 20px; font-size: 13px; color: #78716c;">Responder directamente a ${data.email}.</p>
     </div>
   `;
 }
@@ -249,17 +210,21 @@ export function getB2BNotificationTemplate(data: EmailB2BData): string {
 /**
  * Generates B2B confirmation receipt to the lead.
  */
-export function getB2BConfirmationTemplate(name: string, company: string): string {
+export function getB2BConfirmationTemplate(
+  name: string,
+  company: string
+): string {
   return `
-    <div style="font-family: Arial, sans-serif; padding: 25px; max-width: 600px; margin: 0 auto; border: 1px solid #e7e5e4; border-radius: 12px; background: #ffffff;">
-      <h2 style="color: #78350f; margin-top: 0;">Selva Alta Roasters · Soluciones Corporativas</h2>
-      <p>Hola <strong>${name}</strong> (${company}),</p>
-      <p>Hemos recibido tu solicitud de contacto comercial y muestras de café de especialidad.</p>
-      <p>Un representante de nuestro equipo comercial te contactará a la brevedad con nuestra lista de precios por volumen, fichas técnicas y opciones de degustación.</p>
-      <hr style="border: 0; border-top: 1px solid #e7e5e4; margin: 20px 0;">
-      <p style="font-size: 13px; color: #78716c;">
-        Selva Alta Roasters SpA · Huánuco, Perú · Santiago de Chile.<br>
-        Contacto directo: <a href="mailto:comercial@selvaalta.cl" style="color: #78350f;">comercial@selvaalta.cl</a>
+    <div style="font-family: Arial, sans-serif; padding: 28px; max-width: 600px; margin: 0 auto; border: 1px solid #332c25; border-radius: 10px; background: #181512; color: #f5f3f0;">
+      <p style="font-family: monospace; font-size: 11px; color: #c25e1a; text-transform: uppercase; margin: 0 0 6px 0;">Selva Alta Roasters · 1.820 msnm</p>
+      <h2 style="color: #f5f3f0; margin: 0 0 14px 0;">Solicitud comercial recibida</h2>
+      <p style="color: #b0a89e; font-size: 14px; line-height: 1.6;">Hola <strong>${name}</strong> (${company}),</p>
+      <p style="color: #b0a89e; font-size: 14px; line-height: 1.6;">
+        Hemos recibido tu consulta sobre el lote Marsellesa Orgánico (87 puntos SCA). Un representante de Selva Alta se contactará en breve con la ficha técnica, escala de precios por volumen y opciones de muestra para tu barra u oficina.
+      </p>
+      <hr style="border: 0; border-top: 1px solid #332c25; margin: 20px 0;">
+      <p style="font-size: 12px; color: #7d746b; margin: 0;">
+        Selva Alta Roasters SpA · Tingo María, Perú · Santiago de Chile · comercial@selvaalta.cl
       </p>
     </div>
   `;
@@ -268,15 +233,18 @@ export function getB2BConfirmationTemplate(name: string, company: string): strin
 /**
  * Generates waitlist welcome email.
  */
-export function getWaitlistWelcomeTemplate(email: string, name?: string): string {
+export function getWaitlistWelcomeTemplate(
+  email: string,
+  name?: string
+): string {
   return `
-    <div style="font-family: Arial, sans-serif; padding: 25px; max-width: 600px; margin: 0 auto; border: 1px solid #e7e5e4; border-radius: 12px; background: #ffffff;">
-      <h2 style="color: #78350f; margin-top: 0;">☕ ¡Bienvenido a Selva Alta Club!</h2>
-      <p>Hola${name ? ` ${name}` : ''},</p>
-      <p>Te has suscrito con éxito a nuestra lista de espera y boletín de café de especialidad.</p>
-      <p>Serás de los primeros en enterarte de nuevos tuestes frescos, microlotes exclusivos de altura (como Marsellesa y Geisha de Huánuco) y promociones de lanzamiento.</p>
-      <hr style="border: 0; border-top: 1px solid #e7e5e4; margin: 20px 0;">
-      <p style="font-size: 12px; color: #78716c;">Selva Alta Roasters SpA · Tueste fresco de especialidad.</p>
+    <div style="font-family: Arial, sans-serif; padding: 28px; max-width: 600px; margin: 0 auto; border: 1px solid #332c25; border-radius: 10px; background: #181512; color: #f5f3f0;">
+      <p style="font-family: monospace; font-size: 11px; color: #c25e1a; text-transform: uppercase; margin: 0 0 6px 0;">Selva Alta Roasters · Tingo María</p>
+      <h2 style="color: #f5f3f0; margin: 0 0 14px 0;">Registro de contacto confirmado</h2>
+      <p style="color: #b0a89e; font-size: 14px; line-height: 1.6;">Hola${name ? ` ${name}` : ""},</p>
+      <p style="color: #b0a89e; font-size: 14px; line-height: 1.6;">
+        Hemos registrado tu correo (${email}). Un representante te enviará los detalles de disponibilidad del lote Marsellesa Orgánico (87 puntos SCA) y opciones de entrega carbono neutral.
+      </p>
     </div>
   `;
 }

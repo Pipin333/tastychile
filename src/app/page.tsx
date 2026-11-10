@@ -1,345 +1,211 @@
-import React from 'react';
-import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import React from "react";
+import Link from "next/link";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
 
 export default function Home() {
-  const featuredVarieties = [
+  const volumeTiers = [
     {
-      name: 'Marsellesa Orgánico',
-      points: '87 Puntos SCA',
-      notes: ['🍫 Chocolate Suave', '🍬 Caramelo', '🍒 Frutos Rojos'],
-      origin: 'Huánuco, Perú · 1.820 msnm',
-      process: 'Lavado / Orgánico',
-      badge: 'Favorito',
-      href: '/club#catalogo',
+      label: "Formato 250g",
+      price: "$12.900",
+      detail: "1 bolsa con válvula desgasificadora",
+      href: "/club?tier=marsellesa-250g",
     },
     {
-      name: 'Catimore Suave',
-      points: '84 Puntos SCA',
-      notes: ['🍯 Miel', '🌰 Avellanas', '🍫 Cacao Puro'],
-      origin: 'Huánuco, Perú · 1.600 msnm',
-      process: 'Lavado',
-      badge: 'Versátil Espresso',
-      href: '/club#catalogo',
+      label: "Volumen 1 kg",
+      price: "$44.900",
+      detail: "4 × 250g · Ahorro 13% · Envío incluido",
+      href: "/club?tier=marsellesa-1kg",
     },
     {
-      name: 'Caturra Clásico',
-      points: '85 Puntos SCA',
-      notes: ['🍋 Cítrico Brillante', '🍯 Miel', '🍫 Cacao'],
-      origin: 'Alta Amazonía · 1.650 msnm',
-      process: 'Lavado',
-      badge: 'Equilibrado',
-      href: '/club#catalogo',
+      label: "Volumen 3 kg",
+      price: "$119.900",
+      detail: "12 × 250g · Ahorro 22% · Barras y equipos",
+      href: "/club?tier=marsellesa-3kg",
     },
   ];
 
+  const specifications = [
+    { label: "Variedad Activa", value: "Marsellesa Orgánico" },
+    { label: "Puntaje SCA", value: "87.0 Puntos" },
+    { label: "Origen", value: "Tingo María, Huánuco, Perú" },
+    { label: "Altitud", value: "1.820 msnm" },
+    { label: "Beneficio", value: "Lavado de fermentación controlada" },
+    { label: "Perfil en Taza", value: "Chocolate amargo · Caramelo · Frutos dulces" },
+    { label: "Cosecha", value: "Inclusiva de comercio directo" },
+    { label: "Logística", value: "Entregas carbono neutrales en Santiago" },
+  ];
+
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 flex flex-col font-sans selection:bg-amber-800 selection:text-white">
+    <div className="min-h-screen bg-[#110f0d] text-[#f5f3f0] flex flex-col font-sans selection:bg-[#c25e1a] selection:text-white">
+      <BellaDurmienteBackground variant="home" />
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden border-b border-stone-800 bg-gradient-to-b from-stone-900 via-stone-950 to-stone-950">
-        {/* Glow ambient background elements */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 right-10 w-[300px] h-[300px] bg-yellow-600/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-amber-950/80 border border-amber-600/40 text-amber-300 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full mb-8 shadow-sm">
-            <span>✨ Nueva Cosecha de Altura</span>
-            <span className="w-1 h-1 rounded-full bg-amber-400" />
-            <span>1.820 msnm Huánuco, Perú</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight md:leading-[1.15] mb-6">
-            Café de Especialidad de la <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-yellow-400">Alta Amazonía</span>
-          </h1>
-
-          <p className="text-lg sm:text-xl text-stone-300 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Granos cosechados a mano en las montañas de Huánuco con perfiles de <strong>84 a 87+ Puntos SCA</strong>. Tostados a pedido en Chile para que disfrutes de su máxima pureza sensorial.
-          </p>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto mb-16">
-            <Link
-              href="/club"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg shadow-amber-950/50 transition transform hover:-translate-y-0.5 active:translate-y-0 text-base"
-            >
-              <span>El Club (Para Casa)</span>
-              <span aria-hidden="true">→</span>
-            </Link>
-
-            <Link
-              href="/b2b"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-stone-900 hover:bg-stone-800 text-stone-200 hover:text-white font-semibold px-8 py-4 rounded-xl border border-stone-700 transition"
-            >
-              <span>Para Cafeterías & B2B</span>
-            </Link>
-          </div>
-
-          {/* Value Props */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto pt-8 border-t border-stone-800/80 text-left">
-            <div className="p-4 rounded-xl bg-stone-900/40 border border-stone-800/60">
-              <span className="text-2xl mb-2 block" role="img" aria-label="Tueste">🔥</span>
-              <h2 className="text-sm font-bold text-white mb-1">Tostado a Pedido</h2>
-              <p className="text-xs text-stone-400">Nunca granos añejos; máxima frescura y aromas vivos.</p>
-            </div>
-            <div className="p-4 rounded-xl bg-stone-900/40 border border-stone-800/60">
-              <span className="text-2xl mb-2 block" role="img" aria-label="Montaña">🏔️</span>
-              <h2 className="text-sm font-bold text-white mb-1">1.820 msnm</h2>
-              <p className="text-xs text-stone-400">Maduración lenta de altitud que aporta acidez balanceada.</p>
-            </div>
-            <div className="p-4 rounded-xl bg-stone-900/40 border border-stone-800/60">
-              <span className="text-2xl mb-2 block" role="img" aria-label="Estrella">⭐</span>
-              <h2 className="text-sm font-bold text-white mb-1">84-87 Puntos SCA</h2>
-              <p className="text-xs text-stone-400">Café de especialidad certificado sin defectos primarios.</p>
-            </div>
-            <div className="p-4 rounded-xl bg-stone-900/40 border border-stone-800/60">
-              <span className="text-2xl mb-2 block" role="img" aria-label="Despacho">🚚</span>
-              <h2 className="text-sm font-bold text-white mb-1">Envíos a Todo Chile</h2>
-              <p className="text-xs text-stone-400">Coordinación directa por WhatsApp y correo.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Main Dual Choices Section */}
-      <section className="py-20 bg-stone-900 border-b border-stone-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-2">
-              Elige tu experiencia
-            </h2>
-            <h3 className="text-3xl sm:text-4xl font-extrabold text-white">
-              ¿Cómo quieres disfrutar Selva Alta?
-            </h3>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Club Card */}
-            <Link
-              href="/club"
-              className="group relative flex flex-col justify-between bg-stone-950 border border-stone-800 rounded-3xl p-8 sm:p-10 hover:border-amber-600/50 transition-all duration-300 shadow-xl hover:-translate-y-1"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <span className="flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-900/40 border border-amber-700/40 text-3xl group-hover:scale-110 transition-transform">
-                    ☕
-                  </span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-950/80 px-3 py-1 rounded-full border border-amber-800/40">
-                    Para Amantes del Café
-                  </span>
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 group-hover:text-amber-300 transition-colors">
-                  El Club Selva Alta
-                </h3>
-                <p className="text-stone-300 text-sm sm:text-base leading-relaxed mb-6">
-                  Bolsas de 250g y suscripciones mensuales con despacho a tu puerta. Selecciona tu variedad favorita, tu tipo de molienda y recibe café tostado recientemente.
-                </p>
-
-                <ul className="space-y-2.5 text-sm text-stone-400 mb-8">
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Molienda a medida (Grano, Espresso, Filtro, Moka, Prensa)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Sin compromisos de permanencia
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Backend asistido: confirmación inmediata por WhatsApp
-                  </li>
-                </ul>
-              </div>
-
-              <div className="inline-flex items-center gap-2 text-amber-400 font-bold group-hover:text-amber-300 transition-colors">
-                <span>Explorar Variedades & Pedir</span>
-                <span className="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-              </div>
-            </Link>
-
-            {/* B2B Card */}
-            <Link
-              href="/b2b"
-              className="group relative flex flex-col justify-between bg-stone-950 border border-stone-800 rounded-3xl p-8 sm:p-10 hover:border-amber-600/50 transition-all duration-300 shadow-xl hover:-translate-y-1"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <span className="flex items-center justify-center w-14 h-14 rounded-2xl bg-stone-800 border border-stone-700 text-3xl group-hover:scale-110 transition-transform">
-                    🏢
-                  </span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-stone-300 bg-stone-900 px-3 py-1 rounded-full border border-stone-700">
-                    HORECA & Cafeterías
-                  </span>
-                </div>
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3 group-hover:text-amber-300 transition-colors">
-                  Venta Mayorista & Empresas
-                </h3>
-                <p className="text-stone-300 text-sm sm:text-base leading-relaxed mb-6">
-                  Lotes consistentes para cafeterías de especialidad, restaurantes y oficinas corporativas. Solicita muestras sin costo, fichas técnicas y acuerdos de suministro continuo.
-                </p>
-
-                <ul className="space-y-2.5 text-sm text-stone-400 mb-8">
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Fichas sensoriales de cata completas
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Formatos de 1kg y 250g para retail y barra
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-amber-400">✓</span> Asistencia y calibración técnica en tus máquinas
-                  </li>
-                </ul>
-              </div>
-
-              <div className="inline-flex items-center gap-2 text-amber-400 font-bold group-hover:text-amber-300 transition-colors">
-                <span>Solicitar Muestras & Contacto B2B</span>
-                <span className="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Varieties Showcase */}
-      <section className="py-20 bg-stone-950 border-b border-stone-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-2">
-              Nuestra Colección
-            </h2>
-            <h3 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Variedades de Altura Disponibles
-            </h3>
-            <p className="text-stone-400 mt-3 text-sm sm:text-base">
-              Cultivadas bajo sombra en la selva alta peruana con procesos limpios y trazabilidad total.
+      <main className="relative z-10 flex-grow pt-28 pb-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Hero Section (Strictly 3 elements as locked in BRIEF.md) */}
+          <section className="max-w-2xl pb-24 sm:pb-32">
+            <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-4">
+              Selva Alta Roasters · Tingo María, Huánuco · 1.820 msnm
             </p>
-          </div>
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#f5f3f0] leading-[1.12] mb-5">
+              Café de especialidad de 87 puntos SCA para barras y oficinas en
+              Santiago, con molienda calibrada y entregas carbono neutrales.
+            </h1>
+            <p className="text-base sm:text-lg text-[#b0a89e] leading-relaxed mb-8">
+              Granos cosechados en Huánuco a 1.820 msnm frente al perfil de La
+              Bella Durmiente, con trazabilidad directa, cosecha inclusiva y
+              evaluación sensorial rigurosa.
+            </p>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {featuredVarieties.map((v, i) => (
-              <div
-                key={i}
-                className="bg-stone-900/60 border border-stone-800 hover:border-amber-600/40 rounded-2xl p-6 flex flex-col justify-between transition-all hover:bg-stone-900"
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <Link
+                href="/b2b#contacto"
+                className="inline-flex items-center justify-center bg-[#c25e1a] hover:bg-[#a84e12] text-white font-semibold text-sm px-6 py-3.5 rounded-lg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f5f3f0]"
               >
+                Solicitar detalles y muestras por correo
+              </Link>
+              <Link
+                href="/club"
+                className="inline-flex items-center justify-center bg-[#181512]/90 hover:bg-[#241f1b] text-[#f5f3f0] border border-[#332c25] font-medium text-sm px-6 py-3.5 rounded-lg transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+              >
+                Pedir en formato 250g o por volumen
+              </Link>
+            </div>
+          </section>
+
+          {/* Active Lot Technical Card: Marsellesa 87 SCA */}
+          <section className="mb-16">
+            <div className="flex items-center gap-4 mb-5">
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e] whitespace-nowrap">
+                Lote Activo · Cosecha Actual
+              </h2>
+              <div className="h-px bg-[#332c25] flex-grow" />
+            </div>
+
+            <div className="bg-[#181512]/80 backdrop-blur-md border border-[#332c25] rounded-xl p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="lg:col-span-7 space-y-5">
                 <div>
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-xs font-bold uppercase text-amber-300 bg-amber-950/70 border border-amber-800/40 px-2.5 py-1 rounded-full">
-                      {v.badge}
-                    </span>
-                    <span className="text-xs font-extrabold text-amber-400">
-                      {v.points}
-                    </span>
-                  </div>
-
-                  <h4 className="text-xl font-bold text-white mb-1">{v.name}</h4>
-                  <p className="text-xs text-stone-400 mb-4">{v.origin} · {v.process}</p>
-
-                  <div className="mb-6">
-                    <span className="text-xs font-bold uppercase tracking-wider text-stone-500 block mb-2">
-                      Notas de Cata:
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {v.notes.map((note, idx) => (
-                        <span key={idx} className="text-xs bg-stone-800/80 text-stone-300 px-2.5 py-1 rounded-md">
-                          {note}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  <p className="font-mono text-xs text-[#c25e1a] uppercase tracking-wider mb-1">
+                    Variedad Exclusiva · 87.0 Puntos SCA
+                  </p>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-[#f5f3f0]">
+                    Marsellesa Orgánico
+                  </h3>
                 </div>
 
+                <p className="text-sm sm:text-base text-[#b0a89e] leading-relaxed">
+                  Cultivado bajo sombra en las laderas de Tingo María. La
+                  maduración lenta a 1.820 metros de altitud produce una taza
+                  limpia, de cuerpo sedoso y acidez equilibrada, con notas
+                  definidas a chocolate amargo, caramelo tostado y frutos
+                  dulces.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                  {volumeTiers.map((tier) => (
+                    <Link
+                      key={tier.label}
+                      href={tier.href}
+                      className="block bg-[#241f1b]/90 hover:bg-[#241f1b] border border-[#332c25] hover:border-[#c25e1a] rounded-lg p-3.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+                    >
+                      <span className="block text-xs text-[#b0a89e] mb-1">
+                        {tier.label}
+                      </span>
+                      <span className="block font-mono text-base font-bold text-[#f5f3f0]">
+                        {tier.price}
+                      </span>
+                      <span className="block font-mono text-[11px] text-[#c25e1a] mt-1">
+                        {tier.detail}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 bg-[#241f1b]/90 border border-[#332c25] rounded-lg p-5 space-y-3">
+                <h4 className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] pb-2 border-b border-[#332c25]">
+                  Ficha Agronómica y Logística
+                </h4>
+                <dl className="divide-y divide-[#332c25]">
+                  {specifications.map((spec) => (
+                    <div
+                      key={spec.label}
+                      className="py-2.5 first:pt-1 last:pb-0 flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1"
+                    >
+                      <dt className="text-xs uppercase tracking-wider text-[#7d746b]">
+                        {spec.label}
+                      </dt>
+                      <dd className="font-mono text-xs text-[#f5f3f0] sm:text-right">
+                        {spec.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            </div>
+          </section>
+
+          {/* Route Paths: B2B vs Direct Orders */}
+          <section>
+            <div className="flex items-center gap-4 mb-5">
+              <h2 className="font-mono text-xs font-semibold uppercase tracking-widest text-[#b0a89e] whitespace-nowrap">
+                Modalidades de Abastecimiento
+              </h2>
+              <div className="h-px bg-[#332c25] flex-grow" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-[#181512]/80 backdrop-blur-md border border-[#332c25] hover:border-[#c25e1a] rounded-xl p-6 sm:p-7 flex flex-col justify-between transition-colors duration-150">
+                <div>
+                  <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-2">
+                    Cafeterías · Startups · Oficinas
+                  </p>
+                  <h3 className="text-xl font-bold text-[#f5f3f0] mb-3">
+                    Suministro B2B y Muestras para Barra
+                  </h3>
+                  <p className="text-sm text-[#b0a89e] leading-relaxed mb-6">
+                    Abastecimiento programado en bolsas de 250g con precios
+                    escalonados por kilo. Incluye calibración de molienda para
+                    espresso o métodos filtrados y despacho carbono neutral.
+                  </p>
+                </div>
                 <Link
-                  href={v.href}
-                  className="w-full text-center bg-stone-800 hover:bg-amber-600 hover:text-white text-stone-200 font-bold py-2.5 px-4 rounded-xl text-sm transition"
+                  href="/b2b"
+                  className="inline-flex items-center justify-between w-full bg-[#241f1b] hover:bg-[#c25e1a] text-[#f5f3f0] hover:text-white font-semibold text-sm px-4 py-3 rounded-lg border border-[#332c25] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
                 >
-                  Pedir en El Club
+                  <span>Revisar programa para barras y oficinas</span>
+                  <span className="font-mono text-xs">B2B</span>
                 </Link>
               </div>
-            ))}
-          </div>
 
-          <div className="text-center mt-12">
-            <Link
-              href="/club#catalogo"
-              className="inline-flex items-center gap-2 text-sm font-bold text-amber-400 hover:text-amber-300"
-            >
-              <span>Ver todas las variedades y suscripciones mensuales</span>
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Origin Story Section */}
-      <section className="py-20 bg-stone-900 border-b border-stone-800">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <span className="text-xs font-bold uppercase tracking-widest text-amber-400">
-                Trazabilidad Directa
-              </span>
-              <h3 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight">
-                De las montañas de Huánuco a tu taza
-              </h3>
-              <p className="text-stone-300 text-sm sm:text-base leading-relaxed">
-                Tingo María y las cumbres de Huánuco ofrecen uno de los ecosistemas más puros para el café de especialidad. La combinación de niebla de altura, suelos volcánicos y sombra natural ralentiza la maduración de las cerezas.
-              </p>
-              <p className="text-stone-400 text-sm leading-relaxed">
-                El resultado es una mayor concentración de azúcares naturales y un perfil en taza limpio, con notas a cacao fino, miel y frutas silvestres. Importamos directamente el grano verde y lo tostamos en pequeños lotes en Chile para que recibas un café fresco y lleno de vida.
-              </p>
-            </div>
-
-            <div className="bg-stone-950 border border-stone-800 rounded-3xl p-8 space-y-6 shadow-2xl">
-              <h4 className="text-xl font-bold text-white border-b border-stone-800 pb-4">
-                El Compromiso Selva Alta
-              </h4>
-              <div className="space-y-4">
-                <div className="flex gap-4">
-                  <span className="text-2xl">🌿</span>
-                  <div>
-                    <h5 className="font-bold text-stone-200 text-sm">Comercio Directo y Justo</h5>
-                    <p className="text-xs text-stone-400">Trabajamos estrechamente con cooperativas familiares en Huánuco asegurando un precio premium por calidad superior.</p>
-                  </div>
+              <div className="bg-[#181512]/80 backdrop-blur-md border border-[#332c25] hover:border-[#c25e1a] rounded-xl p-6 sm:p-7 flex flex-col justify-between transition-colors duration-150">
+                <div>
+                  <p className="font-mono text-xs uppercase tracking-widest text-[#c25e1a] mb-2">
+                    Pedidos Directos · Molienda a Medida
+                  </p>
+                  <h3 className="text-xl font-bold text-[#f5f3f0] mb-3">
+                    Catálogo por Formato y Método de Extracción
+                  </h3>
+                  <p className="text-sm text-[#b0a89e] leading-relaxed mb-6">
+                    Elige tu volumen (250g, 1 kg o 3 kg) y selecciona el tipo de
+                    molienda exacto para Moka Italiana, Prensa Francesa,
+                    Espresso, Filtro V60 o Grano Entero.
+                  </p>
                 </div>
-                <div className="flex gap-4">
-                  <span className="text-2xl">🧪</span>
-                  <div>
-                    <h5 className="font-bold text-stone-200 text-sm">Control Sensorial Riguroso</h5>
-                    <p className="text-xs text-stone-400">Cada lote es catado y calibrado según el protocolo oficial SCA (Specialty Coffee Association).</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <span className="text-2xl">📦</span>
-                  <div>
-                    <h5 className="font-bold text-stone-200 text-sm">Empaque con Válvula</h5>
-                    <p className="text-xs text-stone-400">Bolsas trilaminadas herméticas con válvula desgasificadora que conservan los aromas del tueste.</p>
-                  </div>
-                </div>
+                <Link
+                  href="/club"
+                  className="inline-flex items-center justify-between w-full bg-[#241f1b] hover:bg-[#c25e1a] text-[#f5f3f0] hover:text-white font-semibold text-sm px-4 py-3 rounded-lg border border-[#332c25] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c25e1a]"
+                >
+                  <span>Configurar pedido y molienda</span>
+                  <span className="font-mono text-xs">250G / VOLUMEN</span>
+                </Link>
               </div>
             </div>
-          </div>
+          </section>
         </div>
-      </section>
-
-      {/* Final CTA Banner */}
-      <section className="py-16 bg-gradient-to-r from-amber-950 via-stone-900 to-amber-950 border-b border-stone-800 text-center px-4">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <h3 className="text-3xl sm:text-4xl font-extrabold text-white">
-            ¿Listo para saborear la diferencia?
-          </h3>
-          <p className="text-stone-300 text-sm sm:text-base max-w-xl mx-auto">
-            Haz tu pedido en menos de dos minutos. Nuestro equipo coordinará tu entrega y el pago directamente contigo por WhatsApp.
-          </p>
-          <div className="pt-2">
-            <Link
-              href="/club#catalogo"
-              className="inline-flex items-center gap-2 bg-amber-600 hover:bg-amber-500 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition transform hover:-translate-y-0.5"
-            >
-              <span>Pedir Mi Café Ahora</span>
-              <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      </main>
 
       <Footer />
     </div>
