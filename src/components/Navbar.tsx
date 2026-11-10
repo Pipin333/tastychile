@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 /**
- * Primary navigation bar following the Selva Nubosa & Pergamino palette and anti-wrapping rules.
+ * Primary navigation bar with top Región Metropolitana shipping banner.
  */
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +19,18 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 bg-[#FAF6F0]/90 backdrop-blur-md border-b border-[#DFD3C3] text-[#143326]">
+    <header className="fixed top-0 left-0 right-0 z-40 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#DFD3C3] text-[#143326]">
+      {/* Top Banner: Despacho exclusivo en la Región Metropolitana */}
+      <div className="bg-[#143326] text-[#FAF6F0] border-b border-[#1E4D38] px-4 py-1.5 text-center">
+        <p className="font-mono text-[11px] sm:text-xs tracking-wide">
+          Despachos disponibles exclusivamente en la{" "}
+          <strong className="text-[#F5DEB3] font-semibold">
+            Región Metropolitana de Santiago
+          </strong>{" "}
+          · Envío gratis desde Pack 1 kg ($39.990)
+        </p>
+      </div>
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3 flex-shrink-0">

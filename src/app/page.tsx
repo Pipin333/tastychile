@@ -65,7 +65,7 @@ export default function Home() {
       <BellaDurmienteBackground variant="home" />
       <Navbar />
 
-      <main className="relative z-10 flex-grow pt-28 pb-20">
+      <main className="relative z-10 flex-grow pt-36 pb-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section: Warm Coffee Storytelling + Hero Image */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center pb-20 sm:pb-24">

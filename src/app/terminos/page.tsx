@@ -24,7 +24,7 @@ export default function TerminosPage() {
 
       <main
         id="main-content"
-        className="relative z-10 flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 sm:pb-20"
+        className="relative z-10 flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-16 sm:pb-20"
       >
         <nav
           className="flex items-center gap-2 font-mono text-xs text-[#6E5D4F] mb-8"
@@ -159,9 +159,11 @@ export default function TerminosPage() {
               4. Despacho y Garantía de Frescura
             </h2>
             <p className="mb-3">
-              Realizamos repartos carbono neutrales en Santiago y envíos a todo
-              Chile. Para regiones, el costo y medio de transporte se confirman
-              contigo antes del pago.
+              Por el momento realizamos despachos exclusivamente dentro de la{" "}
+              <strong className="text-[#2A1B12]">
+                Región Metropolitana de Santiago
+              </strong>
+              , mediante reparto carbono neutral.
             </p>
             <p>
               Conforme a la Ley N° 19.496 sobre Protección de los Derechos de

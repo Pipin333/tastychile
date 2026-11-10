@@ -10,6 +10,26 @@ import {
 } from "@/lib/email";
 import { EmailOrderData, OrderItem } from "@/lib/email-templates";
 
+const ALLOWED_REGION = "Región Metropolitana de Santiago";
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+/**
+ * Sanitizes open text fields before storing in PostgreSQL or rendering in emails.
+ * Strips control characters and angle brackets, collapses whitespace, and enforces max length.
+ */
+function sanitizeText(
+  value: string | undefined | null,
+  maxLength: number
+): string {
+  if (!value) return "";
+  return value
+    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    .replace(/[<>]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
+}
+
 // Catalog focused exclusively on Marsellesa Orgánico (87 Puntos SCA) in 250g format with volume tiers
 const MARSELLESA_CATALOG: Record<
   string,
@@ -34,7 +54,7 @@ const MARSELLESA_CATALOG: Record<
 
 /**
  * Creates an order in "Mago de Oz" mode.
- * Saves in database and sends instant email to Selva Alta and the customer.
+ * Sanitizes inputs, saves in database with parameterized queries, and sends instant email via Resend.
  */
 export async function createWizardOfOzOrder(payload: {
   name: string;
@@ -50,12 +70,41 @@ export async function createWizardOfOzOrder(payload: {
     grind?: string;
   }>;
 }) {
-  const { name, email, phone, address, city, region, notes, items } = payload;
+  const cleanName = sanitizeText(payload.name, 100);
+  const cleanEmail = sanitizeText(payload.email, 120).toLowerCase();
+  const cleanPhone = sanitizeText(payload.phone, 35);
+  const cleanAddress = sanitizeText(payload.address, 180);
+  const cleanCity = sanitizeText(payload.city, 60);
+  const cleanRegion = sanitizeText(payload.region, 80);
+  const cleanNotes = sanitizeText(payload.notes, 400);
+  const { items } = payload;
 
-  if (!name || !email || !phone || !address || !city || !region) {
+  if (
+    !cleanName ||
+    !cleanEmail ||
+    !cleanPhone ||
+    !cleanAddress ||
+    !cleanCity ||
+    !cleanRegion
+  ) {
     return {
       success: false,
       error: "Por favor completa todos los datos de contacto y entrega.",
+    };
+  }
+
+  if (!EMAIL_REGEX.test(cleanEmail)) {
+    return {
+      success: false,
+      error: "Por favor ingresa un correo electrónico válido.",
+    };
+  }
+
+  if (cleanRegion !== ALLOWED_REGION) {
+    return {
+      success: false,
+      error:
+        "Por el momento solo realizamos despachos dentro de la Región Metropolitana de Santiago.",
     };
   }
 
@@ -69,20 +118,20 @@ export async function createWizardOfOzOrder(payload: {
     const validatedItems: OrderItem[] = items.map((item) => {
       const product =
         MARSELLESA_CATALOG[item.id] || MARSELLESA_CATALOG["marsellesa-250g"];
-      const qty = Math.max(1, item.quantity);
+      const qty = Math.min(50, Math.max(1, Math.floor(Number(item.quantity) || 1)));
       subtotal += product.price * qty;
 
       return {
-        id: item.id,
+        id: sanitizeText(item.id, 40),
         name: product.name,
         price: product.price,
         quantity: qty,
-        grind: item.grind || "Grano Entero",
+        grind: sanitizeText(item.grind, 60) || "Grano Entero",
         detail: product.detail,
       };
     });
 
-    // Despacho carbono neutral sin costo sobre $30.000 CLP (incluye tramos de 1 kg y 3 kg), o $3.900 CLP tarifa plana
+    // Despacho carbono neutral sin costo sobre $30.000 CLP en la RM (incluye tramos de 1 kg y 3 kg), o $3.900 CLP tarifa plana
     const shipping = subtotal >= 30000 ? 0 : 3900;
     const total = subtotal + shipping;
 
@@ -90,17 +139,17 @@ export async function createWizardOfOzOrder(payload: {
 
     const orderData: EmailOrderData = {
       order_number: orderNumber,
-      customer_name: name.trim(),
-      customer_email: email.trim().toLowerCase(),
-      customer_phone: phone.trim(),
-      customer_address: address.trim(),
-      customer_city: city.trim(),
-      customer_region: region.trim(),
+      customer_name: cleanName,
+      customer_email: cleanEmail,
+      customer_phone: cleanPhone,
+      customer_address: cleanAddress,
+      customer_city: cleanCity,
+      customer_region: ALLOWED_REGION,
       items: validatedItems,
       subtotal,
       shipping,
       total,
-      notes: notes?.trim() || "",
+      notes: cleanNotes,
     };
 
     try {
@@ -199,18 +248,25 @@ export async function createWizardOfOzOrder(payload: {
  * Handles B2B commercial contact submission.
  */
 export async function addB2BContact(formData: FormData) {
-  const name = formData.get("name")?.toString()?.trim();
-  const company = formData.get("company")?.toString()?.trim();
-  const email = formData.get("email")?.toString()?.trim()?.toLowerCase();
-  const phone = formData.get("phone")?.toString()?.trim() || "";
-  const volume = formData.get("volume")?.toString()?.trim() || "";
-  const grind = formData.get("grind")?.toString()?.trim() || "";
-  const message = formData.get("message")?.toString()?.trim() || "";
+  const name = sanitizeText(formData.get("name")?.toString(), 100);
+  const company = sanitizeText(formData.get("company")?.toString(), 120);
+  const email = sanitizeText(formData.get("email")?.toString(), 120).toLowerCase();
+  const phone = sanitizeText(formData.get("phone")?.toString(), 35);
+  const volume = sanitizeText(formData.get("volume")?.toString(), 80);
+  const grind = sanitizeText(formData.get("grind")?.toString(), 60);
+  const message = sanitizeText(formData.get("message")?.toString(), 600);
 
   if (!name || !company || !email) {
     return {
       success: false,
       error: "Nombre, empresa o cafetería y correo son obligatorios.",
+    };
+  }
+
+  if (!EMAIL_REGEX.test(email)) {
+    return {
+      success: false,
+      error: "Por favor ingresa un correo electrónico válido.",
     };
   }
 
@@ -280,11 +336,14 @@ export async function addB2BContact(formData: FormData) {
  * Adds email to inquiry list.
  */
 export async function addContactToWaitlist(formData: FormData) {
-  const email = formData.get("email")?.toString()?.trim()?.toLowerCase();
-  const name = formData.get("name")?.toString()?.trim();
+  const email = sanitizeText(formData.get("email")?.toString(), 120).toLowerCase();
+  const name = sanitizeText(formData.get("name")?.toString(), 100);
 
-  if (!email) {
-    return { success: false, error: "El correo electrónico es requerido." };
+  if (!email || !EMAIL_REGEX.test(email)) {
+    return {
+      success: false,
+      error: "Por favor ingresa un correo electrónico válido.",
+    };
   }
 
   try {

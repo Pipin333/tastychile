@@ -91,17 +91,46 @@ const GRIND_METHODS: GrindMethod[] = [
   },
 ];
 
-const REGIONES_CHILE = [
-  "Región Metropolitana de Santiago",
-  "Región de Valparaíso",
-  "Región de O'Higgins",
-  "Región del Maule",
-  "Región del Biobío",
-  "Región de La Araucanía",
-  "Región de Los Lagos",
-  "Región de Coquimbo",
-  "Región de Antofagasta",
-  "Otra Región",
+const REGIONES_CHILE = ["Región Metropolitana de Santiago"];
+
+const COMUNAS_RM = [
+  "Santiago",
+  "Providencia",
+  "Las Condes",
+  "Ñuñoa",
+  "Vitacura",
+  "La Reina",
+  "Lo Barnechea",
+  "Macul",
+  "Peñalolén",
+  "La Florida",
+  "San Miguel",
+  "La Cisterna",
+  "Maipú",
+  "Estación Central",
+  "Recoleta",
+  "Independencia",
+  "Huechuraba",
+  "Quilicura",
+  "Pudahuel",
+  "Cerrillos",
+  "Quinta Normal",
+  "San Joaquín",
+  "Pedro Aguirre Cerda",
+  "Lo Prado",
+  "Conchalí",
+  "Renca",
+  "Cerro Navia",
+  "La Granja",
+  "San Ramón",
+  "La Pintana",
+  "El Bosque",
+  "Lo Espejo",
+  "Puente Alto",
+  "San Bernardo",
+  "Colina",
+  "Lampa",
+  "Padre Hurtado",
 ];
 
 function MethodIcon({ methodId }: { methodId: string }) {
@@ -272,7 +301,7 @@ export default function ClubPage() {
       <BellaDurmienteBackground variant="club" />
       <Navbar />
 
-      <main className="relative z-10 flex-grow pt-28 pb-20">
+      <main className="relative z-10 flex-grow pt-36 pb-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header with Product Photo */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pb-14">
@@ -541,6 +570,12 @@ export default function ClubPage() {
                 </div>
 
                 <form onSubmit={handleOrderSubmit} className="space-y-3.5">
+                  <div className="bg-[#EFE4D2] border border-[#D8C3A5] rounded-lg px-3.5 py-2.5 text-xs text-[#143326]">
+                    <strong>Despacho exclusivo en la Región Metropolitana:</strong>{" "}
+                    Por ahora realizamos entregas únicamente dentro de las
+                    comunas de la RM.
+                  </div>
+
                   <div>
                     <label
                       htmlFor="order-name"
@@ -552,6 +587,7 @@ export default function ClubPage() {
                       id="order-name"
                       name="name"
                       required
+                      maxLength={100}
                       type="text"
                       placeholder="Tu nombre completo"
                       disabled={submitting}
@@ -571,6 +607,7 @@ export default function ClubPage() {
                         id="order-email"
                         name="email"
                         required
+                        maxLength={120}
                         type="email"
                         placeholder="nombre@correo.cl"
                         disabled={submitting}
@@ -588,6 +625,7 @@ export default function ClubPage() {
                         id="order-phone"
                         name="phone"
                         required
+                        maxLength={35}
                         type="tel"
                         placeholder="+56 9 1234 5678"
                         disabled={submitting}
@@ -608,6 +646,7 @@ export default function ClubPage() {
                         id="order-address"
                         name="address"
                         required
+                        maxLength={180}
                         type="text"
                         placeholder="Calle, número, depto"
                         disabled={submitting}
@@ -619,17 +658,24 @@ export default function ClubPage() {
                         htmlFor="order-city"
                         className="block text-xs font-semibold text-[#2A1B12] mb-1"
                       >
-                        Comuna *
+                        Comuna (RM) *
                       </label>
                       <input
                         id="order-city"
                         name="city"
+                        list="comunas-rm"
                         required
+                        maxLength={60}
                         type="text"
                         placeholder="Ej: Ñuñoa, Providencia..."
                         disabled={submitting}
                         className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2.5 text-sm text-[#2A1B12] placeholder-[#6E5D4F] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B]"
                       />
+                      <datalist id="comunas-rm">
+                        {COMUNAS_RM.map((comuna) => (
+                          <option key={comuna} value={comuna} />
+                        ))}
+                      </datalist>
                     </div>
                   </div>
 
@@ -638,7 +684,7 @@ export default function ClubPage() {
                       htmlFor="order-region"
                       className="block text-xs font-semibold text-[#2A1B12] mb-1"
                     >
-                      Región *
+                      Región (Solo RM disponible) *
                     </label>
                     <select
                       id="order-region"
@@ -667,6 +713,7 @@ export default function ClubPage() {
                       id="order-notes"
                       name="notes"
                       rows={2}
+                      maxLength={400}
                       placeholder="Conserjería, horario o RUT si necesitas factura..."
                       disabled={submitting}
                       className="w-full bg-[#FAF6F0] border border-[#DFD3C3] rounded-lg px-3.5 py-2 text-sm text-[#2A1B12] placeholder-[#6E5D4F] focus:outline-none focus:ring-2 focus:ring-[#9E2A2B] resize-none"
