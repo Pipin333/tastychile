@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { filterComunasRM, normalizeComunaRM } from "@/lib/comunas-rm";
+import {
+  filterComunasRM,
+  normalizeComunaRM,
+  isKnownRuralRM,
+} from "@/lib/comunas-rm";
 
 interface ComunaComboboxProps {
   id?: string;
@@ -157,8 +161,16 @@ export default function ComunaCombobox({
             className="max-h-52 overflow-y-auto py-1 text-sm"
           >
             {filteredComunas.length === 0 ? (
-              <li className="px-3.5 py-2.5 text-xs text-[#6E5D4F]">
-                Sin coincidencias en la Región Metropolitana
+              <li className="px-3.5 py-2.5 text-xs">
+                {isKnownRuralRM(query) ? (
+                  <span className="text-[#9E2A2B] font-medium leading-relaxed block">
+                    Comuna fuera de la cobertura de bicimensajería (solo Gran Santiago urbano). Escríbenos a comercial@selvaalta.cl para coordinar por Starken.
+                  </span>
+                ) : (
+                  <span className="text-[#6E5D4F]">
+                    Sin coincidencias en el radio urbano de Santiago
+                  </span>
+                )}
               </li>
             ) : (
               filteredComunas.map((comuna, idx) => {

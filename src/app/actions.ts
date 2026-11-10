@@ -12,6 +12,7 @@ import { EmailOrderData, OrderItem } from "@/lib/email-templates";
 import {
   normalizeComunaRM,
   normalizeStreetAddress,
+  isKnownRuralRM,
 } from "@/lib/comunas-rm";
 
 const ALLOWED_REGION = "Región Metropolitana de Santiago";
@@ -104,7 +105,22 @@ export async function createWizardOfOzOrder(payload: {
     };
   }
 
-  if (cleanRegion !== ALLOWED_REGION || !canonicalComuna) {
+  if (!canonicalComuna) {
+    if (isKnownRuralRM(payload.city)) {
+      return {
+        success: false,
+        error:
+          "Por el momento nuestro despacho en bicimensajería solo cubre las 35 comunas del Gran Santiago urbano. Para envíos a comunas rurales o regiones, escríbenos a comercial@selvaalta.cl.",
+      };
+    }
+    return {
+      success: false,
+      error:
+        "Por el momento solo realizamos despachos a las 35 comunas del Gran Santiago urbano.",
+    };
+  }
+
+  if (cleanRegion !== ALLOWED_REGION) {
     return {
       success: false,
       error:

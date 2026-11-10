@@ -1,42 +1,29 @@
 /**
- * Official 52 comunas of the Región Metropolitana de Santiago in canonical spelling.
+ * Las 35 comunas urbanas del Gran Santiago con cobertura oficial de bicimensajería (Pantera Courier).
  */
 export const COMUNAS_RM = [
-  "Alhué",
-  "Buin",
-  "Calera de Tango",
   "Cerrillos",
   "Cerro Navia",
-  "Colina",
   "Conchalí",
-  "Curacaví",
   "El Bosque",
-  "El Monte",
   "Estación Central",
   "Huechuraba",
   "Independencia",
-  "Isla de Maipo",
   "La Cisterna",
   "La Florida",
   "La Granja",
   "La Pintana",
   "La Reina",
-  "Lampa",
   "Las Condes",
   "Lo Barnechea",
   "Lo Espejo",
   "Lo Prado",
   "Macul",
   "Maipú",
-  "María Pinto",
-  "Melipilla",
   "Ñuñoa",
   "Padre Hurtado",
-  "Paine",
   "Pedro Aguirre Cerda",
-  "Peñaflor",
   "Peñalolén",
-  "Pirque",
   "Providencia",
   "Pudahuel",
   "Puente Alto",
@@ -46,13 +33,9 @@ export const COMUNAS_RM = [
   "Renca",
   "San Bernardo",
   "San Joaquín",
-  "San José de Maipo",
   "San Miguel",
-  "San Pedro",
   "San Ramón",
   "Santiago",
-  "Talagante",
-  "Tiltil",
   "Vitacura",
 ] as const;
 
@@ -74,7 +57,7 @@ for (const comuna of COMUNAS_RM) {
   CANONICAL_COMUNA_MAP[toLookupKey(comuna)] = comuna;
 }
 
-// Common aliases and keyboard typos in Santiago
+// Common aliases and keyboard typos in Santiago urban zone
 const COMUNA_ALIASES: Record<string, string> = {
   "santiago centro": "Santiago",
   "stgo": "Santiago",
@@ -83,23 +66,56 @@ const COMUNA_ALIASES: Record<string, string> = {
   "nunos": "Ñuñoa",
   "nuñoa": "Ñuñoa",
   "penalolen": "Peñalolén",
-  "penaflor": "Peñaflor",
   "estacion central": "Estación Central",
   "maipu": "Maipú",
   "conchali": "Conchalí",
-  "curacavi": "Curacaví",
-  "alhue": "Alhué",
-  "maria pinto": "María Pinto",
   "san joaquin": "San Joaquín",
-  "san jose de maipo": "San José de Maipo",
   "san ramon": "San Ramón",
-  "til til": "Tiltil",
+  "san miguel": "San Miguel",
+  "san bernardo": "San Bernardo",
+  "puente alto": "Puente Alto",
+  "las condes": "Las Condes",
+  "la reina": "La Reina",
+  "la florida": "La Florida",
+  "la cisterna": "La Cisterna",
+  "la granja": "La Granja",
+  "la pintana": "La Pintana",
+  "lo barnechea": "Lo Barnechea",
+  "lo prado": "Lo Prado",
+  "lo espejo": "Lo Espejo",
+  "quinta normal": "Quinta Normal",
+  "cerro navia": "Cerro Navia",
+  "padre hurtado": "Padre Hurtado",
   "pac": "Pedro Aguirre Cerda",
+  "pedro aguirre cerda": "Pedro Aguirre Cerda",
 };
 
 /**
- * Resolves any user variation ("nunoa", "nunos", "ÑUÑOA", "stgo centro")
- * to its single canonical comuna name ("Ñuñoa", "Santiago"), or null if outside RM.
+ * Detects whether the query/input matches common rural/excluded communes outside Pantera's bike network.
+ */
+export function isKnownRuralRM(raw: string | undefined | null): boolean {
+  if (!raw) return false;
+  const key = toLookupKey(raw);
+  return (
+    key.includes("pirque") ||
+    key.includes("maipo") ||
+    key.includes("colina") ||
+    key.includes("lampa") ||
+    key.includes("buin") ||
+    key.includes("paine") ||
+    key.includes("melipilla") ||
+    key.includes("talagante") ||
+    key.includes("penaflor") ||
+    key.includes("curacavi") ||
+    key.includes("tiltil") ||
+    key.includes("alhue") ||
+    key.includes("calera de tango")
+  );
+}
+
+/**
+ * Resolves any user variation ("nunoa", "stgo", "las condes")
+ * to its single canonical comuna name ("Ñuñoa", "Santiago"), or null if outside urban coverage.
  */
 export function normalizeComunaRM(raw: string | undefined | null): string | null {
   if (!raw) return null;
@@ -109,8 +125,7 @@ export function normalizeComunaRM(raw: string | undefined | null): string | null
 }
 
 /**
- * Filters the 52 RM comunas accent-insensitively and alias-aware
- * so searching "nuno", "nunos", "stgo" or "pena" matches "Ñuñoa", "Santiago", "Peñalolén"/"Peñaflor".
+ * Filters the 35 urban Santiago comunas accent-insensitively and alias-aware.
  */
 export function filterComunasRM(query: string): string[] {
   const key = toLookupKey(query);
@@ -124,8 +139,7 @@ export function filterComunasRM(query: string): string[] {
 }
 
 /**
- * Normalizes street addresses to consistent Title Case and clean punctuation
- * so "AV. PROVIDENCIA   1234,  DEPTO 502" becomes "Av. Providencia 1234, Depto 502".
+ * Normalizes street addresses to consistent Title Case and clean punctuation.
  */
 export function normalizeStreetAddress(raw: string | undefined | null): string {
   if (!raw) return "";
