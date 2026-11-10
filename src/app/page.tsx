@@ -6,30 +6,24 @@ import Footer from "@/components/Footer";
 import BellaDurmienteBackground from "@/components/BellaDurmienteBackground";
 
 export default function Home() {
-  const volumeTiers = [
+  const commitments = [
     {
-      label: "1 Bolsa (250g)",
-      oldPrice: "$13.990",
-      price: "$11.500",
-      badge: "18% DCTO",
-      detail: "Para probar en casa · Molido a tu cafetera",
-      href: "/club?tier=marsellesa-250g",
+      tag: "Equidad de Género y Comunidad",
+      title: "Liderazgo y equidad en la cosecha",
+      description:
+        "Trabajamos mano a mano con la cooperativa agrícola en La Bella Durmiente, impulsando activamente la equidad de género y la autonomía económica de las mujeres caficultoras y recolectoras, con primas justas por sobre el mercado.",
     },
     {
-      label: "Pack 1 Kilo (4 × 250g)",
-      oldPrice: "$55.960",
-      price: "$39.990",
-      badge: "28% DCTO",
-      detail: "$9.998 por bolsa · Envío gratis en Santiago",
-      href: "/club?tier=marsellesa-1kg",
+      tag: "Biodiversidad y Suelo",
+      title: "Cultivo bajo sombra agroforestal",
+      description:
+        "Nuestros cafetos crecen integrados con el bosque nativo a 1.820 msnm. La sombra natural y la neblina constante protegen los ecosistemas de la selva nubosa y permiten una maduración lenta que concentra azúcares sin pesticidas químicos.",
     },
     {
-      label: "Caja 3 Kilos (12 × 250g)",
-      oldPrice: "$167.880",
-      price: "$104.990",
-      badge: "37% DCTO",
-      detail: "$8.749 por bolsa · Ideal para oficinas y barras",
-      href: "/club?tier=marsellesa-3kg",
+      tag: "Logística y Huella",
+      title: "Tueste local y despacho consciente",
+      description:
+        "Tostamos en pequeños lotes en Chile para asegurar máxima frescura y cero mermas. En Santiago coordinamos entregas con rutas optimizadas y compensación de emisiones para que el café llegue a tu mesa con el menor impacto posible.",
     },
   ];
 
@@ -69,12 +63,7 @@ export default function Home() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section: Warm Coffee Storytelling + Hero Image */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center pb-20 sm:pb-24">
-            <div className="lg:col-span-7">
-              <div className="inline-flex items-center gap-2 bg-[#EFE4D2] border border-[#D8C3A5] text-[#143326] px-3 py-1 rounded-full text-xs font-medium mb-5">
-                <span className="w-2 h-2 rounded-full bg-[#9E2A2B]" />
-                <span>Cosecha de Selva Alta · Tingo María, Perú (1.820 msnm)</span>
-              </div>
-
+            <div className="lg:col-span-7 bg-[#FAF6F0]/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-[#DFD3C3]/80 shadow-sm">
               <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#143326] leading-[1.12] mb-5">
                 Café de origen amazónico, tostado fresco y molido para tu
                 cafetera.
@@ -177,31 +166,31 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Warm Product Showcase instead of cold consulting table */}
+          {/* Perfil del Café y Compromiso de Origen */}
           <section className="mb-20">
             <div className="bg-[#FFFDF9]/95 backdrop-blur-md border border-[#DFD3C3] rounded-2xl p-6 sm:p-10 shadow-sm">
               <div className="max-w-2xl mb-8">
                 <span className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold block mb-1">
-                  Cosecha Familiar Disponible Ahora
+                  Cosecha Activa · Tingo María
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-bold text-[#143326] mb-3">
-                  Marsellesa Orgánico · Bolsas de 250g
+                  Marsellesa Orgánico · 87.0 Puntos SCA
                 </h2>
                 <p className="text-sm sm:text-base text-[#4A3F35] leading-relaxed">
-                  Un café redondo, aromático y muy fácil de tomar todos los
-                  días. Lo enviamos en grano entero o recién molido para Prensa
-                  Francesa, Cafetera Italiana (Moka), Filtro o Espresso.
+                  Un café redondo, aromático y naturalmente dulce, cultivado en armonía con la selva
+                  amazónica. Lo tostamos fresco en Chile y lo molemos a pedido según tu método
+                  de preparación favorito.
                 </p>
               </div>
 
-              {/* 4 Warm Highlights instead of a clinical 8-row datasheet */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+              {/* 4 Notas Sensoriales y Técnicas */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
                 <div className="bg-[#F3ECE1] border border-[#DFD3C3] rounded-xl p-4">
                   <span className="block text-xs text-[#6E5D4F] mb-1">
                     Aroma y Sabor
                   </span>
                   <span className="text-sm font-bold text-[#2A1B12]">
-                    Chocolate, caramelo y frutos dulces
+                    Chocolate bitter, caramelo y nuez
                   </span>
                 </div>
                 <div className="bg-[#F3ECE1] border border-[#DFD3C3] rounded-xl p-4">
@@ -230,38 +219,37 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Price Tiers */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {volumeTiers.map((tier) => (
-                  <Link
-                    key={tier.label}
-                    href={tier.href}
-                    className="group block bg-[#FAF6F0] hover:bg-[#EFE4D2] border border-[#DFD3C3] hover:border-[#9E2A2B] rounded-xl p-5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B]"
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-semibold text-[#1E4D38]">
-                        {tier.label}
-                      </span>
-                      <span className="font-mono text-[10px] font-bold bg-[#9E2A2B] text-white px-2 py-0.5 rounded">
-                        {tier.badge}
-                      </span>
+              {/* 3 Pilares: Equidad de Género, Agroforestería y Despacho Consciente */}
+              <div className="border-t border-[#DFD3C3] pt-8">
+                <div className="mb-6">
+                  <span className="font-mono text-xs uppercase tracking-widest text-[#1E4D38] font-semibold block mb-1">
+                    Nuestros Compromisos
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#143326]">
+                    Impacto positivo desde la cooperativa hasta tu taza
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {commitments.map((item) => (
+                    <div
+                      key={item.title}
+                      className="bg-[#FAF6F0] border border-[#DFD3C3] rounded-xl p-5 flex flex-col justify-between"
+                    >
+                      <div>
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-[#9E2A2B] font-bold block mb-2">
+                          {item.tag}
+                        </span>
+                        <h4 className="text-base font-bold text-[#143326] mb-2">
+                          {item.title}
+                        </h4>
+                        <p className="text-xs sm:text-sm text-[#4A3F35] leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex items-baseline gap-2 mb-1">
-                      <span className="font-mono text-2xl font-bold text-[#2A1B12]">
-                        {tier.price}
-                      </span>
-                      <span className="font-mono text-xs text-[#6E5D4F] line-through">
-                        {tier.oldPrice}
-                      </span>
-                    </div>
-                    <span className="block text-xs text-[#4A3F35] mb-3">
-                      {tier.detail}
-                    </span>
-                    <span className="inline-block text-xs font-semibold text-[#9E2A2B] group-hover:underline">
-                      Elegir este formato →
-                    </span>
-                  </Link>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </section>

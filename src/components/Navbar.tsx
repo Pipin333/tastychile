@@ -14,8 +14,8 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Nuestro Café" },
-    { href: "/club", label: "Comprar 250g y Volumen" },
-    { href: "/b2b", label: "Cafeterías y Oficinas" },
+    { href: "/club", label: "Tienda" },
+    { href: "/b2b", label: "Para Empresas" },
   ];
 
   return (
@@ -36,13 +36,10 @@ export default function Navbar() {
           <div className="flex items-center gap-3 flex-shrink-0">
             <Link
               href="/"
-              className="flex items-baseline gap-2.5 rounded px-1 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B]"
+              className="flex items-center rounded px-1 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9E2A2B]"
             >
               <span className="text-base sm:text-lg font-bold tracking-tight text-[#143326] whitespace-nowrap">
                 Selva Alta Roasters
-              </span>
-              <span className="hidden xl:inline-flex font-mono text-[11px] uppercase tracking-widest text-[#1E4D38] whitespace-nowrap">
-                Tingo María · Perú
               </span>
             </Link>
           </div>

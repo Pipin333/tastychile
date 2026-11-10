@@ -73,7 +73,7 @@ export default function B2BPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header with Origin Photos */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pb-16">
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-7 bg-[#FAF6F0]/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-[#DFD3C3]/80 shadow-sm">
               <p className="font-mono text-xs uppercase tracking-widest text-[#1E4D38] font-semibold mb-3">
                 Cafeterías · Restaurantes · Oficinas
               </p>

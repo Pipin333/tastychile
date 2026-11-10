@@ -41,7 +41,7 @@ export default function Footer() {
                   href="/club"
                   className="hover:text-[#FAF6F0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FAF6F0] rounded"
                 >
-                  Comprar Bolsas de 250g y Packs
+                  Tienda
                 </Link>
               </li>
               <li>
@@ -49,7 +49,7 @@ export default function Footer() {
                   href="/b2b"
                   className="hover:text-[#FAF6F0] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FAF6F0] rounded"
                 >
-                  Para Cafeterías y Oficinas
+                  Para Empresas
                 </Link>
               </li>
             </ul>
@@ -85,8 +85,7 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-[#1E4D38] flex flex-col sm:flex-row items-center justify-between text-xs text-[#D5CBB8] gap-3 font-mono">
           <p>
-            © {new Date().getFullYear()} Selva Alta Roasters SpA. Marca
-            &quot;Tasty&quot;. Todos los derechos reservados.
+            {`© ${new Date().getFullYear()} Selva Alta Roasters SpA. Marca "Tasty". Todos los derechos reservados.`}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
@@ -104,10 +103,6 @@ export default function Footer() {
             >
               Términos
             </Link>
-            <span className="text-[#2D6A4F]" aria-hidden="true">
-              /
-            </span>
-            <span className="text-[#A9BFA8]">Despacho carbono neutral</span>
           </div>
         </div>
       </div>

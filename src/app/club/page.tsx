@@ -268,7 +268,7 @@ export default function ClubPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header with Product Photo */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pb-14">
-            <div className="lg:col-span-7">
+            <div className="lg:col-span-7 bg-[#FAF6F0]/85 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-[#DFD3C3]/80 shadow-sm">
               <p className="font-mono text-xs uppercase tracking-widest text-[#9E2A2B] font-semibold mb-2">
                 Marsellesa Orgánico · Tingo María (87.0 SCA)
               </p>
