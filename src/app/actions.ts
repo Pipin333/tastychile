@@ -151,8 +151,8 @@ export async function createWizardOfOzOrder(payload: {
       };
     });
 
-    // Despacho carbono neutral sin costo sobre $30.000 CLP en la RM (incluye tramos de 1 kg y 3 kg), o $3.900 CLP tarifa plana
-    const shipping = subtotal >= 30000 ? 0 : 3900;
+    // Despacho sin costo sobre $39.990 CLP en las 35 comunas del Gran Santiago urbano, o $3.900 CLP tarifa plana
+    const shipping = subtotal >= 39990 ? 0 : 3900;
     const total = subtotal + shipping;
 
     const orderNumber = `SAR-${Math.floor(100000 + Math.random() * 900000)}`;
