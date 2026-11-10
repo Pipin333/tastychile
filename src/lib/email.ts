@@ -15,7 +15,8 @@ const getResendClient = () => {
 };
 
 const getFromEmail = () =>
-  process.env.RESEND_FROM_EMAIL || "Selva Alta <onboarding@resend.dev>";
+  process.env.RESEND_FROM_EMAIL ||
+  "Selva Alta Roasters <pedidos@selvaalta.cl>";
 
 export const getContactEmail = () =>
   process.env.CONTACT_EMAIL ||
