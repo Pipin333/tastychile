@@ -13,7 +13,7 @@
 
 ## CONTENT
 - Opening: "Café de especialidad de 87 puntos SCA para barras y oficinas en Santiago, con molienda calibrada y entregas carbono neutrales."
-- Support: "Granos cosechados en Huánuco a 1.820 msnm con trazabilidad directa, cosecha inclusiva y evaluación sensorial rigurosa."
+- Support: "Granos cosechados en Huánuco a 1.820 msnm con trazabilidad directa, equidad de género en la cosecha y evaluación sensorial rigurosa."
 - Action: "Escribir al correo comercial" / "Solicitar muestra sin costo".
 - Below the fold:
   1. Ficha técnica de variedad insignia: Por ahora exclusivamente Marsellesa Orgánico (87 Puntos SCA, Huánuco, Perú, 1.820 msnm, proceso lavado).
